@@ -9,8 +9,8 @@ public class IntNode implements Node {
 
     private Integer val;
 
-    public IntNode(Integer n) {
-        val = n;
+    public IntNode(Integer val) {
+        this.val = val;
     }
 
     public String toPrint(String s) {

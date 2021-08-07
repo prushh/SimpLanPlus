@@ -10,16 +10,16 @@ public class ArgNode implements Node {
     private String id;
     private Node type;
 
-    public ArgNode (String i, Node t) {
-        this.id = i;
-        this.type = t;
+    public ArgNode(String id, Node type) {
+        this.id = id;
+        this.type = type;
     }
 
-    public String getId(){
+    public String getId() {
         return id;
     }
 
-    public Node getType(){
+    public Node getType() {
         return type;
     }
 

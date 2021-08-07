@@ -9,8 +9,8 @@ public class BoolNode implements Node {
 
     private boolean val;
 
-    public BoolNode(boolean n) {
-        val = n;
+    public BoolNode(boolean val) {
+        this.val = val;
     }
 
     public String toPrint(String s) {

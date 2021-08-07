@@ -1,1 +1,1 @@
-{bool x; int y = 3;}
+{bool x; int y = 3; int fun(bool w){}; x = true; y = 2; fun(x); print fun(true); if (1) x = false else x = true; return;}
