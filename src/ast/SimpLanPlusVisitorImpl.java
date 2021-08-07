@@ -163,7 +163,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitDerExp(DerExpContext ctx) {
-        return null;
+        return new DerExpNode(visit(ctx.lhs()));
     }
 
     @Override
@@ -178,7 +178,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitCallExp(CallExpContext ctx) {
-        return null;
+        return new CallExpNode(visit(ctx.call()));
     }
 
     @Override
