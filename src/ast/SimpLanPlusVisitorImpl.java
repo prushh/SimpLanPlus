@@ -43,27 +43,36 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
+    public Node visitType(TypeContext ctx) {
+        if (ctx.getText().equals("int"))
+            return new IntTypeNode();
+        else if (ctx.getText().equals("bool"))
+            return new BoolTypeNode();
+
+        return null;
+    }
+
+
+    @Override
     public Node visitDecFun(DecFunContext ctx) {
 
         VoidTypeNode voidType = null;
-        DecFunNode res = new DecFunNode(null, null, null);
+        DecFunNode res = new DecFunNode(null,null,null);
 
         TypeContext tmp = ctx.type();
 
         if (tmp == null) {
             res = new DecFunNode(ctx.ID().getText(), new VoidTypeNode(), visit(ctx.block()));
-        } else {
+        }
+        else {
             res = new DecFunNode(ctx.ID().getText(), visit(ctx.type()), visit(ctx.block()));
         }
 
-        //add argument declarations
-        //we are getting a shortcut here by constructing directly the ParNode
-        //this could be done differently by visiting instead the VardecContext
-        for (ArgContext vc : ctx.arg()) {
-            res.addArg(new ArgNode(vc.ID().getText(), visit(vc.type())));
-        }
+        for(ArgContext vc : ctx.arg())
+            res.addArg( new ArgNode(vc.ID().getText(), visit( vc.type() )) );
 
         return res;
+
     }
 
     @Override
@@ -141,14 +150,40 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         return new CallNode(ctx.ID().getText(), args);
     }
 
-    @Override
-    public Node visitType(TypeContext ctx) {
-        if (ctx.getText().equals("int"))
-            return new IntTypeNode();
-        else if (ctx.getText().equals("bool"))
-            return new BoolTypeNode();
 
+    @Override
+    public Node visitBaseExp(BaseExpContext ctx) {
+        return new BaseExpNode(visit(ctx.exp()));
+    }
+
+    @Override
+    public Node visitBinExp(BinExpContext ctx) {
+        return new BinExpNode(visit(ctx.left), ctx.op, visit(ctx.right) );
+    }
+
+    @Override
+    public Node visitDerExp(DerExpContext ctx) {
         return null;
+    }
+
+    @Override
+    public Node visitNewExp(NewExpContext ctx) {
+        return new NewExpNode(visit(ctx.type()));
+    }
+
+    @Override
+    public Node visitNegExp(NegExpContext ctx) {
+        return new NegExpNode(visit(ctx.exp()));
+    }
+
+    @Override
+    public Node visitCallExp(CallExpContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Node visitNotExp(NotExpContext ctx) {
+        return new NotExpNode(visit(ctx.exp()));
     }
 
     @Override
