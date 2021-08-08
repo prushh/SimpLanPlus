@@ -6,30 +6,30 @@ import util.Environment;
 import util.SemanticError;
 
 public class IntTypeNode implements Node {
-    Integer nestingLevel;
 
-    public IntTypeNode(int nestingLevel) {
-        this.nestingLevel = nestingLevel;
+    private Integer pointLevel;
+
+    public IntTypeNode(Integer pointLevel) {
+        this.pointLevel = pointLevel;
     }
 
-    public String toPrint(String s) {
-        return s + "IntType\n";
+    @Override
+    public String toPrint(String indent) {
+        return null;
     }
 
-    //non utilizzato
+    @Override
     public Node typeCheck() {
         return null;
     }
 
-    //non utilizzato
+    @Override
     public String codeGeneration() {
-        return "";
+        return null;
     }
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-
-        return new ArrayList<SemanticError>();
+        return null;
     }
-
-}  
+}

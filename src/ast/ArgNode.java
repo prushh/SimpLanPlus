@@ -7,16 +7,16 @@ import util.SemanticError;
 
 public class ArgNode implements Node {
 
-    private String id;
+    private String ID;
     private Node type;
 
-    public ArgNode(String id, Node type) {
-        this.id = id;
+    public ArgNode(String ID, Node type) {
+        this.ID = ID;
         this.type = type;
     }
 
     public String getId() {
-        return id;
+        return ID;
     }
 
     public Node getType() {
@@ -24,23 +24,22 @@ public class ArgNode implements Node {
     }
 
     @Override
+    public String toPrint(String indent) {
+        return null;
+    }
+
+    @Override
+    public Node typeCheck() {
+        return null;
+    }
+
+    @Override
+    public String codeGeneration() {
+        return null;
+    }
+
+    @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return null;
     }
-
-    public String toPrint(String s) {
-        return s+"Arg:" + id +"\n"
-                +type.toPrint(s+"  ") ;
-    }
-
-    //non utilizzato
-    public Node typeCheck () {
-        return null;
-    }
-
-    //non utilizzato
-    public String codeGeneration() {
-        return "";
-    }
-
 }

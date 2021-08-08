@@ -7,31 +7,29 @@ import util.SemanticError;
 
 public class BoolTypeNode implements Node {
 
-    private Integer nestingLevel;
+    private Integer pointLevel;
 
-    public BoolTypeNode(Integer nestingLevel) {
-        this.nestingLevel = nestingLevel;
+    public BoolTypeNode(Integer pointLevel) {
+        this.pointLevel = pointLevel;
     }
 
-    public String toPrint(String s) {
-        return s + "BoolType\n";
+    @Override
+    public String toPrint(String indent) {
+        return null;
     }
 
-    //non utilizzato
+    @Override
     public Node typeCheck() {
         return null;
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-
-        return new ArrayList<SemanticError>();
-    }
-
-    //non utilizzato
     public String codeGeneration() {
-        return "";
+        return null;
     }
 
-
-}  
+    @Override
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return null;
+    }
+}

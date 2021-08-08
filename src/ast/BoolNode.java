@@ -8,30 +8,30 @@ import util.SemanticError;
 public class BoolNode implements Node {
 
     private boolean val;
-    private Integer nestingLevel;
+    private Integer pointLevel;
 
-    public BoolNode(boolean val, Integer nestingLevel) {
+    public BoolNode(boolean val, Integer pointLevel) {
         this.val = val;
-        this.nestingLevel = nestingLevel;
+        this.pointLevel = pointLevel;
     }
 
-    public String toPrint(String s) {
-        if (val) return s + "Bool:true\n";
-        else return s + "Bool:false\n";
+    @Override
+    public String toPrint(String indent) {
+        return null;
     }
 
+    @Override
     public Node typeCheck() {
-        return new BoolTypeNode(this.nestingLevel);
+        return null;
+    }
+
+    @Override
+    public String codeGeneration() {
+        return null;
     }
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-
-        return new ArrayList<SemanticError>();
+        return null;
     }
-
-    public String codeGeneration() {
-        return "push " + (val ? 1 : 0) + "\n";
-    }
-
-}  
+}

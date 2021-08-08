@@ -32,5 +32,4 @@ public class NotExpNode implements Node {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return null;
     }
-
 }

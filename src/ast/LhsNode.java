@@ -7,18 +7,18 @@ import util.SemanticError;
 
 public class LhsNode implements Node {
 
-    private String id;
+    private String ID;
     private STentry entry;
-    private Integer nestinglevel;
+    private Integer pointLevel;
 
-    public LhsNode(String id, Integer nestingLevel) {
-        this.id = id;
-        this.nestinglevel = nestingLevel;
+    public LhsNode(String ID, Integer pointLevel) {
+        this.ID = ID;
+        this.pointLevel = pointLevel;
     }
 
     @Override
-    public String toPrint(String s) {
-        return s + "Id:" + id + " at nestlev " + nestinglevel + "\n" + entry.toPrint(s + "  ");
+    public String toPrint(String indent) {
+        return null;
     }
 
     @Override

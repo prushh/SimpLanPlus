@@ -9,49 +9,39 @@ import java.util.HashMap;
 
 public class DecFunNode implements Node {
 
-    private String id;
+    private String ID;
     private Node type;
-    private ArrayList<Node> parlist = new ArrayList<Node>();
+    private ArrayList<Node> args;
     private Node body;
 
-    public DecFunNode(String id, Node type, Node body) {
-        this.id = id;
+    public DecFunNode(String ID, Node type, Node body) {
+        this.ID = ID;
         this.type = type;
         this.body = body;
+        args = new ArrayList<>();
     }
 
-    public void addArg(Node p){
-        parlist.add(p);
+    public void addArg(Node p) {
+        args.add(p);
     }
-
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public String toPrint(String indent) {
         return null;
     }
 
-
-    public String toPrint(String s) {
-        String parlstr="";
-        for (Node par:parlist)
-            parlstr+=par.toPrint(s+"  ");
-        String declstr="";
-        if (parlist!=null)
-            for (Node dec:parlist)
-                declstr+=dec.toPrint(s+"  ");
-        return s+"Fun:" + id +"\n"
-                +type.toPrint(s+"  ")
-                +parlstr
-                +declstr
-                +body.toPrint(s+"  ") ;
-    }
-
-    //valore di ritorno non utilizzato
+    @Override
     public Node typeCheck() {
         return null;
     }
 
+    @Override
     public String codeGeneration() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
         return null;
     }
 }

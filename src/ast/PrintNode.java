@@ -13,22 +13,23 @@ public class PrintNode implements Node {
         this.val = val;
     }
 
-    public String toPrint(String s) {
-        return s + "Print\n" + val.toPrint(s + "  ");
+    @Override
+    public String toPrint(String indent) {
+        return null;
     }
 
+    @Override
     public Node typeCheck() {
-        return val.typeCheck();
+        return null;
+    }
+
+    @Override
+    public String codeGeneration() {
+        return null;
     }
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-
-        return val.checkSemantics(env);
+        return null;
     }
-
-    public String codeGeneration() {
-        return val.codeGeneration() + "print\n";
-    }
-
 }
