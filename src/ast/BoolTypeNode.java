@@ -7,7 +7,10 @@ import util.SemanticError;
 
 public class BoolTypeNode implements Node {
 
-    public BoolTypeNode() {
+    private Integer nestingLevel;
+
+    public BoolTypeNode(Integer nestingLevel) {
+        this.nestingLevel = nestingLevel;
     }
 
     public String toPrint(String s) {

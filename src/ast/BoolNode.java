@@ -8,9 +8,11 @@ import util.SemanticError;
 public class BoolNode implements Node {
 
     private boolean val;
+    private Integer nestingLevel;
 
-    public BoolNode(boolean val) {
+    public BoolNode(boolean val, Integer nestingLevel) {
         this.val = val;
+        this.nestingLevel = nestingLevel;
     }
 
     public String toPrint(String s) {
@@ -19,7 +21,7 @@ public class BoolNode implements Node {
     }
 
     public Node typeCheck() {
-        return new BoolTypeNode();
+        return new BoolTypeNode(this.nestingLevel);
     }
 
     @Override

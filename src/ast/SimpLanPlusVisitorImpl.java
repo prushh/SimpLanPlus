@@ -44,11 +44,16 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitType(TypeContext ctx) {
-        if (ctx.getText().equals("int"))
-            return new IntTypeNode();
-        else if (ctx.getText().equals("bool"))
-            return new BoolTypeNode();
+        int nestLev;
 
+        if (ctx.getText().contains("int")){
+            nestLev = ctx.getText().substring(0,ctx.getText().length()-3).length();
+            return new IntTypeNode(nestLev);
+        }
+        else if (ctx.getText().contains("bool")) {
+            nestLev = ctx.getText().substring(0, ctx.getText().length() - 4).length();
+            return new BoolTypeNode(nestLev);
+        }
         return null;
     }
 
@@ -79,6 +84,8 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     public Node visitStatement(StatementContext ctx) {
         if (ctx.assignment() != null) {
             return visit(ctx.assignment());
+        } else if (ctx.deletion() != null) {
+            return visit(ctx.deletion());
         } else if (ctx.print() != null) {
             return visit(ctx.print());
         } else if (ctx.ret() != null) {
@@ -103,14 +110,16 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
-	public Node visitLhs(LhsContext ctx) {
-    	if (ctx.ID() != null)
-    		return new LhsNode(ctx.ID().getText());
-    	
-    	return null;
-	}
+    public Node visitLhs(LhsContext ctx) {
+        Integer nestLev;
+        if (ctx.getText().indexOf("^") != -1) {
+            nestLev = ctx.getText().length() - ctx.getText().indexOf("^");
+        }
+        else nestLev = 0;
+        return new LhsNode(ctx.getText().substring(0,ctx.getText().length()-nestLev),nestLev);
+    }
 
-	@Override
+    @Override
     public Node visitPrint(PrintContext ctx) {
         return new PrintNode(visit(ctx.exp()));
     }
@@ -153,13 +162,14 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         return new CallNode(ctx.ID().getText(), args);
     }
 
-    
     @Override
-	public Node visitDeletion(DeletionContext ctx) {
-		return new DeleteNode(ctx.ID().getText());
-	}
+    public Node visitDeletion(DeletionContext ctx){
+        return new DeletionNode(ctx.ID().getText());
+    };
 
-	@Override
+
+
+    @Override
     public Node visitBaseExp(BaseExpContext ctx) {
         return new BaseExpNode(visit(ctx.exp()));
     }
@@ -196,12 +206,12 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitValExp(ValExpContext ctx) {
-        return new IntNode(Integer.parseInt(ctx.NUMBER().getText()));
+        return new IntNode(Integer.parseInt(ctx.NUMBER().getText()),0);
     }
 
     @Override
     public Node visitBoolExp(BoolExpContext ctx) {
-        return new BoolNode(Boolean.parseBoolean(ctx.getText()));
+        return new BoolNode(Boolean.parseBoolean(ctx.getText()),0);
     }
 
 }

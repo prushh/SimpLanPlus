@@ -40,7 +40,7 @@ public class IteNode implements Node {
     }
 
     public Node typeCheck() {
-        if (!(SimpLanlib.isSubtype(cond.typeCheck(), new BoolTypeNode()))) {
+        if (!(SimpLanlib.isSubtype(cond.typeCheck(), new BoolTypeNode(0)))) {
             System.out.println("non boolean condition in if");
             System.exit(0);
         }

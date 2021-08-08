@@ -6,8 +6,10 @@ import util.Environment;
 import util.SemanticError;
 
 public class IntTypeNode implements Node {
+    Integer nestingLevel;
 
-    public IntTypeNode() {
+    public IntTypeNode(int nestingLevel) {
+        this.nestingLevel = nestingLevel;
     }
 
     public String toPrint(String s) {

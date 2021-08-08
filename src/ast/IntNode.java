@@ -8,9 +8,11 @@ import util.SemanticError;
 public class IntNode implements Node {
 
     private Integer val;
+    private Integer nestingLevel;
 
-    public IntNode(Integer val) {
+    public IntNode(Integer val, Integer nestingLevel) {
         this.val = val;
+        this.nestingLevel = nestingLevel;
     }
 
     public String toPrint(String s) {
@@ -18,7 +20,7 @@ public class IntNode implements Node {
     }
 
     public Node typeCheck() {
-        return new IntTypeNode();
+        return new IntTypeNode(this.nestingLevel);
     }
 
     @Override

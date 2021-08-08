@@ -9,10 +9,11 @@ public class LhsNode implements Node {
 
     private String id;
     private STentry entry;
-    private int nestinglevel;
+    private Integer nestinglevel;
 
-    public LhsNode(String id) {
+    public LhsNode(String id, Integer nestingLevel) {
         this.id = id;
+        this.nestinglevel = nestingLevel;
     }
 
     @Override
