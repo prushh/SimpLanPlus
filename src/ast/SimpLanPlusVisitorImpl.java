@@ -103,11 +103,14 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitLhs(LhsContext ctx) {
-        return new LhsNode(ctx.ID().getText());
-    }
+	public Node visitLhs(LhsContext ctx) {
+    	if (ctx.ID() != null)
+    		return new LhsNode(ctx.ID().getText());
+    	
+    	return null;
+	}
 
-    @Override
+	@Override
     public Node visitPrint(PrintContext ctx) {
         return new PrintNode(visit(ctx.exp()));
     }
