@@ -46,14 +46,14 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     public Node visitType(TypeContext ctx) {
         int nestLev;
 
-        if (ctx.getText().contains("int")){
-            nestLev = ctx.getText().substring(0,ctx.getText().length()-3).length();
+        if (ctx.getText().contains("int")) {
+            nestLev = ctx.getText().substring(0, ctx.getText().length() - 3).length();
             return new IntTypeNode(nestLev);
-        }
-        else if (ctx.getText().contains("bool")) {
+        } else if (ctx.getText().contains("bool")) {
             nestLev = ctx.getText().substring(0, ctx.getText().length() - 4).length();
             return new BoolTypeNode(nestLev);
         }
+        
         return null;
     }
 
@@ -62,19 +62,18 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     public Node visitDecFun(DecFunContext ctx) {
 
         VoidTypeNode voidType = null;
-        DecFunNode res = new DecFunNode(null,null,null);
+        DecFunNode res = new DecFunNode(null, null, null);
 
         TypeContext tmp = ctx.type();
 
         if (tmp == null) {
             res = new DecFunNode(ctx.ID().getText(), new VoidTypeNode(), visit(ctx.block()));
-        }
-        else {
+        } else {
             res = new DecFunNode(ctx.ID().getText(), visit(ctx.type()), visit(ctx.block()));
         }
 
-        for(ArgContext vc : ctx.arg())
-            res.addArg( new ArgNode(vc.ID().getText(), visit( vc.type() )) );
+        for (ArgContext vc : ctx.arg())
+            res.addArg(new ArgNode(vc.ID().getText(), visit(vc.type())));
 
         return res;
 
@@ -114,9 +113,8 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         Integer nestLev;
         if (ctx.getText().indexOf("^") != -1) {
             nestLev = ctx.getText().length() - ctx.getText().indexOf("^");
-        }
-        else nestLev = 0;
-        return new LhsNode(ctx.getText().substring(0,ctx.getText().length()-nestLev),nestLev);
+        } else nestLev = 0;
+        return new LhsNode(ctx.getText().substring(0, ctx.getText().length() - nestLev), nestLev);
     }
 
     @Override
@@ -163,10 +161,11 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitDeletion(DeletionContext ctx){
+    public Node visitDeletion(DeletionContext ctx) {
         return new DeletionNode(ctx.ID().getText());
-    };
+    }
 
+    ;
 
 
     @Override
@@ -176,7 +175,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitBinExp(BinExpContext ctx) {
-        return new BinExpNode(visit(ctx.left), ctx.op, visit(ctx.right) );
+        return new BinExpNode(visit(ctx.left), ctx.op, visit(ctx.right));
     }
 
     @Override
@@ -206,12 +205,12 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitValExp(ValExpContext ctx) {
-        return new IntNode(Integer.parseInt(ctx.NUMBER().getText()),0);
+        return new IntNode(Integer.parseInt(ctx.NUMBER().getText()), 0);
     }
 
     @Override
     public Node visitBoolExp(BoolExpContext ctx) {
-        return new BoolNode(Boolean.parseBoolean(ctx.getText()),0);
+        return new BoolNode(Boolean.parseBoolean(ctx.getText()), 0);
     }
 
 }
