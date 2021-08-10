@@ -30,7 +30,7 @@ public class CallExpNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        return callNode.checkSemantics(env);
     }
 
 }

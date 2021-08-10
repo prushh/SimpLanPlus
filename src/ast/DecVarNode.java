@@ -36,6 +36,20 @@ public class DecVarNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        HashMap<String, STentry> hm = env.symTable.get(env.nestingLevel);
+        STentry entry = new STentry(env.nestingLevel, type, env.offset--);
+
+        if (exp != null) {
+            res.addAll(exp.checkSemantics(env));
+        }
+
+        if (hm.put(ID, entry) != null) {
+            res.add(new SemanticError("DecVar " + ID + " already declared"));
+        }
+
+        return res;
     }
+
 }

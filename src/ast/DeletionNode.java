@@ -30,7 +30,13 @@ public class DeletionNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        if (!env.symTable.get(env.nestingLevel).containsKey(ID)) {
+            res.add(new SemanticError("Id " + ID + " not declared"));
+        }
+
+        return res;
     }
 
 }

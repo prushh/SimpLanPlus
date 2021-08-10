@@ -53,7 +53,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
             nestLev = ctx.getText().substring(0, ctx.getText().length() - 4).length();
             return new BoolTypeNode(nestLev);
         }
-        
+
         return null;
     }
 
@@ -110,8 +110,8 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitLhs(LhsContext ctx) {
-        Integer nestLev;
-        if (ctx.getText().indexOf("^") != -1) {
+        int nestLev;
+        if (ctx.getText().contains("^")) {
             nestLev = ctx.getText().length() - ctx.getText().indexOf("^");
         } else nestLev = 0;
         return new LhsNode(ctx.getText().substring(0, ctx.getText().length() - nestLev), nestLev);
@@ -152,7 +152,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitCall(CallContext ctx) {
-        ArrayList<Node> args = new ArrayList<Node>();
+        ArrayList<Node> args = new ArrayList<>();
 
         for (ExpContext exp : ctx.exp())
             args.add(visit(exp));
@@ -205,12 +205,12 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitValExp(ValExpContext ctx) {
-        return new IntNode(Integer.parseInt(ctx.NUMBER().getText()), 0);
+        return new IntNode(Integer.parseInt(ctx.NUMBER().getText()));
     }
 
     @Override
     public Node visitBoolExp(BoolExpContext ctx) {
-        return new BoolNode(Boolean.parseBoolean(ctx.getText()), 0);
+        return new BoolNode(Boolean.parseBoolean(ctx.getText()));
     }
 
 }

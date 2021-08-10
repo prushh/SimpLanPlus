@@ -8,11 +8,9 @@ import util.SemanticError;
 public class IntNode implements Node {
 
     private Integer val;
-    private Integer pointLevel;
 
-    public IntNode(Integer val, Integer pointLevel) {
+    public IntNode(Integer val) {
         this.val = val;
-        this.pointLevel = pointLevel;
     }
 
     @Override
@@ -22,7 +20,7 @@ public class IntNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        return new IntTypeNode(0);
     }
 
     @Override
@@ -32,6 +30,6 @@ public class IntNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        return new ArrayList<>();
     }
 }

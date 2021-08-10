@@ -37,11 +37,12 @@ public class Test {
 		if (lexer.lexicalErrors > 0){
 			System.out.println("The program was not in the right format. Exiting the compilation process now");
 		} else {
-			Environment env = new Environment();	
+			Environment env = new Environment();
+
 			ArrayList<SemanticError> err = ast.checkSemantics(env);
-			if(err.size()>0){
-				System.out.println("You had: " +err.size()+" errors:");
-				for(SemanticError e : err)
+			if (err.size() > 0) {
+				System.out.println("You had: " + err.size() + " errors:");
+				for (SemanticError e : err)
 					System.out.println("\t" + e);
 			} else {
 				System.out.println("Visualizing AST...");

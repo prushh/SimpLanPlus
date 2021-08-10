@@ -9,9 +9,10 @@ public class LhsNode implements Node {
 
     private String ID;
     private STentry entry;
-    private Integer pointLevel;
+    private int nestingLevel;
+    private int pointLevel;
 
-    public LhsNode(String ID, Integer pointLevel) {
+    public LhsNode(String ID, int pointLevel) {
         this.ID = ID;
         this.pointLevel = pointLevel;
     }
@@ -23,7 +24,11 @@ public class LhsNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        if (entry.getType() instanceof ArrowTypeNode) {
+            System.out.println("Wrong usage of function identifier");
+            System.exit(0);
+        }
+        return entry.getType();
     }
 
     @Override
@@ -33,6 +38,22 @@ public class LhsNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        int i = env.nestingLevel;
+        STentry tmpEntry = null;
+
+        while (i >= 0 && tmpEntry == null) {
+            tmpEntry = (env.symTable.get(i--)).get(ID);
+        }
+
+        if (tmpEntry == null) {
+            res.add(new SemanticError("Id " + ID + " not declared"));
+        } else {
+            entry = tmpEntry;
+            nestingLevel = env.nestingLevel;
+        }
+
+        return res;
     }
 }

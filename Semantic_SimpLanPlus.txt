@@ -74,8 +74,12 @@ id -> not_in (top(/gamma))
 
 type == res.type
 
-----------------------------------------------------------------------------------------------------------------------[DecFun]
-	/gamma |- type id (T1 arg1, ... , Tn argn) {Declarations; Statements;}: /gamma'''
+/sigma_0 = [arg_1 -> /bottom, ... , arg_n -> /bottom]
+
+/sigma_fun * /sigma_0 = [id -> /sigma_0 -> /sigma_1] |- {Declarations; Statements;} : /sigma_fun * /sigma_1[id -> /sigma_0 -> /sigma_1]
+
+---------------------------------------------------------------------------------------------------------------------------[DecFun]
+	/gamma |- type id (T1 arg1, ... , Tn argn) {Declarations; Statements;}: /gamma''', /sigma[id -> /sigma_0 -> /sigma_1]
 
 
 ##############################################################################################################################################
@@ -171,11 +175,13 @@ res_2.type == res_3.type
 
 id in dom(/gamma)
 
-/gamma.id.args # t1..tn
+/gamma.id.args.type # t1..tn
 
 /gamma_i |- expi : /gamma_i+1, res_i(type, point, state)    // i in 0..n --- gamma_20 = gamma
 
-(/gamma.id.args.ti == res_i foreach arg)
+(/gamma.id.args.type == res_i foreach arg.type)
+
+
 
 (res_i.state <= delete foreach i)
 

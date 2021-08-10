@@ -21,7 +21,7 @@ public class BaseExpNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        return exp.typeCheck();
     }
 
     @Override
@@ -31,7 +31,8 @@ public class BaseExpNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        // TODO Add res to _ExpNode? (neg, not, etc.)
+        return exp.checkSemantics(env);
     }
 
 }

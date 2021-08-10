@@ -30,6 +30,9 @@ public class RetNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        if (val != null) {
+            return val.checkSemantics(env);
+        }
+        return new ArrayList<>();
     }
 }

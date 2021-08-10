@@ -8,11 +8,9 @@ import util.SemanticError;
 public class BoolNode implements Node {
 
     private boolean val;
-    private Integer pointLevel;
 
-    public BoolNode(boolean val, Integer pointLevel) {
+    public BoolNode(boolean val) {
         this.val = val;
-        this.pointLevel = pointLevel;
     }
 
     @Override
@@ -22,7 +20,7 @@ public class BoolNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        return new BoolTypeNode(0);
     }
 
     @Override
@@ -32,6 +30,6 @@ public class BoolNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        return new ArrayList<>();
     }
 }

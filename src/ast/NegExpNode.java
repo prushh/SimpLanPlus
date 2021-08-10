@@ -20,7 +20,7 @@ public class NegExpNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        return exp.typeCheck();
     }
 
     @Override
@@ -30,7 +30,7 @@ public class NegExpNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        return exp.checkSemantics(env);
     }
 
 }

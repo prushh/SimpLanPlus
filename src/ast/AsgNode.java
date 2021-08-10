@@ -32,7 +32,14 @@ public class AsgNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        res.addAll(lhs.checkSemantics(env));
+        if (exp != null) {
+            res.addAll(exp.checkSemantics(env));
+        }
+
+        return res;
     }
 
 }

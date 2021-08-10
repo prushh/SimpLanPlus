@@ -21,9 +21,10 @@ public class DecFunNode implements Node {
         args = new ArrayList<>();
     }
 
-    public void addArg(Node p) {
-        args.add(p);
+    public void addArg(Node arg) {
+        args.add(arg);
     }
+
 
     @Override
     public String toPrint(String indent) {
@@ -42,6 +43,45 @@ public class DecFunNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        HashMap<String, STentry> hm = env.symTable.get(env.nestingLevel);
+        STentry entry = new STentry(env.nestingLevel, env.offset--);
+
+        if (hm.put(ID, entry) != null)
+            res.add(new SemanticError("Fun id " + ID + " already declared"));
+        else {
+            env.nestingLevel++;
+            HashMap<String, STentry> hmn = new HashMap<>();
+            env.symTable.add(hmn);
+
+            ArrayList<Node> parTypes = new ArrayList<>();
+            int argOffset = 1;
+
+            for (Node a : args) {
+                ArgNode arg = (ArgNode) a;
+                parTypes.add(arg.getType());
+
+                if (hmn.put(arg.getId(), new STentry(env.nestingLevel, arg.getType(), argOffset++)) != null) {
+                    System.out.println("Parameter id " + arg.getId() + " already declared");
+                }
+
+            }
+
+            entry.addType(new ArrowTypeNode(parTypes, type));
+
+            if (args.size() > 0) {
+                env.offset = -2;
+
+                for (Node n : args) {
+                    res.addAll(n.checkSemantics(env));
+                }
+            }
+
+            res.addAll(body.checkSemantics(env));
+            env.symTable.remove(env.nestingLevel--);
+        }
+
+        return res;
     }
 }

@@ -11,10 +11,10 @@ public class CallNode implements Node {
     private String ID;
     private STentry entry;
     private ArrayList<Node> args;
-    private Integer nestingLevel;
-    private Integer pointLevel;
+    private int nestingLevel;
+    private int pointLevel;
 
-    public CallNode(String ID, STentry entry, ArrayList<Node> args, Integer pointLevel) {
+    public CallNode(String ID, STentry entry, ArrayList<Node> args, int pointLevel) {
         this.ID = ID;
         this.entry = entry;
         this.args = args;
@@ -43,6 +43,25 @@ public class CallNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        int i = env.nestingLevel;
+        STentry tmpEntry = null;
+
+        while (i >= 0 && tmpEntry == null) {
+            tmpEntry = (env.symTable.get(i--)).get(ID);
+        }
+
+        if (tmpEntry == null) {
+            res.add(new SemanticError("Fun " + ID + " not declared"));
+        } else {
+            this.entry = tmpEntry;
+            this.nestingLevel = env.nestingLevel;
+
+            for (Node arg : args)
+                res.addAll(arg.checkSemantics(env));
+        }
+
+        return res;
     }
 }
