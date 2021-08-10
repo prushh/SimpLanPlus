@@ -1,4 +1,5 @@
 
+
 state = {dec, load, deleted, error}
 off = num
 type = [int, bool]
@@ -8,7 +9,7 @@ id -> (type, off, state, point)
 
 /gamma |- Declarations  : /gamma'
 /gamma |- Statements  : /gamma', res(type)
-/gamma |- exp : /gamma', res(type, point)
+/gamma |- exp : /gamma', res(type, point, state)
 
 
 ##############################################################################################################################################
@@ -44,7 +45,7 @@ off = -(count(var) in /gamma + 1)
 
 id -> not_in(top(/gamma)) 	
 
-/gamma |- exp : /gamma', res(type, point)	
+/gamma |- exp : /gamma', res(type, point, state)	
 
 (type.point != 0  &&  res.point != 0) || (type.point == 0  &&  res.point == 0)
 
@@ -80,7 +81,7 @@ type == res.type
 ##############################################################################################################################################
 
 
-/gamma |- lhs : /gamma, res_1(type, point)	/gamma |- exp : /gamma', res_2(type,point)
+/gamma |- lhs : /gamma, res_1(type, point)	/gamma |- exp : /gamma', res_2(type,point,state)
 
 (res_1.point != 0  &&  res_2.point != 0) || (res_1.point == 0  &&  res_2.point == 0)
 
@@ -109,7 +110,7 @@ res.point == 0
 ##############################################################################################################################################
 
 
-/gamma |- exp : /gamma', res(type, point)
+/gamma |- exp : /gamma', res(type, point, state)
 --------------------------------------------------------------------------------------------------------------------------[Print]
 				/gamma |- print exp ; : /gamma', void
 
@@ -117,7 +118,7 @@ res.point == 0
 ##############################################################################################################################################
 
 
-/gamma |- exp : /gamma', res(type, point)
+/gamma |- exp : /gamma', res(type, point, state)
 
 res.point == 0
 --------------------------------------------------------------------------------------------------------------------------[ReturnExp]
@@ -135,7 +136,7 @@ res.point == 0
 ##############################################################################################################################################
 
 
-/gamma |- exp : /gamma', res_1(type, point)
+/gamma |- exp : /gamma', res_1(type, point, state)
 
 res_1.type == bool
 
@@ -149,7 +150,7 @@ res_1.point == 0
 ##############################################################################################################################################
 
 
-/gamma |- exp : /gamma', res_1(type, point)
+/gamma |- exp : /gamma', res_1(type, point, state)
 
 res_1.type == bool
 
@@ -172,18 +173,34 @@ id in dom(/gamma)
 
 /gamma.id.args # t1..tn
 
-/gamma |- expi : /gamma_i, res_i(type, point)
+/gamma_i |- expi : /gamma_i+1, res_i(type, point, state)    // i in 0..n --- gamma_20 = gamma
 
 (/gamma.id.args.ti == res_i foreach arg)
 
+(res_i.state <= delete foreach i)
+
 ->controllare che le exp siano utilizzabili in qualche modo (es. variabile non inizializzata)
 ->applicare il par nel senso bisogna fare la seq tra tipo exp1 e tutti gli altri, exp2 e tutti gli altri, expn e todos other
-->stato all'espressione
 ->find a way to ottenere lo state dell'exp se sono id quando finisce la chiamata di funzione
 
 --------------------------------------------------------------------------------------------------------------------------[Call]
 				/gamma |- id (exp1, ..., expn) ; : 
 
+{
+
+int f (^int a){
+
+	a = a;
+	return 0;			/sigma0 [a -> /bottom]  (/bottom /seq /rw)
+					/sigma1 [a -> rw]
+}
+
+int ^b = new int;
+delete b;
+	
+f(b+1);				(b.state /seq /wr) --> error
+			
+}
 
 ##############################################################################################################################################
 
@@ -192,7 +209,7 @@ id in dom(/gamma)
 
 /gamma.id.args # t1..tn
 
-/gamma |- expi : /gamma_i, res_i(type, point)
+/gamma |- expi : /gamma_i, res_i(type, point, state)
 
 (/gamma.id.args.ti == res_i foreach arg)
 
@@ -213,7 +230,7 @@ id in dom(/gamma)
 NUMBER in Dom(Integer)
 
 --------------------------------------------------------------------------------------------------------------------------[ValExp]
-				/gamma |- NUMBER: /gamma', int, 0
+				/gamma |- NUMBER: /gamma', res(int, 0, load)
 
 
 ##############################################################################################################################################
@@ -222,110 +239,114 @@ NUMBER in Dom(Integer)
 BOOL in Dom(Boolean)
 
 --------------------------------------------------------------------------------------------------------------------------[BoolExp]
-				/gamma |- BOOL : /gamma', bool, 0
+				/gamma |- BOOL : /gamma', res(bool, 0, load)
 
 
 ##############################################################################################################################################
 
 
-/gamma |- left : /gamma', res1(type, point)
+/gamma |- left : /gamma', res1(type, point, state)
 
 op in [*, /, +, -]
 
-/gamma' |- right : /gamma'', res2(type, point)
+/gamma' |- right : /gamma'', res2(type, point, state)
 
 res1.type == res2.type == int
 
 res1.point == res2.point == 0
 
+state = max (res1.state, res2.state)
 --------------------------------------------------------------------------------------------------------------------------[BinExp]
-				/gamma |- left op right : /gamma'', int, 0
+				/gamma |- left op right : /gamma'', res(int, 0, state)
 
 
 ##############################################################################################################################################
 
 
-/gamma |- left : /gamma', res1(type, point)
+/gamma |- left : /gamma', res1(type, point, state)
 
 op in [&&, ||]
 
-/gamma' |- right : /gamma'', res2(type, point)
+/gamma' |- right : /gamma'', res2(type, point, state)
 
 res1.type == res2.type == bool
 
 res1.point == res2.point == 0
 
+state = max (res1.state, res2.state)
 --------------------------------------------------------------------------------------------------------------------------[BinBoolBoolExp]
-				/gamma |- left op right : /gamma'', bool, 0
+				/gamma |- left op right : /gamma'', res(bool, 0, state)
 
 
 ##############################################################################################################################################
 
 
-/gamma |- left : /gamma', res1(type, point)
+/gamma |- left : /gamma', res1(type, point, state)
 
 op in [<, <=, >, >=]
 
-/gamma' |- right : /gamma'', res2(type, point)
+/gamma' |- right : /gamma'', res2(type, point, state)
 
 res1.type == res2.type == int
 
 res1.point == res2.point == 0
 
+state = max (res1.state, res2.state)
 --------------------------------------------------------------------------------------------------------------------------[BinBoolIntExp]
-				/gamma |- left op right : /gamma'', bool, 0
+				/gamma |- left op right : /gamma'', res(bool, 0, state)
 
 
 ##############################################################################################################################################
 
 
-/gamma |- left : /gamma', res1(type, point)
+/gamma |- left : /gamma', res1(type, point, state)
 
 op in [==, !=]
 
-/gamma' |- right : /gamma'', res2(type, point)
+/gamma' |- right : /gamma'', res2(type, point, state)
 
 res1.type == res2.type
 
 res1.point == res2.point == 0
 
+state = max (res1.state, res2.state)
 --------------------------------------------------------------------------------------------------------------------------[BinBoolCosExp]
-				/gamma |- left op right : /gamma'', bool, 0
+				/gamma |- left op right : /gamma'', res(bool, 0, state)
 
 
 ##############################################################################################################################################
 
 
-/gamma |- exp : /gamma', res(type, point)
+/gamma |- exp : /gamma', res(type, point, state)
 
 --------------------------------------------------------------------------------------------------------------------------[BaseExp]
-				/gamma |- ( exp ) : /gamma', res.type, res.point
+				/gamma |- ( exp ) : /gamma', (res.type, res.point, res.state)
 
 
 ##############################################################################################################################################
 
 
-/gamma |- exp : /gamma', res(type, point)
+/gamma |- exp : /gamma', res(type, point, state)
 
 res.type == int
 
 res.point == 0
 
 --------------------------------------------------------------------------------------------------------------------------[NegExp]
-				/gamma |- -exp : /gamma', int, 0
+				/gamma |- -exp : /gamma', res(int, 0, res.state)
 
 
 ##############################################################################################################################################
 
 
-/gamma |- exp : /gamma', res(type, point)
+/gamma |- exp : /gamma', res(type, point, state)
 
 res.type == bool
 
 res.point == 0
 
 --------------------------------------------------------------------------------------------------------------------------[NotExp]
-				/gamma |- !exp : /gamma', bool, 0
+				/gamma |- !exp : /gamma', res(bool, 0, res.state)
 
 
 ##############################################################################################################################################
@@ -338,7 +359,7 @@ lhs.id in(/gamma)
 n = /gamma.lhs.id.point - lhs.id.point
 
 --------------------------------------------------------------------------------------------------------------------------[DerNicoExp]
-				/gamma |- lhs : /gamma', /gamma.lhs.id.type, n
+				/gamma |- lhs : /gamma', (/gamma.lhs.id.type, n, /gamma.lhs.id.state)
 
 
 ##############################################################################################################################################
@@ -351,7 +372,7 @@ type.name == bool \/ int
 type.point == 0
 
 --------------------------------------------------------------------------------------------------------------------------[NewExp]
-				/gamma |- new type : /gamma, type.name, 1
+				/gamma |- new type : /gamma, res(type.name, 1, load)
 
 '''
 int a = new int; #ERROR
@@ -372,9 +393,3 @@ a^^
 '''
 
 ##############################################################################################################################################
-##############################################################################################################################################
-
-
-TODO:
- - Call
- - CallExp
