@@ -32,4 +32,10 @@ public class BoolNode implements Node {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return new ArrayList<>();
     }
+
+    @Override
+    public Integer getPointLevel() {
+        return 0;
+    }
+
 }

@@ -19,7 +19,7 @@ public class ArrowTypeNode implements Node {
         return ret;
     }
 
-    public ArrayList<Node> getArgList() { //
+    public ArrayList<Node> getParList() { //
         return args;
     }
 
@@ -40,6 +40,12 @@ public class ArrowTypeNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<>();
+        return null;
     }
+
+    @Override
+    public Integer getPointLevel() {
+        return 0;
+    }
+
 }

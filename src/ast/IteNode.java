@@ -25,17 +25,20 @@ public class IteNode implements Node {
 
     @Override
     public Node typeCheck() {
-        if (!(SimpLanlib.isSubtype(cond.typeCheck(), new BoolTypeNode(0)))) {
+        Node cond_type = cond.typeCheck();
+        if (cond_type.getPointLevel()!=0 || !(SimpLanlib.isSubtype(cond_type, new BoolTypeNode(0)))){
             System.out.println("non boolean condition in if");
             System.exit(0);
         }
         Node t = th.typeCheck();
-        Node e = el.typeCheck();
-        if (SimpLanlib.isSubtype(t, e))
-            return e;
-        System.out.println("Incompatible types in then else branches");
-        System.exit(0);
-        return null;
+        if (el != null) {
+            Node e = el.typeCheck();
+            if (SimpLanlib.isSubtype(t, e))
+                return e;
+            System.out.println("Incompatible types in then else branches");
+            System.exit(0);
+        }
+        return t;
     }
 
     @Override
@@ -49,8 +52,15 @@ public class IteNode implements Node {
 
         res.addAll(cond.checkSemantics(env));
         res.addAll(th.checkSemantics(env));
-        res.addAll(el.checkSemantics(env));
+        if (el != null)
+            res.addAll(el.checkSemantics(env));
 
         return res;
     }
+
+    @Override
+    public Integer getPointLevel() {
+        return 0;
+    }
+
 }

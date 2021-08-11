@@ -8,9 +8,11 @@ import java.util.ArrayList;
 public class DeletionNode implements Node {
 
     private String ID;
+    private LhsNode lhs;
 
     public DeletionNode(String ID) {
         this.ID = ID;
+        this.lhs = new LhsNode(ID,0);
     }
 
     @Override
@@ -20,7 +22,6 @@ public class DeletionNode implements Node {
 
     @Override
     public Node typeCheck() {
-        // need symbol table
         return new NullTypeNode();
     }
 
@@ -35,13 +36,19 @@ public class DeletionNode implements Node {
 
         if (!env.symTable.get(env.nestingLevel).containsKey(ID)) {
             res.add(new SemanticError("Id " + ID + " not declared"));
-        } else {
-            /*if (env.symTable.get(env.nestingLevel).get(ID).getType().getPointLevel() == 0) {
+        }
+        else {
+            if (env.symTable.get(env.nestingLevel).get(ID).getType().getPointLevel() == 0){
                 System.out.println("cannot delete a non pointer id");
                 System.exit(0);
-            }*/
+            }
         }
         return res;
+    }
+
+    @Override
+    public Integer getPointLevel() {
+        return 0;
     }
 
 }

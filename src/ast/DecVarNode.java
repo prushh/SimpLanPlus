@@ -26,7 +26,20 @@ public class DecVarNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        Node l = this.type;
+        if (exp != null) {
+            Node r = this.exp.typeCheck();
+            if (!(SimpLanlib.isSubtype(l, r))) {
+                System.out.println("incompatible value for variable " + this.ID);
+                System.exit(0);
+            } else {
+                if (l.getPointLevel() != r.getPointLevel()) {
+                    System.out.println("cannot assign variable or pointers of different type");
+                    System.exit(0);
+                }
+            }
+        }
+        return new NullTypeNode();
     }
 
     @Override
@@ -49,7 +62,14 @@ public class DecVarNode implements Node {
             res.add(new SemanticError("DecVar " + ID + " already declared"));
         }
 
+
+
         return res;
+    }
+
+    @Override
+    public Integer getPointLevel() {
+        return 0;
     }
 
 }

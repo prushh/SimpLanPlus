@@ -4,17 +4,23 @@ import java.util.ArrayList;
 
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanlib;
 
 public class LhsNode implements Node {
 
     private String ID;
     private STentry entry;
     private int nestingLevel;
-    private int pointLevel;
+    private Integer pointLevel;
+
 
     public LhsNode(String ID, int pointLevel) {
         this.ID = ID;
         this.pointLevel = pointLevel;
+    }
+
+    public Integer getPointLevel() {
+        return this.pointLevel;
     }
 
     @Override
@@ -28,7 +34,17 @@ public class LhsNode implements Node {
             System.out.println("Wrong usage of function identifier");
             System.exit(0);
         }
-        return entry.getType();
+        int difference = entry.getType().getPointLevel() - this.pointLevel;
+        if (difference < 0){
+            System.out.println("too many dereferencing operations");
+            System.exit(0);
+        }
+        Node lhs_type;
+        if (SimpLanlib.isSubtype(entry.getType(),new IntTypeNode(0)))
+            lhs_type = new IntTypeNode(difference);
+        else
+            lhs_type = new BoolTypeNode(difference);
+        return lhs_type;
     }
 
     @Override
@@ -56,4 +72,5 @@ public class LhsNode implements Node {
 
         return res;
     }
+
 }

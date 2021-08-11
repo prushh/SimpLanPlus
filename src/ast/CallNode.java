@@ -27,10 +27,6 @@ public class CallNode implements Node {
         this.args = args;
     }
 
-    public void setCallExp() {
-        isCallExp = true;
-    }
-
     @Override
     public String toPrint(String indent) {
         return null;
@@ -38,26 +34,32 @@ public class CallNode implements Node {
 
     @Override
     public Node typeCheck() {  //
-        /*
+
         ArrowTypeNode t = null;
         if (entry.getType() instanceof ArrowTypeNode) t = (ArrowTypeNode) entry.getType();
         else {
-            System.out.println("Invocation of a non-function " + id);
+            System.out.println("Invocation of a non-function " + ID);
             System.exit(0);
         }
         ArrayList<Node> p = t.getParList();
-        if (!(p.size() == parlist.size())) {
-            System.out.println("Wrong number of parameters in the invocation of " + id);
+        if (!(p.size() == args.size())) {
+            System.out.println("Wrong number of parameters in the invocation of " + ID);
             System.exit(0);
         }
-        for (int i = 0; i < parlist.size(); i++)
-            if (!(SimpLanlib.isSubtype((parlist.get(i)).typeCheck(), p.get(i)))) {
-                System.out.println("Wrong type for " + (i + 1) + "-th parameter in the invocation of " + id);
+        if (isCallExp){
+            if (SimpLanlib.isSubtype(t.getRet(),new VoidTypeNode())){
+                System.out.println("cannot use void function as an exp");
                 System.exit(0);
             }
+        }
+        for (int i = 0; i < args.size(); i++){
+            Node arg_i = args.get(i).typeCheck();
+            if (!(SimpLanlib.isSubtype(arg_i, p.get(i))) || (arg_i.getPointLevel() != p.get(i).getPointLevel())) {
+                System.out.println("Wrong type for " + (i + 1) + "-th parameter in the invocation of " + ID);
+                System.exit(0);
+            }
+        }
         return t.getRet();
-        */
-        return new NullTypeNode();
     }
 
     @Override
@@ -82,11 +84,17 @@ public class CallNode implements Node {
             this.entry = tmpEntry;
             this.nestingLevel = env.nestingLevel;
 
-            for (Node arg : args) {
+            for (Node arg : args)
                 res.addAll(arg.checkSemantics(env));
-            }
         }
 
         return res;
     }
+
+    @Override
+    public Integer getPointLevel() {
+        return 0;
+    }
+
+
 }

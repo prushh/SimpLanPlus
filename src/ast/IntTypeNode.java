@@ -14,8 +14,8 @@ public class IntTypeNode implements Node {
     }
 
     @Override
-    public String toPrint(String indent) {
-        return null;
+    public String toPrint(String s) {
+        return s + "IntType\n";
     }
 
     @Override
@@ -30,6 +30,11 @@ public class IntTypeNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<>();
+        return null;
+    }
+
+    @Override
+    public Integer getPointLevel() {
+        return this.pointLevel;
     }
 }

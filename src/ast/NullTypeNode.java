@@ -30,5 +30,9 @@ public class NullTypeNode implements Node {
         return "";
     }
 
+    @Override
+    public Integer getPointLevel() {
+        return 0;
+    }
 
 }  

@@ -22,8 +22,17 @@ public class RetNode implements Node {
     public Node typeCheck() {
         if (val == null)
             return new VoidTypeNode();
-        else
-            return val.typeCheck();
+        else {
+            Node t = val.typeCheck();
+            if (t.getPointLevel() != 0) {
+                System.out.println("cannot return pointers");
+                System.exit(0);
+            }
+            else {
+                return t;
+            }
+        }
+        return new NullTypeNode() ;
     }
 
     @Override
@@ -38,4 +47,10 @@ public class RetNode implements Node {
         }
         return new ArrayList<>();
     }
+
+    @Override
+    public Integer getPointLevel() {
+        return 0;
+    }
+
 }

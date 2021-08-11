@@ -13,10 +13,10 @@ public class BoolTypeNode implements Node {
         this.pointLevel = pointLevel;
     }
 
-    @Override
-    public String toPrint(String indent) {
-        return null;
+    public String toPrint(String s) {
+        return s + "BoolType\n";
     }
+
 
     @Override
     public Node typeCheck() {
@@ -31,5 +31,10 @@ public class BoolTypeNode implements Node {
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return null;
+    }
+
+    @Override
+    public Integer getPointLevel() {
+        return this.pointLevel;
     }
 }

@@ -2,14 +2,15 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanlib;
 
 import java.util.ArrayList;
 
 public class CallExpNode implements Node {
 
-    private CallNode callNode;
+    private Node callNode;
 
-    public CallExpNode(CallNode callNode) {
+    public CallExpNode(Node callNode) {
         this.callNode = callNode;
     }
 
@@ -20,7 +21,7 @@ public class CallExpNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        return this.callNode.typeCheck();
     }
 
     @Override
@@ -32,5 +33,13 @@ public class CallExpNode implements Node {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return callNode.checkSemantics(env);
     }
+
+    @Override
+    public Integer getPointLevel() {
+        return 0;
+    }
+
+
+
 
 }
