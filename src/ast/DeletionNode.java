@@ -35,8 +35,12 @@ public class DeletionNode implements Node {
 
         if (!env.symTable.get(env.nestingLevel).containsKey(ID)) {
             res.add(new SemanticError("Id " + ID + " not declared"));
+        } else {
+            /*if (env.symTable.get(env.nestingLevel).get(ID).getType().getPointLevel() == 0) {
+                System.out.println("cannot delete a non pointer id");
+                System.exit(0);
+            }*/
         }
-
         return res;
     }
 

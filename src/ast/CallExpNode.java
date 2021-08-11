@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public class CallExpNode implements Node {
 
-    private Node callNode;
+    private CallNode callNode;
 
-    public CallExpNode(Node callNode) {
+    public CallExpNode(CallNode callNode) {
         this.callNode = callNode;
     }
 

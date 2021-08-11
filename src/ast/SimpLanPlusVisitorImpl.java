@@ -8,11 +8,10 @@ import parser.SimpLanPlusParser.*;
 public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
-    public Node visitBlock(BlockContext ctx) {
-        BlockNode res;
+    public BlockNode visitBlock(BlockContext ctx) {
+        BlockNode block;
 
         ArrayList<Node> declarations = new ArrayList<>();
-
         ArrayList<Node> statements = new ArrayList<>();
 
         for (DeclarationContext dc : ctx.declaration()) {
@@ -23,15 +22,14 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
             statements.add(visit(st));
         }
 
-        res = new BlockNode(declarations, statements);
+        block = new BlockNode(declarations, statements);
 
-        return res;
+        return block;
     }
 
     @Override
-    public Node visitDecVar(DecVarContext ctx) {
-
-        Node typeNode = visit(ctx.type());
+    public DecVarNode visitDecVar(DecVarContext ctx) {
+        Node type = visit(ctx.type());
 
         Node exp = null;
         ExpContext tmp = ctx.exp();
@@ -39,7 +37,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
             exp = visit(tmp);
         }
 
-        return new DecVarNode(ctx.ID().getText(), typeNode, exp);
+        return new DecVarNode(ctx.ID().getText(), type, exp);
     }
 
     @Override
@@ -59,24 +57,28 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
 
     @Override
-    public Node visitDecFun(DecFunContext ctx) {
+    public DecFunNode visitDecFun(DecFunContext ctx) {
 
         VoidTypeNode voidType = null;
+        Node typeNode = visit(ctx.type());
         DecFunNode res = new DecFunNode(null, null, null);
+
+        BlockNode block = visitBlock(ctx.block());
+        block.setBlockFunction();
 
         TypeContext tmp = ctx.type();
 
         if (tmp == null) {
-            res = new DecFunNode(ctx.ID().getText(), new VoidTypeNode(), visit(ctx.block()));
+            res = new DecFunNode(ctx.ID().getText(), new VoidTypeNode(), block);
         } else {
-            res = new DecFunNode(ctx.ID().getText(), visit(ctx.type()), visit(ctx.block()));
+            res = new DecFunNode(ctx.ID().getText(), typeNode, block);
         }
 
-        for (ArgContext vc : ctx.arg())
+        for (ArgContext vc : ctx.arg()) {
             res.addArg(new ArgNode(vc.ID().getText(), visit(vc.type())));
+        }
 
         return res;
-
     }
 
     @Override
@@ -101,29 +103,33 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitAssignment(AssignmentContext ctx) {
-        Node lhs = visit(ctx.lhs());
+    public AsgNode visitAssignment(AssignmentContext ctx) {
+        LhsNode lhs = visitLhs(ctx.lhs());
         Node exp = visit(ctx.exp());
 
         return new AsgNode(lhs, exp);
     }
 
     @Override
-    public Node visitLhs(LhsContext ctx) {
+    public LhsNode visitLhs(LhsContext ctx) {
         int nestLev;
         if (ctx.getText().contains("^")) {
             nestLev = ctx.getText().length() - ctx.getText().indexOf("^");
-        } else nestLev = 0;
-        return new LhsNode(ctx.getText().substring(0, ctx.getText().length() - nestLev), nestLev);
+        } else {
+            nestLev = 0;
+        }
+
+        String id = ctx.getText().substring(0, ctx.getText().length() - nestLev);
+        return new LhsNode(id, nestLev);
     }
 
     @Override
-    public Node visitPrint(PrintContext ctx) {
+    public PrintNode visitPrint(PrintContext ctx) {
         return new PrintNode(visit(ctx.exp()));
     }
 
     @Override
-    public Node visitRet(RetContext ctx) {
+    public RetNode visitRet(RetContext ctx) {
         Node exp = null;
         ExpContext tmp = ctx.exp();
         if (tmp != null) {
@@ -134,9 +140,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitIte(IteContext ctx) {
-        IteNode res;
-
+    public IteNode visitIte(IteContext ctx) {
         Node condExp = visit(ctx.exp());
         Node thenExp = visit(ctx.statement(0));
         Node elseExp = null;
@@ -145,13 +149,11 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
             elseExp = visit(ctx.statement(1));
         }
 
-        res = new IteNode(condExp, thenExp, elseExp);
-
-        return res;
+        return new IteNode(condExp, thenExp, elseExp);
     }
 
     @Override
-    public Node visitCall(CallContext ctx) {
+    public CallNode visitCall(CallContext ctx) {
         ArrayList<Node> args = new ArrayList<>();
 
         for (ExpContext exp : ctx.exp())
@@ -161,55 +163,55 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitDeletion(DeletionContext ctx) {
+    public DeletionNode visitDeletion(DeletionContext ctx) {
         return new DeletionNode(ctx.ID().getText());
     }
 
-    ;
-
-
     @Override
-    public Node visitBaseExp(BaseExpContext ctx) {
+    public BaseExpNode visitBaseExp(BaseExpContext ctx) {
         return new BaseExpNode(visit(ctx.exp()));
     }
 
     @Override
-    public Node visitBinExp(BinExpContext ctx) {
+    public BinExpNode visitBinExp(BinExpContext ctx) {
         return new BinExpNode(visit(ctx.left), ctx.op, visit(ctx.right));
     }
 
     @Override
-    public Node visitDerExp(DerExpContext ctx) {
+    public DerExpNode visitDerExp(DerExpContext ctx) {
         return new DerExpNode(visit(ctx.lhs()));
     }
 
     @Override
-    public Node visitNewExp(NewExpContext ctx) {
+    public NewExpNode visitNewExp(NewExpContext ctx) {
         return new NewExpNode(visit(ctx.type()));
     }
 
     @Override
-    public Node visitNegExp(NegExpContext ctx) {
+    public NegExpNode visitNegExp(NegExpContext ctx) {
         return new NegExpNode(visit(ctx.exp()));
     }
 
     @Override
-    public Node visitCallExp(CallExpContext ctx) {
-        return new CallExpNode(visit(ctx.call()));
+    public CallExpNode visitCallExp(CallExpContext ctx) {
+        CallNode call = visitCall(ctx.call());
+        call.setCallExp();
+
+        return new CallExpNode(call);
     }
 
     @Override
-    public Node visitNotExp(NotExpContext ctx) {
+    public NotExpNode visitNotExp(NotExpContext ctx) {
         return new NotExpNode(visit(ctx.exp()));
     }
 
     @Override
-    public Node visitValExp(ValExpContext ctx) {
+    public IntNode visitValExp(ValExpContext ctx) {
         return new IntNode(Integer.parseInt(ctx.NUMBER().getText()));
     }
 
     @Override
-    public Node visitBoolExp(BoolExpContext ctx) {
+    public BoolNode visitBoolExp(BoolExpContext ctx) {
         return new BoolNode(Boolean.parseBoolean(ctx.getText()));
     }
 

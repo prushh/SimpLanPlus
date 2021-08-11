@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class AsgNode implements Node {
 
-    private Node lhs;
+    private LhsNode lhs;
     private Node exp;
 
-    public AsgNode(Node lhs, Node exp) {
+    public AsgNode(LhsNode lhs, Node exp) {
         this.lhs = lhs;
         this.exp = exp;
     }

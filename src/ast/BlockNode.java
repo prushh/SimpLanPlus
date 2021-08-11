@@ -11,6 +11,7 @@ public class BlockNode implements Node {
 
     private ArrayList<Node> decList;
     private ArrayList<Node> stmList;
+    private boolean isBlockFunction = false;
 
     public BlockNode(ArrayList<Node> decList, ArrayList<Node> stmList) {
         this.decList = decList;
@@ -74,9 +75,11 @@ public class BlockNode implements Node {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<>();
 
-        HashMap<String, STentry> hm = new HashMap<>();
-        env.symTable.add(hm);
-        env.nestingLevel += 1;
+        if (!isBlockFunction) {
+            HashMap<String, STentry> hm = new HashMap<>();
+            env.symTable.add(hm);
+            env.nestingLevel++;
+        }
 
         for (Node dec : decList) {
             res.addAll(dec.checkSemantics(env));
@@ -86,6 +89,15 @@ public class BlockNode implements Node {
             res.addAll(stm.checkSemantics(env));
         }
 
+        if (!isBlockFunction) {
+            env.symTable.remove(env.nestingLevel);
+            env.nestingLevel--;
+        }
+
         return res;
+    }
+
+    public void setBlockFunction() {
+        isBlockFunction = true;
     }
 }

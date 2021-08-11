@@ -13,6 +13,7 @@ public class CallNode implements Node {
     private ArrayList<Node> args;
     private int nestingLevel;
     private int pointLevel;
+    private boolean isCallExp = false;
 
     public CallNode(String ID, STentry entry, ArrayList<Node> args, int pointLevel) {
         this.ID = ID;
@@ -24,6 +25,10 @@ public class CallNode implements Node {
     public CallNode(String ID, ArrayList<Node> args) {
         this.ID = ID;
         this.args = args;
+    }
+
+    public void setCallExp() {
+        isCallExp = true;
     }
 
     @Override
@@ -77,8 +82,9 @@ public class CallNode implements Node {
             this.entry = tmpEntry;
             this.nestingLevel = env.nestingLevel;
 
-            for (Node arg : args)
+            for (Node arg : args) {
                 res.addAll(arg.checkSemantics(env));
+            }
         }
 
         return res;
