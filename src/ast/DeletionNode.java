@@ -20,7 +20,8 @@ public class DeletionNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        // need symbol table
+        return new NullTypeNode();
     }
 
     @Override

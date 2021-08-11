@@ -2,6 +2,7 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanlib;
 
 import java.util.ArrayList;
 
@@ -22,9 +23,14 @@ public class AsgNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        Node l = this.lhs.typeCheck();
+        Node r = this.exp.typeCheck();
+        if (!(SimpLanlib.isSubtype(l,r))) {
+            System.out.println("incompatible value for variable " + this.lhs );
+            System.exit(0);
+        }
+        return new NullTypeNode();
     }
-
     @Override
     public String codeGeneration() {
         return null;

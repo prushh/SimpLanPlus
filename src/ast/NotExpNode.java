@@ -2,6 +2,7 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanlib;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,12 @@ public class NotExpNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return exp.typeCheck();
+        Node t = this.exp.typeCheck();
+        if (!SimpLanlib.isSubtype(t,new BoolTypeNode(0))){
+            System.out.println("incompatible types for operator -");
+            System.exit(0);
+        }
+        return t;
     }
 
     @Override

@@ -3,6 +3,7 @@ package ast;
 import org.antlr.v4.runtime.Token;
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanlib;
 
 import java.util.ArrayList;
 
@@ -25,7 +26,41 @@ public class BinExpNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        Node l = left.typeCheck();
+        Node r = right.typeCheck();
+        if (op.getText().equals("*") ||
+                op.getText().equals("/") ||
+                op.getText().equals("+") ||
+                op.getText().equals("-") ||
+                op.getText().equals("<") ||
+                op.getText().equals("<=") ||
+                op.getText().equals(">") ||
+                op.getText().equals(">=")) {
+            if (!(SimpLanlib.isSubtype(l, new IntTypeNode(0))
+                    && (SimpLanlib.isSubtype(r, new IntTypeNode(0))))) {
+                System.out.println("incompatible types for binary operator " + op.getText());
+                System.exit(0);
+            } else {
+                return new IntTypeNode(0);
+            }
+        } else if (op.getText().equals("&&") ||
+                op.getText().equals("||")) {
+            if (!(SimpLanlib.isSubtype(l, new BoolTypeNode(0))
+                    && (SimpLanlib.isSubtype(r, new BoolTypeNode(0))))) {
+                System.out.println("incompatible types for binary operator " + op.getText());
+                System.exit(0);
+            } else {
+                return new BoolTypeNode(0);
+            }
+        } else {
+            if (!(SimpLanlib.isSubtype(l, r))) {
+                System.out.println("incompatible types for binary operator " + op.getText());
+                System.exit(0);
+            } else {
+                return new BoolTypeNode(0);
+            }
+        }
+        return new NullTypeNode();
     }
 
     @Override

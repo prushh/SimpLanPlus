@@ -33,7 +33,11 @@ public class DecFunNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        if(!SimpLanlib.isSubtype(this.type,body.typeCheck())){
+            System.out.println("Mismatching return types <function = " + this.type +  ", body = " + body.typeCheck() + ">");
+            System.exit(0);
+        }
+        return body.typeCheck();
     }
 
     @Override

@@ -20,7 +20,8 @@ public class PrintNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        this.val.typeCheck();
+        return new NullTypeNode();
     }
 
     @Override

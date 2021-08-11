@@ -29,8 +29,8 @@ public class ArgNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
-        return null;
+    public Node typeCheck () {
+        return this.type;
     }
 
     @Override

@@ -2,6 +2,7 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanlib;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,10 @@ public class NewExpNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        if (SimpLanlib.isSubtype(type,new IntTypeNode(0)))
+            return new IntTypeNode(1);
+        else
+            return new BoolTypeNode(1);
     }
 
     @Override

@@ -21,7 +21,7 @@ public class BaseExpNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return exp.typeCheck();
+        return this.exp.typeCheck();
     }
 
     @Override

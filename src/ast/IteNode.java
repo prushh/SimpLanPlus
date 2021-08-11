@@ -25,6 +25,16 @@ public class IteNode implements Node {
 
     @Override
     public Node typeCheck() {
+        if (!(SimpLanlib.isSubtype(cond.typeCheck(), new BoolTypeNode(0)))) {
+            System.out.println("non boolean condition in if");
+            System.exit(0);
+        }
+        Node t = th.typeCheck();
+        Node e = el.typeCheck();
+        if (SimpLanlib.isSubtype(t, e))
+            return e;
+        System.out.println("Incompatible types in then else branches");
+        System.exit(0);
         return null;
     }
 

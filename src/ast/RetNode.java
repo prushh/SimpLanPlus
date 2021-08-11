@@ -20,7 +20,10 @@ public class RetNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        if (val == null)
+            return new VoidTypeNode();
+        else
+            return val.typeCheck();
     }
 
     @Override
