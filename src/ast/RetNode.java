@@ -27,12 +27,11 @@ public class RetNode implements Node {
             if (t.getPointLevel() != 0) {
                 System.out.println("cannot return pointers");
                 System.exit(0);
-            }
-            else {
+            } else {
                 return t;
             }
         }
-        return new NullTypeNode() ;
+        return new NullTypeNode();
     }
 
     @Override
@@ -48,9 +47,9 @@ public class RetNode implements Node {
         return new ArrayList<>();
     }
 
+
     @Override
-    public Integer getPointLevel() {
+    public int getPointLevel() {
         return 0;
     }
-
 }

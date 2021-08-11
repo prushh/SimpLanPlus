@@ -29,7 +29,7 @@ public class ArgNode implements Node {
     }
 
     @Override
-    public Node typeCheck () {
+    public Node typeCheck() {
         return this.type;
     }
 
@@ -44,8 +44,7 @@ public class ArgNode implements Node {
     }
 
     @Override
-    public Integer getPointLevel() {
+    public int getPointLevel() {
         return 0;
     }
-
 }

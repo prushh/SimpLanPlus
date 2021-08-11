@@ -22,7 +22,7 @@ public class NegExpNode implements Node {
     @Override
     public Node typeCheck() {
         Node t = this.exp.typeCheck();
-        if (!SimpLanlib.isSubtype(t,new IntTypeNode(0)) || t.getPointLevel() != 0){
+        if (!SimpLanlib.isSubtype(t, new IntTypeNode(0)) || t.getPointLevel() != 0) {
             System.out.println("incompatible types for operator -");
             System.exit(0);
         }
@@ -39,10 +39,10 @@ public class NegExpNode implements Node {
         return exp.checkSemantics(env);
     }
 
+
     @Override
-    public Integer getPointLevel() {
+    public int getPointLevel() {
         return 0;
     }
-
 
 }

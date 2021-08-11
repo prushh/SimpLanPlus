@@ -21,4 +21,6 @@ public interface Node {
 
     ArrayList<SemanticError> checkSemantics(Environment env);
 
+    int getPointLevel();
+
 }  

@@ -37,4 +37,9 @@ public class IntTypeNode implements Node {
     public Integer getPointLevel() {
         return this.pointLevel;
     }
+
+    @Override
+    public int getPointLevel() {
+        return this.pointLevel;
+    }
 }

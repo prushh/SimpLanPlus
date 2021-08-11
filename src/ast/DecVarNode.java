@@ -62,13 +62,12 @@ public class DecVarNode implements Node {
             res.add(new SemanticError("DecVar " + ID + " already declared"));
         }
 
-
-
         return res;
     }
 
+
     @Override
-    public Integer getPointLevel() {
+    public int getPointLevel() {
         return 0;
     }
 

@@ -11,16 +11,11 @@ public class LhsNode implements Node {
     private String ID;
     private STentry entry;
     private int nestingLevel;
-    private Integer pointLevel;
-
+    private int pointLevel;
 
     public LhsNode(String ID, int pointLevel) {
         this.ID = ID;
         this.pointLevel = pointLevel;
-    }
-
-    public Integer getPointLevel() {
-        return this.pointLevel;
     }
 
     @Override
@@ -35,12 +30,12 @@ public class LhsNode implements Node {
             System.exit(0);
         }
         int difference = entry.getType().getPointLevel() - this.pointLevel;
-        if (difference < 0){
+        if (difference < 0) {
             System.out.println("too many dereferencing operations");
             System.exit(0);
         }
         Node lhs_type;
-        if (SimpLanlib.isSubtype(entry.getType(),new IntTypeNode(0)))
+        if (SimpLanlib.isSubtype(entry.getType(), new IntTypeNode(0)))
             lhs_type = new IntTypeNode(difference);
         else
             lhs_type = new BoolTypeNode(difference);
@@ -71,6 +66,11 @@ public class LhsNode implements Node {
         }
 
         return res;
+    }
+
+    @Override
+    public int getPointLevel() {
+        return this.pointLevel;
     }
 
 }

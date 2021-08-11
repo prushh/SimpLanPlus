@@ -22,9 +22,9 @@ public class NewExpNode implements Node {
     @Override
     public Node typeCheck() {
         if (SimpLanlib.isSubtype(type,new IntTypeNode(0)))
-            return new IntTypeNode(type.getPointLevel()+1);
+            return new IntTypeNode(type.getPointLevel() + 1);
         else
-            return new BoolTypeNode(type.getPointLevel()+1);
+            return new BoolTypeNode(type.getPointLevel() + 1);
     }
 
     @Override
@@ -37,8 +37,9 @@ public class NewExpNode implements Node {
         return new ArrayList<>();
     }
 
+
     @Override
-    public Integer getPointLevel() {
+    public int getPointLevel() {
         return 0;
     }
 

@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class AsgNode implements Node {
 
-    private Node lhs;
+    private LhsNode lhs;
     private Node exp;
 
-    public AsgNode(Node lhs, Node exp) {
+    public AsgNode(LhsNode lhs, Node exp) {
         this.lhs = lhs;
         this.exp = exp;
     }
@@ -28,16 +28,15 @@ public class AsgNode implements Node {
         if (!(SimpLanlib.isSubtype(l, r))) {
             System.out.println("incompatible value for variable " + this.lhs);
             System.exit(0);
-        }
-        else {
-            if (l.getPointLevel() != r.getPointLevel())
-            {
+        } else {
+            if (l.getPointLevel() != r.getPointLevel()) {
                 System.out.println("cannot assign variable or pointers of different type");
                 System.exit(0);
             }
         }
         return new NullTypeNode();
     }
+
     @Override
     public String codeGeneration() {
         return null;
@@ -55,7 +54,10 @@ public class AsgNode implements Node {
         return res;
     }
 
-    public Integer getPointLevel() {
+
+    @Override
+    public int getPointLevel() {
         return 0;
     }
+
 }

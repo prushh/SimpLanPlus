@@ -31,9 +31,7 @@ public class VoidTypeNode implements Node {
     }
 
     @Override
-    public Integer getPointLevel() {
+    public int getPointLevel() {
         return 0;
     }
-
-
 }  

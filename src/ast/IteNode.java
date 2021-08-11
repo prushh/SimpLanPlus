@@ -26,7 +26,7 @@ public class IteNode implements Node {
     @Override
     public Node typeCheck() {
         Node cond_type = cond.typeCheck();
-        if (cond_type.getPointLevel()!=0 || !(SimpLanlib.isSubtype(cond_type, new BoolTypeNode(0)))){
+        if (cond_type.getPointLevel() != 0 || !(SimpLanlib.isSubtype(cond_type, new BoolTypeNode(0)))) {
             System.out.println("non boolean condition in if");
             System.exit(0);
         }
@@ -58,9 +58,9 @@ public class IteNode implements Node {
         return res;
     }
 
+
     @Override
-    public Integer getPointLevel() {
+    public int getPointLevel() {
         return 0;
     }
-
 }

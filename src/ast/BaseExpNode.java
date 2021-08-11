@@ -25,11 +25,6 @@ public class BaseExpNode implements Node {
     }
 
     @Override
-    public Integer getPointLevel(){
-        return 0;
-    };
-
-    @Override
     public String codeGeneration() {
         return null;
     }
@@ -40,5 +35,8 @@ public class BaseExpNode implements Node {
         return exp.checkSemantics(env);
     }
 
-
+    @Override
+    public int getPointLevel() {
+        return 0;
+    }
 }

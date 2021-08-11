@@ -11,6 +11,7 @@ public class BlockNode implements Node {
 
     private ArrayList<Node> decList;
     private ArrayList<Node> stmList;
+    private boolean isBlockFunction = false;
 
     public BlockNode(ArrayList<Node> decList, ArrayList<Node> stmList) {
         this.decList = decList;
@@ -32,7 +33,7 @@ public class BlockNode implements Node {
         ArrayList<Node> nodeList = new ArrayList<>();
         for (Node stm : stmList) {
             tmp = stm.typeCheck();
-            if ((stm instanceof RetNode) || (stm instanceof IteNode  &&  ! (tmp instanceof NullTypeNode) ))
+            if ((stm instanceof RetNode) || (stm instanceof IteNode && !(tmp instanceof NullTypeNode)))
                 nodeList.add(tmp);
         }
         Node check;
@@ -42,7 +43,7 @@ public class BlockNode implements Node {
         } else {
             check = nodeList.get(0);
             for (Node ret : nodeList) {
-                if (!SimpLanlib.isSubtype(ret,check))
+                if (!SimpLanlib.isSubtype(ret, check))
                     err = true;
             }
         }
@@ -53,14 +54,11 @@ public class BlockNode implements Node {
 
         if (SimpLanlib.isSubtype(check, new BoolTypeNode(0))) {
             return new BoolTypeNode(0);
-        }
-        else if (SimpLanlib.isSubtype(check, new IntTypeNode(0))) {
+        } else if (SimpLanlib.isSubtype(check, new IntTypeNode(0))) {
             return new IntTypeNode(0);
-        }
-        else if (SimpLanlib.isSubtype(check, new VoidTypeNode())) {
+        } else if (SimpLanlib.isSubtype(check, new VoidTypeNode())) {
             return new VoidTypeNode();
-        }
-        else {
+        } else {
             return new NullTypeNode();
         }
     }
@@ -74,9 +72,11 @@ public class BlockNode implements Node {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<>();
 
-        HashMap<String, STentry> hm = new HashMap<>();
-        env.symTable.add(hm);
-        env.nestingLevel += 1;
+        if (!isBlockFunction) {
+            HashMap<String, STentry> hm = new HashMap<>();
+            env.symTable.add(hm);
+            env.nestingLevel++;
+        }
 
         for (Node dec : decList) {
             res.addAll(dec.checkSemantics(env));
@@ -86,11 +86,21 @@ public class BlockNode implements Node {
             res.addAll(stm.checkSemantics(env));
         }
 
+        if (!isBlockFunction) {
+            env.symTable.remove(env.nestingLevel);
+            env.nestingLevel--;
+        }
+
         return res;
     }
 
+    public void setBlockFunction() {
+        isBlockFunction = true;
+    }
+
+
     @Override
-    public Integer getPointLevel() {
+    public int getPointLevel() {
         return 0;
     }
 

@@ -1,1 +1,2 @@
-{bool x; int y = 3; int fun(bool w){}; x = true; y = 2; fun(x); print fun(true); if (1) x = false else x = true; return;}
+//{bool x; int y = 3; int fun(bool w){}; x = true; y = 2; y =fun(x); print fun(true); if (1) x = false else x = true; return 4;}
+{int x = 1; int y; int f(^int z){ z^ = x; return 3;} print f(1);  {^^int x = new ^int; delete x;}}

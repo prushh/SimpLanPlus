@@ -33,9 +33,9 @@ public class BoolNode implements Node {
         return new ArrayList<>();
     }
 
+
     @Override
-    public Integer getPointLevel() {
+    public int getPointLevel() {
         return 0;
     }
-
 }
