@@ -1,10 +1,11 @@
 package ast;
 
-import java.util.ArrayList;
-
 import util.Environment;
 import util.SemanticError;
 import util.SimpLanlib;
+import util.Status;
+
+import java.util.ArrayList;
 
 public class PrintNode implements Node {
 
@@ -15,10 +16,19 @@ public class PrintNode implements Node {
     }
 
     @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
+    @Override
     public String toPrint(String indent) {
         return null;
     }
-
 
     @Override
     public Node typeCheck() {

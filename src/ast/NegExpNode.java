@@ -3,6 +3,7 @@ package ast;
 import util.Environment;
 import util.SemanticError;
 import util.SimpLanlib;
+import util.Status;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,16 @@ public class NegExpNode implements Node {
 
     public NegExpNode(Node exp) {
         this.exp = exp;
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.Token;
 import util.Environment;
 import util.SemanticError;
 import util.SimpLanlib;
+import util.Status;
 
 import java.util.ArrayList;
 
@@ -20,8 +21,21 @@ public class BinExpNode implements Node {
     }
 
     @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
+    @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "BinExp\n" +
+                left.toPrint(indent + " ") +
+                op.getText() +
+                right.toPrint(indent + " ");
     }
 
     public Node typeCheck() {

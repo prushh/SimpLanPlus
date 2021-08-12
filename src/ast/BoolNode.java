@@ -1,9 +1,10 @@
 package ast;
 
-import java.util.ArrayList;
-
 import util.Environment;
 import util.SemanticError;
+import util.Status;
+
+import java.util.ArrayList;
 
 public class BoolNode implements Node {
 
@@ -14,8 +15,20 @@ public class BoolNode implements Node {
     }
 
     @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
+    @Override
     public String toPrint(String indent) {
-        return null;
+        if (val)
+            return indent + "Bool: true\n";
+        return indent + "Bool: false\n";
     }
 
     @Override

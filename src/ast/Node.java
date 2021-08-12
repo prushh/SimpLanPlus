@@ -1,15 +1,14 @@
 package ast;
 
-import java.util.ArrayList;
-
 import util.Environment;
 import util.SemanticError;
+import util.Status;
+
+import java.util.ArrayList;
 
 public interface Node {
 
     String toPrint(String indent);
-
-    Integer getPointLevel();
 
     //fa il type checking e ritorna:
     //  per una espressione, il suo tipo (oggetto BoolTypeNode o IntTypeNode)
@@ -22,5 +21,9 @@ public interface Node {
     ArrayList<SemanticError> checkSemantics(Environment env);
 
     int getPointLevel();
+
+    Status getStatus();
+
+    void setStatus(Status status);
 
 }  

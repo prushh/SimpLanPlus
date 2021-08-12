@@ -2,6 +2,7 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
+import util.Status;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,16 @@ public class DeletionNode implements Node {
 
     public DeletionNode(String ID) {
         this.ID = ID;
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
     @Override

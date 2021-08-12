@@ -1,16 +1,27 @@
 package ast;
 
-import java.util.ArrayList;
-
 import util.Environment;
 import util.SemanticError;
+import util.Status;
+
+import java.util.ArrayList;
 
 public class IntNode implements Node {
 
-    private Integer val;
+    private int val;
 
-    public IntNode(Integer val) {
+    public IntNode(int val) {
         this.val = val;
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
     @Override

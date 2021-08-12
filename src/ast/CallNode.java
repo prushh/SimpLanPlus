@@ -1,26 +1,18 @@
 package ast;
 
-import java.util.ArrayList;
-
 import util.Environment;
 import util.SemanticError;
 import util.SimpLanlib;
+import util.Status;
+
+import java.util.ArrayList;
 
 public class CallNode implements Node {
 
     private String ID;
     private STentry entry;
     private ArrayList<Node> args;
-    private int nestingLevel;
-    private int pointLevel;
     private boolean isCallExp = false;
-
-    public CallNode(String ID, STentry entry, ArrayList<Node> args, int pointLevel) {
-        this.ID = ID;
-        this.entry = entry;
-        this.args = args;
-        this.pointLevel = pointLevel;
-    }
 
     public CallNode(String ID, ArrayList<Node> args) {
         this.ID = ID;
@@ -32,10 +24,19 @@ public class CallNode implements Node {
     }
 
     @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
+    @Override
     public String toPrint(String indent) {
         return null;
     }
-
 
     @Override
     public Node typeCheck() {  //
@@ -87,7 +88,6 @@ public class CallNode implements Node {
             res.add(new SemanticError("Fun " + ID + " not declared"));
         } else {
             this.entry = tmpEntry;
-            this.nestingLevel = env.nestingLevel;
 
             for (Node arg : args) {
                 res.addAll(arg.checkSemantics(env));

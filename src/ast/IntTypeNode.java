@@ -1,16 +1,28 @@
 package ast;
 
-import java.util.ArrayList;
-
 import util.Environment;
 import util.SemanticError;
+import util.Status;
+
+import java.util.ArrayList;
 
 public class IntTypeNode implements Node {
 
     private Integer pointLevel;
+    private Status status = Status.DECLARED;
 
     public IntTypeNode(Integer pointLevel) {
         this.pointLevel = pointLevel;
+    }
+
+    @Override
+    public Status getStatus() {
+        return this.status;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override
@@ -31,11 +43,6 @@ public class IntTypeNode implements Node {
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return null;
-    }
-
-    @Override
-    public Integer getPointLevel() {
-        return this.pointLevel;
     }
 
     @Override

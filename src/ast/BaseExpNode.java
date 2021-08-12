@@ -1,8 +1,8 @@
 package ast;
 
-import org.antlr.v4.runtime.Token;
 import util.Environment;
 import util.SemanticError;
+import util.Status;
 
 import java.util.ArrayList;
 
@@ -15,8 +15,19 @@ public class BaseExpNode implements Node {
     }
 
     @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
+    @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "BaseExp\n" +
+                exp.toPrint(indent + " ");
     }
 
     @Override

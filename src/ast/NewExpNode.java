@@ -3,6 +3,7 @@ package ast;
 import util.Environment;
 import util.SemanticError;
 import util.SimpLanlib;
+import util.Status;
 
 import java.util.ArrayList;
 
@@ -15,13 +16,23 @@ public class NewExpNode implements Node {
     }
 
     @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
+    @Override
     public String toPrint(String indent) {
         return null;
     }
 
     @Override
     public Node typeCheck() {
-        if (SimpLanlib.isSubtype(type,new IntTypeNode(0)))
+        if (SimpLanlib.isSubtype(type, new IntTypeNode(0)))
             return new IntTypeNode(type.getPointLevel() + 1);
         else
             return new BoolTypeNode(type.getPointLevel() + 1);

@@ -1,9 +1,10 @@
 package ast;
 
-import java.util.ArrayList;
-
 import util.Environment;
 import util.SemanticError;
+import util.Status;
+
+import java.util.ArrayList;
 
 public class ArgNode implements Node {
 
@@ -24,8 +25,21 @@ public class ArgNode implements Node {
     }
 
     @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
+    @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "Arg\n" +
+                type.toPrint(indent + " ") +
+                ID +
+                "\n";
     }
 
     @Override

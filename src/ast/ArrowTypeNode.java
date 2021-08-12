@@ -1,9 +1,10 @@
 package ast;
 
-import java.util.ArrayList;
-
 import util.Environment;
 import util.SemanticError;
+import util.Status;
+
+import java.util.ArrayList;
 
 public class ArrowTypeNode implements Node {
 
@@ -24,8 +25,23 @@ public class ArrowTypeNode implements Node {
     }
 
     @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
+    @Override
     public String toPrint(String indent) {
-        return null;
+        StringBuilder argList = new StringBuilder();
+        for (Node arg : args)
+            argList.append(arg.toPrint(indent + " "));
+        return indent + "ArrowType\n" +
+                argList +
+                ret.toPrint(indent + " -> ");
     }
 
     @Override

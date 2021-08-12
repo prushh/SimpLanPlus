@@ -1,9 +1,9 @@
 package ast;
 
-import java.util.ArrayList;
-
-import parser.*;
+import parser.SimpLanPlusBaseVisitor;
 import parser.SimpLanPlusParser.*;
+
+import java.util.ArrayList;
 
 public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
@@ -29,6 +29,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public DecVarNode visitDecVar(DecVarContext ctx) {
+        String id = ctx.ID().getText();
         Node type = visit(ctx.type());
 
         Node exp = null;
@@ -37,19 +38,19 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
             exp = visit(tmp);
         }
 
-        return new DecVarNode(ctx.ID().getText(), type, exp);
+        return new DecVarNode(id, type, exp);
     }
 
     @Override
     public Node visitType(TypeContext ctx) {
-        int nestLev;
+        int pointLevel;
 
         if (ctx.getText().contains("int")) {
-            nestLev = ctx.getText().substring(0, ctx.getText().length() - 3).length();
-            return new IntTypeNode(nestLev);
+            pointLevel = ctx.getText().substring(0, ctx.getText().length() - 3).length();
+            return new IntTypeNode(pointLevel);
         } else if (ctx.getText().contains("bool")) {
-            nestLev = ctx.getText().substring(0, ctx.getText().length() - 4).length();
-            return new BoolTypeNode(nestLev);
+            pointLevel = ctx.getText().substring(0, ctx.getText().length() - 4).length();
+            return new BoolTypeNode(pointLevel);
         }
 
         return null;
@@ -59,9 +60,10 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override
     public DecFunNode visitDecFun(DecFunContext ctx) {
 
+        String id = ctx.ID().getText();
         VoidTypeNode voidType = null;
-        Node typeNode = visit(ctx.type());
-        DecFunNode res = new DecFunNode(null, null, null);
+        Node type = visit(ctx.type());
+        DecFunNode res;
 
         BlockNode block = visitBlock(ctx.block());
         block.setBlockFunction();
@@ -69,13 +71,15 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         TypeContext tmp = ctx.type();
 
         if (tmp == null) {
-            res = new DecFunNode(ctx.ID().getText(), new VoidTypeNode(), block);
+            res = new DecFunNode(id, new VoidTypeNode(), block);
         } else {
-            res = new DecFunNode(ctx.ID().getText(), typeNode, block);
+            res = new DecFunNode(id, type, block);
         }
 
         for (ArgContext vc : ctx.arg()) {
-            res.addArg(new ArgNode(vc.ID().getText(), visit(vc.type())));
+            id = vc.ID().getText();
+            type = visit(vc.type());
+            res.addArg(new ArgNode(id, type));
         }
 
         return res;

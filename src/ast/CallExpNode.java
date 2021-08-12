@@ -2,6 +2,7 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
+import util.Status;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,16 @@ public class CallExpNode implements Node {
 
     public CallExpNode(CallNode callNode) {
         this.callNode = callNode;
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
     @Override

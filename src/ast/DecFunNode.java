@@ -3,6 +3,7 @@ package ast;
 import util.Environment;
 import util.SemanticError;
 import util.SimpLanlib;
+import util.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,16 @@ public class DecFunNode implements Node {
 
     public void addArg(Node arg) {
         args.add(arg);
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
     @Override

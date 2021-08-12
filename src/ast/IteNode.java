@@ -1,10 +1,11 @@
 package ast;
 
-import java.util.ArrayList;
-
 import util.Environment;
 import util.SemanticError;
 import util.SimpLanlib;
+import util.Status;
+
+import java.util.ArrayList;
 
 public class IteNode implements Node {
 
@@ -16,6 +17,16 @@ public class IteNode implements Node {
         this.cond = cond;
         this.th = th;
         this.el = el;
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
     @Override

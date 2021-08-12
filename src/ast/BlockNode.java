@@ -3,6 +3,7 @@ package ast;
 import util.Environment;
 import util.SemanticError;
 import util.SimpLanlib;
+import util.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,16 @@ public class BlockNode implements Node {
     public BlockNode(ArrayList<Node> decList, ArrayList<Node> stmList) {
         this.decList = decList;
         this.stmList = stmList;
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
     @Override

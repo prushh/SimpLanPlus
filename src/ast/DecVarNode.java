@@ -1,11 +1,12 @@
 package ast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import util.Environment;
 import util.SemanticError;
 import util.SimpLanlib;
+import util.Status;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DecVarNode implements Node {
 
@@ -17,6 +18,16 @@ public class DecVarNode implements Node {
         this.ID = ID;
         this.type = type;
         this.exp = exp;
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
     @Override

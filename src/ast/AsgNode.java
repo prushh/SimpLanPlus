@@ -3,8 +3,10 @@ package ast;
 import util.Environment;
 import util.SemanticError;
 import util.SimpLanlib;
+import util.Status;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AsgNode implements Node {
 
@@ -17,19 +19,31 @@ public class AsgNode implements Node {
     }
 
     @Override
-    public String toPrint(String s) {
-        return null;
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
+    @Override
+    public String toPrint(String indent) {
+        return indent + "Asg\n" +
+                lhs.toPrint(indent + " ") +
+                exp.toPrint(indent + " ");
     }
 
     @Override
     public Node typeCheck() {
-        Node l = this.lhs.typeCheck();
-        Node r = this.exp.typeCheck();
-        if (!(SimpLanlib.isSubtype(l, r))) {
+        Node lhs = this.lhs.typeCheck();
+        Node exp = this.exp.typeCheck();
+        if (!(SimpLanlib.isSubtype(lhs, exp))) {
             System.out.println("incompatible value for variable " + this.lhs);
             System.exit(0);
         } else {
-            if (l.getPointLevel() != r.getPointLevel()) {
+            if (!Objects.equals(lhs.getPointLevel(), exp.getPointLevel())) {
                 System.out.println("cannot assign variable or pointers of different type");
                 System.exit(0);
             }
