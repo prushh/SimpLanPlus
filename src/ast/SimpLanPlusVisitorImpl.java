@@ -2,6 +2,7 @@ package ast;
 
 import parser.SimpLanPlusBaseVisitor;
 import parser.SimpLanPlusParser.*;
+import util.Status;
 
 import java.util.ArrayList;
 
@@ -47,10 +48,10 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
         if (ctx.getText().contains("int")) {
             pointLevel = ctx.getText().substring(0, ctx.getText().length() - 3).length();
-            return new IntTypeNode(pointLevel);
+            return new IntTypeNode(pointLevel, Status.DECLARED);
         } else if (ctx.getText().contains("bool")) {
             pointLevel = ctx.getText().substring(0, ctx.getText().length() - 4).length();
-            return new BoolTypeNode(pointLevel);
+            return new BoolTypeNode(pointLevel, Status.DECLARED);
         }
 
         return null;
@@ -71,7 +72,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         TypeContext tmp = ctx.type();
 
         if (tmp == null) {
-            res = new DecFunNode(id, new VoidTypeNode(), block);
+            res = new DecFunNode(id, new VoidTypeNode(Status.DECLARED), block);
         } else {
             res = new DecFunNode(id, type, block);
         }

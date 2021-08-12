@@ -33,12 +33,12 @@ public class PrintNode implements Node {
     @Override
     public Node typeCheck() {
         Node t = this.val.typeCheck();
-        if ((!SimpLanlib.isSubtype(t, new IntTypeNode(0)) && !SimpLanlib.isSubtype(t, new BoolTypeNode(0)))
+        if ((!SimpLanlib.isSubtype(t, new IntTypeNode(0, Status.DECLARED)) && !SimpLanlib.isSubtype(t, new BoolTypeNode(0, Status.DECLARED)))
                 || (t.getPointLevel() != 0)) {
             System.out.println("incompatible type for print");
             System.exit(0);
         }
-        return new NullTypeNode();
+        return new NullTypeNode(Status.DECLARED);
     }
 
     @Override

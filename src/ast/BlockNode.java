@@ -50,7 +50,7 @@ public class BlockNode implements Node {
         Node check;
         boolean err = false;
         if (nodeList.isEmpty()) {
-            return new NullTypeNode();
+            return new NullTypeNode(Status.DECLARED);
         } else {
             check = nodeList.get(0);
             for (Node ret : nodeList) {
@@ -63,14 +63,14 @@ public class BlockNode implements Node {
             System.exit(0);
         }
 
-        if (SimpLanlib.isSubtype(check, new BoolTypeNode(0))) {
-            return new BoolTypeNode(0);
-        } else if (SimpLanlib.isSubtype(check, new IntTypeNode(0))) {
-            return new IntTypeNode(0);
-        } else if (SimpLanlib.isSubtype(check, new VoidTypeNode())) {
-            return new VoidTypeNode();
+        if (SimpLanlib.isSubtype(check, new BoolTypeNode(0, Status.DECLARED))) {
+            return new BoolTypeNode(0, Status.DECLARED);
+        } else if (SimpLanlib.isSubtype(check, new IntTypeNode(0, Status.DECLARED))) {
+            return new IntTypeNode(0, Status.DECLARED);
+        } else if (SimpLanlib.isSubtype(check, new VoidTypeNode(Status.DECLARED))) {
+            return new VoidTypeNode(Status.DECLARED);
         } else {
-            return new NullTypeNode();
+            return new NullTypeNode(Status.DECLARED);
         }
     }
 

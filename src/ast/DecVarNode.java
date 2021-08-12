@@ -50,7 +50,7 @@ public class DecVarNode implements Node {
                 }
             }
         }
-        return new NullTypeNode();
+        return new NullTypeNode(Status.DECLARED);
     }
 
     @Override

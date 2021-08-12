@@ -50,39 +50,39 @@ public class BinExpNode implements Node {
                     op.getText().equals("<=") ||
                     op.getText().equals(">") ||
                     op.getText().equals(">=")) {
-                if (!(SimpLanlib.isSubtype(l, new IntTypeNode(0))
-                        && (SimpLanlib.isSubtype(r, new IntTypeNode(0))))) {
+                if (!(SimpLanlib.isSubtype(l, new IntTypeNode(0, Status.DECLARED))
+                        && (SimpLanlib.isSubtype(r, new IntTypeNode(0, Status.DECLARED))))) {
                     System.out.println("incompatible types for binary operator " + op.getText());
                     System.exit(0);
                 } else {
-                    return new IntTypeNode(0);
+                    return new IntTypeNode(0, Status.DECLARED);
                 }
             } else if (op.getText().equals("&&") ||
                     op.getText().equals("||")) {
-                if (!(SimpLanlib.isSubtype(l, new BoolTypeNode(0))
-                        && (SimpLanlib.isSubtype(r, new BoolTypeNode(0))))) {
+                if (!(SimpLanlib.isSubtype(l, new BoolTypeNode(0, Status.DECLARED))
+                        && (SimpLanlib.isSubtype(r, new BoolTypeNode(0, Status.DECLARED))))) {
                     System.out.println("incompatible types for binary operator " + op.getText());
                     System.exit(0);
                 } else {
-                    return new BoolTypeNode(0);
+                    return new BoolTypeNode(0, Status.DECLARED);
                 }
             } else {
                 if (!(SimpLanlib.isSubtype(l, r))) {
                     System.out.println("incompatible types for binary operator " + op.getText());
                     System.exit(0);
                 } else {
-                    return new BoolTypeNode(0);
+                    return new BoolTypeNode(0, Status.DECLARED);
                 }
             }
         } else if (l.getPointLevel() != 0 && r.getPointLevel() != 0 && l.getPointLevel() == r.getPointLevel()) {
             if (op.getText().equals("==") ||
                     op.getText().equals("!=")) {
-                if (!(SimpLanlib.isSubtype(l, new BoolTypeNode(0))
-                        && (SimpLanlib.isSubtype(r, new BoolTypeNode(0))))) {
+                if (!(SimpLanlib.isSubtype(l, new BoolTypeNode(0, Status.DECLARED))
+                        && (SimpLanlib.isSubtype(r, new BoolTypeNode(0, Status.DECLARED))))) {
                     System.out.println("incompatible types for binary operator " + op.getText());
                     System.exit(0);
                 } else {
-                    return new BoolTypeNode(0);
+                    return new BoolTypeNode(0, Status.DECLARED);
                 }
             }
         } else if (l.getPointLevel() != 0 && r.getPointLevel() != 0 && l.getPointLevel() != r.getPointLevel()) {
@@ -94,7 +94,7 @@ public class BinExpNode implements Node {
         }
 
 
-        return new NullTypeNode();
+        return new NullTypeNode(Status.DECLARED);
     }
 
     @Override

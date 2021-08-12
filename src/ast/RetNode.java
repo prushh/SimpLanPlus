@@ -32,7 +32,7 @@ public class RetNode implements Node {
     @Override
     public Node typeCheck() {
         if (val == null)
-            return new VoidTypeNode();
+            return new VoidTypeNode(Status.DECLARED);
         else {
             Node t = val.typeCheck();
             if (t.getPointLevel() != 0) {
@@ -42,7 +42,7 @@ public class RetNode implements Node {
                 return t;
             }
         }
-        return new NullTypeNode();
+        return new NullTypeNode(Status.DECLARED);
     }
 
     @Override

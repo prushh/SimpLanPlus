@@ -9,10 +9,11 @@ import java.util.ArrayList;
 public class BoolTypeNode implements Node {
 
     private int pointLevel;
-    private Status status = Status.DECLARED;
+    private Status status;
 
-    public BoolTypeNode(int pointLevel) {
+    public BoolTypeNode(int pointLevel, Status status) {
         this.pointLevel = pointLevel;
+        this.status = status;
     }
 
     @Override

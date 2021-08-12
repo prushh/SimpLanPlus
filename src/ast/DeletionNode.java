@@ -32,7 +32,7 @@ public class DeletionNode implements Node {
     @Override
     public Node typeCheck() {
         // need symbol table
-        return new NullTypeNode();
+        return new NullTypeNode(Status.DECLARED);
     }
 
     @Override

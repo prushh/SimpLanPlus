@@ -48,7 +48,7 @@ public class AsgNode implements Node {
                 System.exit(0);
             }
         }
-        return new NullTypeNode();
+        return new NullTypeNode(Status.DECLARED);
     }
 
     @Override

@@ -8,17 +8,20 @@ import java.util.ArrayList;
 
 public class VoidTypeNode implements Node {
 
-    public VoidTypeNode() {
+    private Status status;
+
+    public VoidTypeNode(Status status) {
+        this.status = status;
     }
 
     @Override
     public Status getStatus() {
-        return Status.DECLARED;
+        return this.status;
     }
 
     @Override
     public void setStatus(Status status) {
-
+        this.status = status;
     }
 
     @Override

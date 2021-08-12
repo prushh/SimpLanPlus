@@ -8,11 +8,12 @@ import java.util.ArrayList;
 
 public class IntTypeNode implements Node {
 
-    private Integer pointLevel;
-    private Status status = Status.DECLARED;
+    private int pointLevel;
+    private Status status;
 
-    public IntTypeNode(Integer pointLevel) {
+    public IntTypeNode(int pointLevel, Status status) {
         this.pointLevel = pointLevel;
+        this.status = status;
     }
 
     @Override

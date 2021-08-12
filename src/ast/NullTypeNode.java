@@ -8,17 +8,20 @@ import java.util.ArrayList;
 
 public class NullTypeNode implements Node {
 
-    public NullTypeNode() {
+    private Status status;
+
+    public NullTypeNode(Status status) {
+        this.status = status;
     }
 
     @Override
     public Status getStatus() {
-        return Status.DECLARED;
+        return this.status;
     }
 
     @Override
     public void setStatus(Status status) {
-
+        this.status = status;
     }
 
     public String toPrint(String s) {
