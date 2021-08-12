@@ -33,7 +33,7 @@ public class NegExpNode implements Node {
     @Override
     public Node typeCheck() {
         Node t = this.exp.typeCheck();
-        if (!SimpLanlib.isSubtype(t, new IntTypeNode(0)) || t.getPointLevel() != 0) {
+        if (!SimpLanlib.isSubtype(t, new IntTypeNode(0, Status.DECLARED)) || t.getPointLevel() != 0) {
             System.out.println("incompatible types for operator -");
             System.exit(0);
         }

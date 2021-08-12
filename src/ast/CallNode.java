@@ -53,7 +53,7 @@ public class CallNode implements Node {
             System.exit(0);
         }
         if (isCallExp) {
-            if (SimpLanlib.isSubtype(t.getRet(), new VoidTypeNode())) {
+            if (SimpLanlib.isSubtype(t.getRet(), new VoidTypeNode(Status.DECLARED))) {
                 System.out.println("cannot use void function as an exp");
                 System.exit(0);
             }

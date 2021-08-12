@@ -32,10 +32,10 @@ public class NewExpNode implements Node {
 
     @Override
     public Node typeCheck() {
-        if (SimpLanlib.isSubtype(type, new IntTypeNode(0)))
-            return new IntTypeNode(type.getPointLevel() + 1);
+        if (SimpLanlib.isSubtype(type, new IntTypeNode(0, Status.DECLARED)))
+            return new IntTypeNode(type.getPointLevel() + 1, Status.DECLARED);
         else
-            return new BoolTypeNode(type.getPointLevel() + 1);
+            return new BoolTypeNode(type.getPointLevel() + 1, Status.DECLARED);
     }
 
     @Override

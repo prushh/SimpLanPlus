@@ -33,7 +33,7 @@ public class BoolNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return new BoolTypeNode(0);
+        return new BoolTypeNode(0, Status.DECLARED);
     }
 
     @Override

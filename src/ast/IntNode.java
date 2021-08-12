@@ -31,7 +31,7 @@ public class IntNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return new IntTypeNode(0);
+        return new IntTypeNode(0, Status.DECLARED);
     }
 
     @Override

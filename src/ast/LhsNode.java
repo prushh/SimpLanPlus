@@ -46,10 +46,10 @@ public class LhsNode implements Node {
             System.exit(0);
         }
         Node type;
-        if (SimpLanlib.isSubtype(entry.getType(), new IntTypeNode(0)))
-            type = new IntTypeNode(difference);
+        if (SimpLanlib.isSubtype(entry.getType(), new IntTypeNode(0, Status.DECLARED)))
+            type = new IntTypeNode(difference, Status.DECLARED);
         else
-            type = new BoolTypeNode(difference);
+            type = new BoolTypeNode(difference, Status.DECLARED);
 
         return type;
     }
