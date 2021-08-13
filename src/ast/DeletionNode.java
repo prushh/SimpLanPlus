@@ -30,7 +30,7 @@ public class DeletionNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
         // need symbol table
         return new NullTypeNode(Status.DECLARED);
     }
@@ -48,8 +48,7 @@ public class DeletionNode implements Node {
             res.add(new SemanticError("Id " + ID + " not declared"));
         } else {
             if (env.symTable.get(env.nestingLevel).get(ID).getType().getPointLevel() == 0) {
-                System.out.println("cannot delete a non pointer id");
-                System.exit(0);
+                res.add(new SemanticError("cannot delete a non pointer id"));
             }
         }
         return res;

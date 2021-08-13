@@ -35,15 +35,13 @@ public class LhsNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
         if (entry.getType() instanceof ArrowTypeNode) {
-            System.out.println("wrong usage of function identifier");
-            System.exit(0);
+            typeErr.add(new SemanticError("wrong usage of function identifier"));
         }
         int difference = entry.getType().getPointLevel() - this.pointLevel;
         if (difference < 0) {
-            System.out.println("too many dereferencing operations");
-            System.exit(0);
+            typeErr.add(new SemanticError("too many dereferencing operations"));
         }
         Node type;
         if (SimpLanlib.isSubtype(entry.getType(), new IntTypeNode(0, Status.DECLARED)))

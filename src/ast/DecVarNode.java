@@ -36,17 +36,15 @@ public class DecVarNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
         Node l = this.type;
         if (exp != null) {
-            Node r = this.exp.typeCheck();
+            Node r = this.exp.typeCheck(typeErr);
             if (!(SimpLanlib.isSubtype(l, r))) {
-                System.out.println("incompatible value for variable " + this.ID);
-                System.exit(0);
+                typeErr.add(new SemanticError("incompatible value for variable " + this.ID));
             } else {
                 if (l.getPointLevel() != r.getPointLevel()) {
-                    System.out.println("cannot assign variable or pointers of different type");
-                    System.exit(0);
+                    typeErr.add(new SemanticError("cannot assign variable or pointers of different type"));
                 }
             }
         }

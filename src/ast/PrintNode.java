@@ -31,12 +31,11 @@ public class PrintNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
-        Node t = this.val.typeCheck();
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
+        Node t = this.val.typeCheck(typeErr);
         if ((!SimpLanlib.isSubtype(t, new IntTypeNode(0, Status.DECLARED)) && !SimpLanlib.isSubtype(t, new BoolTypeNode(0, Status.DECLARED)))
                 || (t.getPointLevel() != 0)) {
-            System.out.println("incompatible type for print");
-            System.exit(0);
+            typeErr.add(new SemanticError("incompatible type for print"));
         }
         return new NullTypeNode(Status.DECLARED);
     }

@@ -32,7 +32,7 @@ public class BoolNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
         return new BoolTypeNode(0, Status.DECLARED);
     }
 

@@ -31,8 +31,8 @@ public class BaseExpNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
-        return this.exp.typeCheck();
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
+        return this.exp.typeCheck(typeErr);
     }
 
     @Override

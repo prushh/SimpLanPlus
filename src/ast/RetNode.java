@@ -30,14 +30,13 @@ public class RetNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
         if (val == null)
             return new VoidTypeNode(Status.DECLARED);
         else {
-            Node t = val.typeCheck();
+            Node t = val.typeCheck(typeErr);
             if (t.getPointLevel() != 0) {
-                System.out.println("cannot return pointers");
-                System.exit(0);
+                typeErr.add(new SemanticError("cannot return pointers"));
             } else {
                 return t;
             }

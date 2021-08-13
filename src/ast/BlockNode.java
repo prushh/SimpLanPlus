@@ -35,15 +35,15 @@ public class BlockNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
 
         for (Node dec : decList)
-            dec.typeCheck();
+            dec.typeCheck(typeErr);
 
         Node tmp;
         ArrayList<Node> nodeList = new ArrayList<>();
         for (Node stm : stmList) {
-            tmp = stm.typeCheck();
+            tmp = stm.typeCheck(typeErr);
             if ((stm instanceof RetNode) || (stm instanceof IteNode && !(tmp instanceof NullTypeNode)))
                 nodeList.add(tmp);
         }
@@ -59,8 +59,7 @@ public class BlockNode implements Node {
             }
         }
         if (err) {
-            System.out.println("Mismatching return types");
-            System.exit(0);
+            typeErr.add(new SemanticError("Mismatching return types"));
         }
 
         if (SimpLanlib.isSubtype(check, new BoolTypeNode(0, Status.DECLARED))) {

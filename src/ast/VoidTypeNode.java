@@ -31,7 +31,7 @@ public class VoidTypeNode implements Node {
 
     //non utilizzato
     @Override
-    public Node typeCheck() {
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
         return null;
     }
 

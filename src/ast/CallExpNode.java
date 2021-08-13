@@ -30,8 +30,8 @@ public class CallExpNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
-        return this.callNode.typeCheck();
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
+        return this.callNode.typeCheck(typeErr);
     }
 
     @Override

@@ -31,11 +31,10 @@ public class NegExpNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
-        Node t = this.exp.typeCheck();
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
+        Node t = this.exp.typeCheck(typeErr);
         if (!SimpLanlib.isSubtype(t, new IntTypeNode(0, Status.DECLARED)) || t.getPointLevel() != 0) {
-            System.out.println("incompatible types for operator -");
-            System.exit(0);
+            typeErr.add(new SemanticError("incompatible types for operator -"));
         }
         return t;
     }

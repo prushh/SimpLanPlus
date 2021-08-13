@@ -31,7 +31,7 @@ public class NewExpNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
         if (SimpLanlib.isSubtype(type, new IntTypeNode(0, Status.DECLARED)))
             return new IntTypeNode(type.getPointLevel() + 1, Status.DECLARED);
         else

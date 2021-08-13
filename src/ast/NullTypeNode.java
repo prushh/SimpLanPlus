@@ -29,7 +29,7 @@ public class NullTypeNode implements Node {
     }
 
     //non utilizzato
-    public Node typeCheck() {
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
         return null;
     }
 

@@ -35,19 +35,17 @@ public class IteNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
-        Node cond_type = cond.typeCheck();
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
+        Node cond_type = cond.typeCheck(typeErr);
         if (cond_type.getPointLevel() != 0 || !(SimpLanlib.isSubtype(cond_type, new BoolTypeNode(0, Status.DECLARED)))) {
-            System.out.println("non boolean condition in if");
-            System.exit(0);
+            typeErr.add(new SemanticError("non boolean condition in if"));
         }
-        Node t = th.typeCheck();
+        Node t = th.typeCheck(typeErr);
         if (el != null) {
-            Node e = el.typeCheck();
+            Node e = el.typeCheck(typeErr);
             if (SimpLanlib.isSubtype(t, e))
                 return e;
-            System.out.println("Incompatible types in then else branches");
-            System.exit(0);
+            typeErr.add(new SemanticError("Incompatible types in then else branches"));
         }
         return t;
     }

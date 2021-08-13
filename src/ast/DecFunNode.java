@@ -42,17 +42,16 @@ public class DecFunNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
+        Node bodyTmp = body.typeCheck(typeErr);
         if (this.type.getPointLevel() == 0) {
-            if (!SimpLanlib.isSubtype(this.type, body.typeCheck())) {
-                System.out.println("Mismatching return types <function = " + this.type + ", body = " + body.typeCheck() + ">");
-                System.exit(0);
+            if (!SimpLanlib.isSubtype(this.type, bodyTmp)) {
+                typeErr.add(new SemanticError("Mismatching return types <function = " + this.type + ", body = " + bodyTmp + ">"));
             }
         } else {
-            System.out.println("Function can not have pointer type");
-            System.exit(0);
+            typeErr.add(new SemanticError("Function can not have pointer type"));
         }
-        return body.typeCheck();
+        return bodyTmp;
     }
 
     @Override

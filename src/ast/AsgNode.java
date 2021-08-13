@@ -36,16 +36,14 @@ public class AsgNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
-        Node lhs = this.lhs.typeCheck();
-        Node exp = this.exp.typeCheck();
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
+        Node lhs = this.lhs.typeCheck(typeErr);
+        Node exp = this.exp.typeCheck(typeErr);
         if (!(SimpLanlib.isSubtype(lhs, exp))) {
-            System.out.println("incompatible value for variable " + this.lhs);
-            System.exit(0);
+            typeErr.add(new SemanticError("incompatible value for variable " + this.lhs));
         } else {
             if (!Objects.equals(lhs.getPointLevel(), exp.getPointLevel())) {
-                System.out.println("cannot assign variable or pointers of different type");
-                System.exit(0);
+                typeErr.add(new SemanticError("cannot assign variable or pointers of different type"));
             }
         }
         return new NullTypeNode(Status.DECLARED);

@@ -39,30 +39,26 @@ public class CallNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {  //
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
 
         ArrowTypeNode t = null;
         if (entry.getType() instanceof ArrowTypeNode) t = (ArrowTypeNode) entry.getType();
         else {
-            System.out.println("Invocation of a non-function " + ID);
-            System.exit(0);
+            typeErr.add(new SemanticError("Invocation of a non-function " + ID));
         }
         ArrayList<Node> p = t.getArgList();
         if (!(p.size() == args.size())) {
-            System.out.println("Wrong number of parameters in the invocation of " + ID);
-            System.exit(0);
+            typeErr.add(new SemanticError("Wrong number of parameters in the invocation of " + ID));
         }
         if (isCallExp) {
             if (SimpLanlib.isSubtype(t.getRet(), new VoidTypeNode(Status.DECLARED))) {
-                System.out.println("cannot use void function as an exp");
-                System.exit(0);
+                typeErr.add(new SemanticError("cannot use void function as an exp"));
             }
         }
         for (int i = 0; i < args.size(); i++) {
-            Node arg_i = args.get(i).typeCheck();
+            Node arg_i = args.get(i).typeCheck(typeErr);
             if (!(SimpLanlib.isSubtype(arg_i, p.get(i))) || (arg_i.getPointLevel() != p.get(i).getPointLevel())) {
-                System.out.println("Wrong type for " + (i + 1) + "-th parameter in the invocation of " + ID);
-                System.exit(0);
+                typeErr.add(new SemanticError("Wrong type for " + (i + 1) + "-th parameter in the invocation of " + ID));
             }
         }
         return t.getRet();

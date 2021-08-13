@@ -38,9 +38,9 @@ public class BinExpNode implements Node {
                 right.toPrint(indent + " ");
     }
 
-    public Node typeCheck() {
-        Node l = left.typeCheck();
-        Node r = right.typeCheck();
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
+        Node l = left.typeCheck(typeErr);
+        Node r = right.typeCheck(typeErr);
         if (l.getPointLevel() == 0 && r.getPointLevel() == 0) {
             if (op.getText().equals("*") ||
                     op.getText().equals("/") ||
@@ -52,8 +52,7 @@ public class BinExpNode implements Node {
                     op.getText().equals(">=")) {
                 if (!(SimpLanlib.isSubtype(l, new IntTypeNode(0, Status.DECLARED))
                         && (SimpLanlib.isSubtype(r, new IntTypeNode(0, Status.DECLARED))))) {
-                    System.out.println("incompatible types for binary operator " + op.getText());
-                    System.exit(0);
+                    typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
                 } else {
                     return new IntTypeNode(0, Status.DECLARED);
                 }
@@ -61,15 +60,13 @@ public class BinExpNode implements Node {
                     op.getText().equals("||")) {
                 if (!(SimpLanlib.isSubtype(l, new BoolTypeNode(0, Status.DECLARED))
                         && (SimpLanlib.isSubtype(r, new BoolTypeNode(0, Status.DECLARED))))) {
-                    System.out.println("incompatible types for binary operator " + op.getText());
-                    System.exit(0);
+                    typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
                 } else {
                     return new BoolTypeNode(0, Status.DECLARED);
                 }
             } else {
                 if (!(SimpLanlib.isSubtype(l, r))) {
-                    System.out.println("incompatible types for binary operator " + op.getText());
-                    System.exit(0);
+                    typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
                 } else {
                     return new BoolTypeNode(0, Status.DECLARED);
                 }
@@ -79,18 +76,15 @@ public class BinExpNode implements Node {
                     op.getText().equals("!=")) {
                 if (!(SimpLanlib.isSubtype(l, new BoolTypeNode(0, Status.DECLARED))
                         && (SimpLanlib.isSubtype(r, new BoolTypeNode(0, Status.DECLARED))))) {
-                    System.out.println("incompatible types for binary operator " + op.getText());
-                    System.exit(0);
+                    typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
                 } else {
                     return new BoolTypeNode(0, Status.DECLARED);
                 }
             }
         } else if (l.getPointLevel() != 0 && r.getPointLevel() != 0 && l.getPointLevel() != r.getPointLevel()) {
-            System.out.println("can't apply 'operator " + op.getText() + "' between incompatible pointer types");
-            System.exit(0);
+            typeErr.add(new SemanticError("can't apply operator '" + op.getText() + "' between pointers and variables"));
         } else {
-            System.out.println("can't apply 'operator " + op.getText() + "' between pointers and variables");
-            System.exit(0);
+            typeErr.add(new SemanticError("can't apply operator '" + op.getText() + "' between pointers and variables"));
         }
 
 

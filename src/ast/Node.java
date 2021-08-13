@@ -14,7 +14,7 @@ public interface Node {
     //  per una espressione, il suo tipo (oggetto BoolTypeNode o IntTypeNode)
     //  per una dichiarazione, "null"
 
-    Node typeCheck();
+    Node typeCheck(ArrayList<SemanticError> typeErr);
 
     String codeGeneration();
 
@@ -26,4 +26,4 @@ public interface Node {
 
     void setStatus(Status status);
 
-}  
+}
