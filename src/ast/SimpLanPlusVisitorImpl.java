@@ -62,7 +62,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     public DecFunNode visitDecFun(DecFunContext ctx) {
 
         String id = ctx.ID().getText();
-        VoidTypeNode voidType = null;
         Node type = visit(ctx.type());
         DecFunNode res;
 

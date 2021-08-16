@@ -67,16 +67,15 @@ public class AsgNode implements Node {
                 //  Case lhs.status == declared, bisognerebbe fare una seq tra declared e readwrite, quindi otteniamo readwrite
                 //  Case lhs.status == readwrite, non succede niente
                 //  Case lhs.status == deleted, riassegno una cella di memoria a lhs, torno a readwrite
-                lhs.setStatus(Status.READWRITE);
+                tmpEntry.getType().setStatus(Status.READWRITE);
             }
             else {
                 res.addAll(exp.checkEffects(env));
                 Status newlhsAsg = Status.READWRITE;
                 newlhsAsg = SimpLanlib.seqStatus(tmpEntry.getType().getStatus(), newlhsAsg);
-                lhs.setStatus(newlhsAsg);
+                tmpEntry.getType().setStatus(newlhsAsg);
             }
-            STentry newEntry = new STentry(tmpEntry.getNestinglevel(), lhs, tmpEntry.getOffset());
-            env.symTable.get(tmpEntry.getNestinglevel()).replace(lhs.getID(), newEntry);
+            env.symTable.get(tmpEntry.getNestinglevel()).replace(lhs.getID(), tmpEntry);
         }
 
         return res;

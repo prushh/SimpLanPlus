@@ -3,10 +3,21 @@
 //{int a = 1; {int b = 2; {return a+b;}} return;}
 
 {
-int c = 2;
-int b;
-if (true) print b; else print c;
+    ^int x = new int;
+    ^int a = new int;
+    int b (){
+        a = new int;
+        return 1;
+        }
+    int c () {
+        delete a;
+        return 1;
+    }
+    delete a;
+    if (c()==b()) {print (a^);}
 }
+
+//sigma1 == [b -> d]
 
 /*
 {

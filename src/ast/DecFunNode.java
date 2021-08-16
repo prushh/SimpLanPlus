@@ -56,9 +56,48 @@ public class DecFunNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
-    }
+        ArrayList<SemanticError> res = new ArrayList<>();
 
+        // pre controllare il body usando /sigmafun*sigma0 [a1 -> dec, an -> dec]
+        HashMap<String, STentry> hm = env.symTable.get(env.nestingLevel);
+        STentry entry = new STentry(env.nestingLevel, env.offset--);
+
+        if (hm.put(ID, entry) != null) {
+            res.add(new SemanticError("Fun id " + ID + " already declared"));
+        } else {
+            env.nestingLevel++;
+            HashMap<String, STentry> hmn = new HashMap<>();
+
+            hmn.put(ID, entry);
+
+            env.symTable.add(hmn);
+
+            ArrayList<Node> argTypes = new ArrayList<>();
+            int argOffset = 1;
+
+            for (Node a : args) {
+                ArgNode arg = (ArgNode) a;
+                argTypes.add(arg.getType());
+                hmn.put(arg.getId(), new STentry(env.nestingLevel, arg.getType(), argOffset++));
+            }
+
+            entry.addType(new ArrowTypeNode(argTypes, type));
+
+            if (args.size() > 0) {
+                env.offset = -2;
+
+                for (Node n : args) {
+                    res.addAll(n.checkEffects(env));
+                }
+            }
+
+            res.addAll(body.checkEffects(env));
+            env.symTable.remove(env.nestingLevel);
+            env.nestingLevel--;
+        }
+
+        return res;
+    }
     @Override
     public String codeGeneration() {
         return null;

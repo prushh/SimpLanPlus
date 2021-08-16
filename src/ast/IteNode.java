@@ -60,30 +60,35 @@ public class IteNode implements Node {
 
         res.addAll(cond.checkEffects(env));
 
-        Environment envThen = new Environment(env);
-        Environment envElse = new Environment(env);
 
-        res.addAll(new ArrayList<>(th.checkEffects(envThen)));
-        if (el != null)
-            res.addAll(new ArrayList<>(el.checkEffects(envElse)));
+        if (el != null) {
 
-        for (HashMap<String, STentry> map : env.symTable) {
-            for (Map.Entry<String, STentry> entry : map.entrySet()) {
-                String key = entry.getKey();
-                int nestLevel = entry.getValue().getNestinglevel();
-                Status th = envThen.symTable.get(nestLevel).get(key).getType().getStatus();
-                Status el = envElse.symTable.get(nestLevel).get(key).getType().getStatus();
-                Status max = maxStatus(th, el);
-                STentry newEntry;
-                if (max == th) {
-                    newEntry = envThen.symTable.get(nestLevel).get(key);
-                } else {
-                    newEntry = envElse.symTable.get(nestLevel).get(key);
+            Environment envThen = new Environment(env);
+            Environment envElse = new Environment(env);
+
+            res.addAll(th.checkEffects(envThen));
+            res.addAll(el.checkEffects(envElse));
+
+            for (HashMap<String, STentry> map : env.symTable) {
+                for (Map.Entry<String, STentry> entry : map.entrySet()) {
+                    String key = entry.getKey();
+                    int nestLevel = entry.getValue().getNestinglevel();
+                    Status th = envThen.symTable.get(nestLevel).get(key).getType().getStatus();
+                    Status el = envElse.symTable.get(nestLevel).get(key).getType().getStatus();
+                    Status max = maxStatus(th, el);
+                    STentry newEntry;
+                    if (max == th) {
+                        newEntry = envThen.symTable.get(nestLevel).get(key);
+                    } else {
+                        newEntry = envElse.symTable.get(nestLevel).get(key);
+                    }
+                    env.symTable.get(nestLevel).replace(key, newEntry);
                 }
-                env.symTable.get(nestLevel).replace(key, newEntry);
             }
         }
-
+        else {
+            res.addAll(th.checkEffects(env));
+        }
         return res;
     }
 

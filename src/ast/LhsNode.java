@@ -70,16 +70,30 @@ public class LhsNode implements Node {
             if (tmpEntry.getType().getStatus() != Status.READWRITE){
 
                 if (tmpEntry.getType().getStatus() == Status.DECLARED) {
-                    res.add(new SemanticError("Id " + ID + " has not been assigned"));
+                    res.add(new SemanticError("Id --" + ID + "-- has not been assigned"));
                 } else if (tmpEntry.getType().getStatus() == Status.DELETED) {
-                    res.add(new SemanticError("Id " + ID + " has been deleted"));
+                    res.add(new SemanticError("Id --" + ID + "-- has been deleted"));
                 } else if (tmpEntry.getType().getStatus() == Status.ERROR) {
-                    res.add(new SemanticError("Id " + ID + " has returned an error status"));
+                    res.add(new SemanticError("Id --" + ID + "-- has returned an error status"));
                 }
-                this.setStatus(Status.ERROR);
-                STentry newEntry = new STentry(tmpEntry.getNestinglevel(), this, tmpEntry.getOffset());
-                env.symTable.get(tmpEntry.getNestinglevel()).replace(this.getID(), newEntry);
+                /*
+                Node tmpLhs = tmpEntry.getType();
+                tmpLhs.setStatus(Status.ERROR);
+                STentry newEntry = new STentry(tmpEntry.getNestinglevel(), tmpLhs, tmpEntry.getOffset());
+                */
+                tmpEntry.getType().setStatus(Status.ERROR);
+                env.symTable.get(tmpEntry.getNestinglevel()).replace(this.getID(), tmpEntry);
+
             }
+        }
+
+        if (this.pointLevel > 0 && tmpEntry.getType().getStatus() == Status.DELETED){
+            res.add(new SemanticError("Cannot dereference an already deleted pointer"));
+            Node tmpLhs = tmpEntry.getType();
+            tmpLhs.setStatus(Status.ERROR);
+            STentry newEntry = new STentry(tmpEntry.getNestinglevel(), tmpLhs, tmpEntry.getOffset());
+            env.symTable.get(tmpEntry.getNestinglevel()).replace(this.getID(), newEntry);
+
         }
 
         return res;
