@@ -50,6 +50,11 @@ public class ArrowTypeNode implements Node {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
+
+    @Override
     public String codeGeneration() {
         return null;
     }
@@ -58,7 +63,6 @@ public class ArrowTypeNode implements Node {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return new ArrayList<>();
     }
-
 
     @Override
     public int getPointLevel() {

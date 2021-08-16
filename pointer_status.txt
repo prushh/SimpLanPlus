@@ -1,0 +1,12 @@
+^^^int a = new ^^int;
+
+# Concettualmente è uguale a fare tutti i passini, ossia vanno inizializzati nella codegen tutti i livelli di dereferenziazione.
+
+
+^^^int a; 		[a -> DEC]
+^^^int a = new ^^int; 	[a -> RW]
+delete a;		[a -> DEL]
+
+# PSC:
+^^^int a;
+a^^ = new int;		#LHS viene visitato ma ancora è DEC, quindi RW |> DEC = ERR

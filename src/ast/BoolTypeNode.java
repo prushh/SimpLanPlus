@@ -37,6 +37,11 @@ public class BoolTypeNode implements Node {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
+
+    @Override
     public String codeGeneration() {
         return null;
     }
