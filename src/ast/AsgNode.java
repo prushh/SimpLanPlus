@@ -40,7 +40,7 @@ public class AsgNode implements Node {
         Node lhs = this.lhs.typeCheck(typeErr);
         Node exp = this.exp.typeCheck(typeErr);
         if (!(SimpLanlib.isSubtype(lhs, exp))) {
-            typeErr.add(new SemanticError("incompatible value for variable " + this.lhs));
+            typeErr.add(new SemanticError("incompatible value for variable " + this.lhs.getID()));
         } else {
             if (!Objects.equals(lhs.getPointLevel(), exp.getPointLevel())) {
                 typeErr.add(new SemanticError("cannot assign variable or pointers of different type"));
@@ -51,7 +51,35 @@ public class AsgNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        res.addAll(lhs.checkEffects(env));
+
+        int idLevel = env.nestingLevel;
+        STentry tmpEntry = null;
+
+        while (idLevel >= 0 && tmpEntry == null) {
+            tmpEntry = (env.symTable.get(idLevel--)).get(lhs.getID());
+        }
+
+        if (exp != null) {
+            if (SimpLanlib.isSubtype(exp, new NewExpNode(new NullTypeNode(Status.DECLARED)))){
+                //  Case lhs.status == declared, bisognerebbe fare una seq tra declared e readwrite, quindi otteniamo readwrite
+                //  Case lhs.status == readwrite, non succede niente
+                //  Case lhs.status == deleted, riassegno una cella di memoria a lhs, torno a readwrite
+                lhs.setStatus(Status.READWRITE);
+            }
+            else {
+                res.addAll(exp.checkEffects(env));
+                Status newlhsAsg = Status.READWRITE;
+                newlhsAsg = SimpLanlib.seqStatus(tmpEntry.getType().getStatus(), newlhsAsg);
+                lhs.setStatus(newlhsAsg);
+            }
+            STentry newEntry = new STentry(tmpEntry.getNestinglevel(), lhs, tmpEntry.getOffset());
+            env.symTable.get(tmpEntry.getNestinglevel()).replace(lhs.getID(), newEntry);
+        }
+
+        return res;
     }
 
     @Override

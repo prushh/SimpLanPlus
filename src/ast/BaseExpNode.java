@@ -37,7 +37,7 @@ public class BaseExpNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        return exp.checkEffects(env);
     }
 
     @Override

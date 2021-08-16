@@ -43,9 +43,10 @@ public class SimpLanlib {
         Status tmp = maxStatus(s1, s2);
         if (tmp.ordinal() <= Status.READWRITE.ordinal())
             return (tmp);
-        else if ((s1.ordinal() <= Status.READWRITE.ordinal() && s2 == Status.DELETE) ||
-                (s1 == Status.DELETE && s2 == Status.ERROR))
-            return Status.DELETE;
+        else if ((s1.ordinal() <= Status.READWRITE.ordinal() && s2 == Status.DELETED)
+                //       || (s1 == Status.DELETED && s2 == Status.DECLARED)
+        )
+            return Status.DELETED;
         else
             return Status.ERROR;
     }

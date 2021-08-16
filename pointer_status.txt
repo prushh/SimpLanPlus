@@ -1,11 +1,18 @@
 ^^^int a = new ^^int;
-
+^^^int b = new ^^int;
+{
+b^ = new ^int;
+b^^ = new int;
+b^^^ = 0; ----------- assunzione, scegliere se fare o no
+}
+int c;
 # Concettualmente è uguale a fare tutti i passini, ossia vanno inizializzati nella codegen tutti i livelli di dereferenziazione.
 
 
 ^^^int a; 		[a -> DEC]
 ^^^int a = new ^^int; 	[a -> RW]
-delete a;		[a -> DEL]
+//delete a;		[a -> DEL]
+c= ^^^a
 
 # PSC:
 ^^^int a;

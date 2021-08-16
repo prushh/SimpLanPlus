@@ -6,6 +6,10 @@ import util.SimpLanlib;
 import util.Status;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static util.SimpLanlib.maxStatus;
 
 public class IteNode implements Node {
 
@@ -52,7 +56,35 @@ public class IteNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        res.addAll(cond.checkEffects(env));
+
+        Environment envThen = new Environment(env);
+        Environment envElse = new Environment(env);
+
+        res.addAll(new ArrayList<>(th.checkEffects(envThen)));
+        if (el != null)
+            res.addAll(new ArrayList<>(el.checkEffects(envElse)));
+
+        for (HashMap<String, STentry> map : env.symTable) {
+            for (Map.Entry<String, STentry> entry : map.entrySet()) {
+                String key = entry.getKey();
+                int nestLevel = entry.getValue().getNestinglevel();
+                Status th = envThen.symTable.get(nestLevel).get(key).getType().getStatus();
+                Status el = envElse.symTable.get(nestLevel).get(key).getType().getStatus();
+                Status max = maxStatus(th, el);
+                STentry newEntry;
+                if (max == th) {
+                    newEntry = envThen.symTable.get(nestLevel).get(key);
+                } else {
+                    newEntry = envElse.symTable.get(nestLevel).get(key);
+                }
+                env.symTable.get(nestLevel).replace(key, newEntry);
+            }
+        }
+
+        return res;
     }
 
     @Override
@@ -62,16 +94,17 @@ public class IteNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
+
         ArrayList<SemanticError> res = new ArrayList<>();
 
         res.addAll(cond.checkSemantics(env));
+
         res.addAll(th.checkSemantics(env));
         if (el != null)
             res.addAll(el.checkSemantics(env));
 
         return res;
     }
-
 
     @Override
     public int getPointLevel() {

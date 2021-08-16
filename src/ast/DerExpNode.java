@@ -7,12 +7,12 @@ import util.Status;
 
 import java.util.ArrayList;
 
-public class PrintNode implements Node {
+public class DerExpNode implements Node {
 
-    private Node val;
+    private Node lhs;
 
-    public PrintNode(Node val) {
-        this.val = val;
+    public DerExpNode(Node exp) {
+        this.lhs = exp;
     }
 
     @Override
@@ -22,7 +22,6 @@ public class PrintNode implements Node {
 
     @Override
     public void setStatus(Status status) {
-
     }
 
     @Override
@@ -32,17 +31,12 @@ public class PrintNode implements Node {
 
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
-        Node t = this.val.typeCheck(typeErr);
-        if ((!SimpLanlib.isSubtype(t, new IntTypeNode(0, Status.DECLARED)) && !SimpLanlib.isSubtype(t, new BoolTypeNode(0, Status.DECLARED)))
-                || (t.getPointLevel() != 0)) {
-            typeErr.add(new SemanticError("incompatible type for print"));
-        }
-        return new NullTypeNode(Status.DECLARED);
+        return lhs.typeCheck(typeErr);
     }
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return val.checkEffects(env);
+        return lhs.checkEffects(env);
     }
 
     @Override
@@ -52,7 +46,7 @@ public class PrintNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return val.checkSemantics(env);
+        return lhs.checkSemantics(env);
     }
 
 
@@ -60,4 +54,5 @@ public class PrintNode implements Node {
     public int getPointLevel() {
         return 0;
     }
+
 }

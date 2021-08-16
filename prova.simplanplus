@@ -1,3 +1,32 @@
 //{bool x; int y = 3; int fun(bool w){}; x = true; y = 2; y =fun(x); print fun(true); if (1) x = false else x = true; return 4;}
 //{int x = 1; int y; int f(^int z){ z^ = x; return 3;} print f(1);  {^^int x = new ^int; delete x;}}
-{int a = 1; {int b = 2; {return a+b;}} return;}
+//{int a = 1; {int b = 2; {return a+b;}} return;}
+
+{
+int c = 2;
+int b;
+if (true) print b; else print c;
+}
+
+/*
+{
+^int a;
+delete a;               [a --> del]
+
+if true
+    a = new int;        [a --> del] update [a --> rw1]
+    delete a;
+    a = new int;        [a --> rw2]
+else
+    a = new int;        [a --> del] update [a --> rw1]
+    delete a;           [a --> del1]
+}
+
+{
+int a;
+int c (int d){a = 3}
+int b = 2;
+c();
+a = a;
+}
+*/

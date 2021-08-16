@@ -1,7 +1,9 @@
 package ast;
 
+import parser.SimpLanPlusVisitor;
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanlib;
 import util.Status;
 
 import java.util.ArrayList;
@@ -21,7 +23,6 @@ public class DeletionNode implements Node {
 
     @Override
     public void setStatus(Status status) {
-
     }
 
     @Override
@@ -37,7 +38,27 @@ public class DeletionNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        int idLevel = env.nestingLevel;
+        STentry tmpEntry = null;
+
+        while (idLevel >= 0 && tmpEntry == null) {
+            tmpEntry = (env.symTable.get(idLevel--)).get(ID);
+        }
+
+        Status deletionStatus = Status.DELETED;
+        deletionStatus = SimpLanlib.seqStatus(tmpEntry.getType().getStatus(), deletionStatus);
+        Node lhs = tmpEntry.getType();
+        lhs.setStatus(deletionStatus);
+        STentry newEntry = new STentry(tmpEntry.getNestinglevel(), lhs, tmpEntry.getOffset());
+        env.symTable.get(tmpEntry.getNestinglevel()).replace(ID, newEntry);
+
+        if (deletionStatus == Status.ERROR){
+            res.add(new SemanticError("Cannot delete an already deleted variable"));
+        }
+
+        return res;
     }
 
     @Override
@@ -49,10 +70,18 @@ public class DeletionNode implements Node {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<>();
 
-        if (!env.symTable.get(env.nestingLevel).containsKey(ID)) {
+        int idLevel = env.nestingLevel;
+        STentry tmpEntry = null;
+
+        while (idLevel >= 0 && tmpEntry == null) {
+            tmpEntry = (env.symTable.get(idLevel--)).get(ID);
+        }
+
+        if (tmpEntry == null) {
             res.add(new SemanticError("Id " + ID + " not declared"));
-        } else {
-            if (env.symTable.get(env.nestingLevel).get(ID).getType().getPointLevel() == 0) {
+        }
+        else {
+            if (env.symTable.get(tmpEntry.getNestinglevel()).get(ID).getType().getPointLevel() == 0) {
                 res.add(new SemanticError("cannot delete a non pointer id"));
             }
         }

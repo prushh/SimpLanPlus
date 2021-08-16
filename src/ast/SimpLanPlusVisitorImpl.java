@@ -193,6 +193,13 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
+    public DerExpNode visitDerExp(DerExpContext ctx) {
+        LhsNode rhs = visitLhs(ctx.lhs());
+        rhs.setRightHandSide();
+        return new DerExpNode(rhs);
+    }
+
+    @Override
     public CallExpNode visitCallExp(CallExpContext ctx) {
         CallNode call = visitCall(ctx.call());
         call.setCallExp();

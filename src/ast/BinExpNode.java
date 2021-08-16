@@ -93,7 +93,12 @@ public class BinExpNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        res.addAll(left.checkEffects(env));
+        res.addAll(right.checkEffects(env));
+
+        return res;
     }
 
     @Override
