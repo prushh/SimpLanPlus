@@ -41,6 +41,11 @@ public class PrintNode implements Node {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return val.checkEffects(env);
+    }
+
+    @Override
     public String codeGeneration() {
         return null;
     }

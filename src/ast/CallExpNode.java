@@ -35,6 +35,11 @@ public class CallExpNode implements Node {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return this.callNode.checkEffects(env);
+    }
+
+    @Override
     public String codeGeneration() {
         return null;
     }

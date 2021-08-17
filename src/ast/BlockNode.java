@@ -74,6 +74,32 @@ public class BlockNode implements Node {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        if (!isBlockFunction) {
+            HashMap<String, STentry> hm = new HashMap<>();
+            env.symTable.add(hm);
+            env.nestingLevel++;
+        }
+
+        for (Node dec : decList) {
+            res.addAll(dec.checkEffects(env));
+        }
+
+        for (Node stm : stmList) {
+            res.addAll(stm.checkEffects(env));
+        }
+
+        if (!isBlockFunction) {
+            env.symTable.remove(env.nestingLevel);
+            env.nestingLevel--;
+        }
+
+        return res;
+    }
+
+    @Override
     public String codeGeneration() {
         return null;
     }

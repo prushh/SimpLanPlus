@@ -36,6 +36,11 @@ public class BaseExpNode implements Node {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return exp.checkEffects(env);
+    }
+
+    @Override
     public String codeGeneration() {
         return null;
     }
@@ -50,4 +55,9 @@ public class BaseExpNode implements Node {
     public int getPointLevel() {
         return 0;
     }
+
+    public Node getExp() {
+        return this.exp;
+    }
+
 }

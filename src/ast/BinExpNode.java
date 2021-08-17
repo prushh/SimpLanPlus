@@ -74,8 +74,7 @@ public class BinExpNode implements Node {
         } else if (l.getPointLevel() != 0 && r.getPointLevel() != 0 && l.getPointLevel() == r.getPointLevel()) {
             if (op.getText().equals("==") ||
                     op.getText().equals("!=")) {
-                if (!(SimpLanlib.isSubtype(l, new BoolTypeNode(0, Status.DECLARED))
-                        && (SimpLanlib.isSubtype(r, new BoolTypeNode(0, Status.DECLARED))))) {
+                if (!(SimpLanlib.isSubtype(l,r))) {
                     typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
                 } else {
                     return new BoolTypeNode(0, Status.DECLARED);
@@ -89,6 +88,16 @@ public class BinExpNode implements Node {
 
 
         return new NullTypeNode(Status.DECLARED);
+    }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        res.addAll(left.checkEffects(env));
+        res.addAll(right.checkEffects(env));
+
+        return res;
     }
 
     @Override

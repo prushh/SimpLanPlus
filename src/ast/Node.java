@@ -20,6 +20,8 @@ public interface Node {
 
     ArrayList<SemanticError> checkSemantics(Environment env);
 
+    ArrayList<SemanticError> checkEffects(Environment env);
+
     int getPointLevel();
 
     Status getStatus();

@@ -17,22 +17,17 @@ public class IntTypeNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return this.status;
-    }
-
-    @Override
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    @Override
     public String toPrint(String s) {
         return s + "IntType\n";
     }
 
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
         return null;
     }
 
@@ -50,4 +45,15 @@ public class IntTypeNode implements Node {
     public int getPointLevel() {
         return this.pointLevel;
     }
+
+    @Override
+    public Status getStatus() {
+        return this.status;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
 }

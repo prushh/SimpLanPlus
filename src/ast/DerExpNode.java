@@ -2,26 +2,17 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanlib;
 import util.Status;
 
 import java.util.ArrayList;
 
-public class ArrowTypeNode implements Node {
+public class DerExpNode implements Node {
 
-    private ArrayList<ArgNode> args;
-    private Node ret;
+    private LhsNode lhs;
 
-    public ArrowTypeNode(ArrayList<ArgNode> args, Node ret) {
-        this.args = args;
-        this.ret = ret;
-    }
-
-    public Node getRet() { //
-        return ret;
-    }
-
-    public ArrayList<ArgNode> getArgList() { //
-        return args;
+    public DerExpNode(LhsNode exp) {
+        this.lhs = exp;
     }
 
     @Override
@@ -31,27 +22,21 @@ public class ArrowTypeNode implements Node {
 
     @Override
     public void setStatus(Status status) {
-
     }
 
     @Override
     public String toPrint(String indent) {
-        StringBuilder argList = new StringBuilder();
-        for (Node arg : args)
-            argList.append(arg.toPrint(indent + " "));
-        return indent + "ArrowType\n" +
-                argList +
-                ret.toPrint(indent + " -> ");
+        return null;
     }
 
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
-        return null;
+        return lhs.typeCheck(typeErr);
     }
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        return lhs.checkEffects(env);
     }
 
     @Override
@@ -61,11 +46,17 @@ public class ArrowTypeNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<>();
+        return lhs.checkSemantics(env);
     }
+
 
     @Override
     public int getPointLevel() {
         return 0;
     }
+
+    public LhsNode getLhsNode(){
+        return this.lhs;
+    }
+
 }

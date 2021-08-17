@@ -40,6 +40,11 @@ public class NotExpNode implements Node {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return exp.checkEffects(env);
+    }
+
+    @Override
     public String codeGeneration() {
         return null;
     }

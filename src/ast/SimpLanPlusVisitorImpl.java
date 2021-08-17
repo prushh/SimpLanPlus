@@ -53,7 +53,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
             pointLevel = ctx.getText().substring(0, ctx.getText().length() - 4).length();
             return new BoolTypeNode(pointLevel, Status.DECLARED);
         }
-
         return null;
     }
 
@@ -62,20 +61,18 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     public DecFunNode visitDecFun(DecFunContext ctx) {
 
         String id = ctx.ID().getText();
-        VoidTypeNode voidType = null;
-        Node type = visit(ctx.type());
+        TypeContext tmp = ctx.type();
+        Node type;
+        if (tmp != null)
+             type = visit(ctx.type());
+        else
+            type = new VoidTypeNode(Status.DECLARED);
         DecFunNode res;
 
         BlockNode block = visitBlock(ctx.block());
         block.setBlockFunction();
 
-        TypeContext tmp = ctx.type();
-
-        if (tmp == null) {
-            res = new DecFunNode(id, new VoidTypeNode(Status.DECLARED), block);
-        } else {
-            res = new DecFunNode(id, type, block);
-        }
+        res = new DecFunNode(id, type, block);
 
         for (ArgContext vc : ctx.arg()) {
             id = vc.ID().getText();
@@ -190,6 +187,13 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override
     public NegExpNode visitNegExp(NegExpContext ctx) {
         return new NegExpNode(visit(ctx.exp()));
+    }
+
+    @Override
+    public DerExpNode visitDerExp(DerExpContext ctx) {
+        LhsNode rhs = visitLhs(ctx.lhs());
+        rhs.setRightHandSide();
+        return new DerExpNode(rhs);
     }
 
     @Override

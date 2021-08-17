@@ -45,6 +45,14 @@ public class RetNode implements Node {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        if (val != null) {
+            return val.checkEffects(env);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
     public String codeGeneration() {
         return null;
     }

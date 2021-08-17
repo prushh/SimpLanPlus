@@ -52,6 +52,29 @@ public class DecVarNode implements Node {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        HashMap<String, STentry> hm = env.symTable.get(env.nestingLevel);
+        STentry entry;
+
+        if (exp != null) {
+            res.addAll(exp.checkEffects(env));
+            Status newDecAsg = Status.READWRITE;
+            Node tmpLhs = type;
+            tmpLhs.setStatus(newDecAsg);
+            entry = new STentry(env.nestingLevel, tmpLhs, env.offset--);
+        }
+        else {
+            entry = new STentry(env.nestingLevel, type, env.offset--);
+        }
+        hm.put(ID, entry);
+
+        return res;
+    }
+
+
+    @Override
     public String codeGeneration() {
         return null;
     }

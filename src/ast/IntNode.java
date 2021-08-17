@@ -35,6 +35,11 @@ public class IntNode implements Node {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return new ArrayList<>();
+    }
+
+    @Override
     public String codeGeneration() {
         return null;
     }

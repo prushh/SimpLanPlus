@@ -12,6 +12,7 @@ public class LhsNode implements Node {
     private String ID;
     private STentry entry;
     private int pointLevel;
+    private boolean isRightHandSide = false;
 
     public LhsNode(String ID, int pointLevel) {
         this.ID = ID;
@@ -52,6 +53,52 @@ public class LhsNode implements Node {
         return type;
     }
 
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        int idLevel = env.nestingLevel;
+        STentry tmpEntry = null;
+
+        while (idLevel >= 0 && tmpEntry == null) {
+            tmpEntry = (env.symTable.get(idLevel--)).get(ID);
+        }
+
+        if (isRightHandSide) {
+
+            if (tmpEntry.getType().getStatus() != Status.READWRITE){
+
+                if (tmpEntry.getType().getStatus() == Status.DECLARED) {
+                    res.add(new SemanticError("Id --" + ID + "-- has not been assigned"));
+                } else if (tmpEntry.getType().getStatus() == Status.DELETED) {
+                    res.add(new SemanticError("Id --" + ID + "-- has been deleted"));
+                } else if (tmpEntry.getType().getStatus() == Status.ERROR) {
+                    res.add(new SemanticError("Id --" + ID + "-- has returned an error status"));
+                }
+                /*
+                Node tmpLhs = tmpEntry.getType();
+                tmpLhs.setStatus(Status.ERROR);
+                STentry newEntry = new STentry(tmpEntry.getNestinglevel(), tmpLhs, tmpEntry.getOffset());
+                */
+                tmpEntry.getType().setStatus(Status.ERROR);
+                env.symTable.get(tmpEntry.getNestinglevel()).replace(this.getID(), tmpEntry);
+
+            }
+        }
+
+        if (this.pointLevel > 0 && tmpEntry.getType().getStatus() == Status.DELETED){
+            res.add(new SemanticError("Cannot dereference an already deleted pointer"));
+            Node tmpLhs = tmpEntry.getType();
+            tmpLhs.setStatus(Status.ERROR);
+            STentry newEntry = new STentry(tmpEntry.getNestinglevel(), tmpLhs, tmpEntry.getOffset());
+            env.symTable.get(tmpEntry.getNestinglevel()).replace(this.getID(), newEntry);
+
+        }
+
+        return res;
+    }
+
     @Override
     public String codeGeneration() {
         return null;
@@ -81,5 +128,14 @@ public class LhsNode implements Node {
     public int getPointLevel() {
         return this.pointLevel;
     }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setRightHandSide() {
+        isRightHandSide = true;
+    }
+
 
 }

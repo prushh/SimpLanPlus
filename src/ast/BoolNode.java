@@ -42,6 +42,11 @@ public class BoolNode implements Node {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return new ArrayList<>();
+    }
+
+    @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return new ArrayList<>();
     }

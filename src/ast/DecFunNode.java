@@ -8,11 +8,13 @@ import util.Status;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static java.util.Collections.copy;
+
 public class DecFunNode implements Node {
 
     private String ID;
     private Node type;
-    private ArrayList<Node> args;
+    private ArrayList<ArgNode> args;
     private Node body;
 
     public DecFunNode(String ID, Node type, Node body) {
@@ -22,7 +24,7 @@ public class DecFunNode implements Node {
         args = new ArrayList<>();
     }
 
-    public void addArg(Node arg) {
+    public void addArg(ArgNode arg) {
         args.add(arg);
     }
 
@@ -55,6 +57,80 @@ public class DecFunNode implements Node {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        HashMap<String, STentry> hm = env.symTable.get(env.nestingLevel);
+        STentry entry = new STentry(env.nestingLevel, env.offset--);
+
+        hm.put(ID, entry);
+
+        env.nestingLevel++;
+        HashMap<String, STentry> hmn = new HashMap<>();
+
+        hmn.put(ID, entry);
+
+        env.symTable.add(hmn);
+
+        int argOffset = 1;
+
+        for (ArgNode arg : args) {
+            hmn.put(arg.getId(), new STentry(env.nestingLevel, arg.getType(), argOffset++));
+        }
+
+        entry.addType(new ArrowTypeNode(args, this.type));
+
+        /* -- todo gestire offset per variabili nella funzione
+        if (args.size() > 0) {
+            env.offset = -2;
+
+            for (Node n : args) {
+                res.addAll(n.checkSemantics(env));
+            }
+        }
+        */
+
+        ArrayList<ArgNode> argDeclared = new ArrayList<>();
+        for (Node a : args) {
+            argDeclared.add((ArgNode) a);
+        }
+
+        ArrayList<ArgNode> sigma0 = new ArrayList<>();
+        for (int i = 0; i < argDeclared.size(); i++) {
+            if (argDeclared.get(i).getType() instanceof IntTypeNode)
+                sigma0.add(new ArgNode(argDeclared.get(i).getId(), new IntTypeNode(argDeclared.get(i).getPointLevel(), Status.DECLARED)));
+            else if (argDeclared.get(i).getType() instanceof BoolTypeNode)
+                sigma0.add(new ArgNode(argDeclared.get(i).getId(), new BoolTypeNode(argDeclared.get(i).getPointLevel(), Status.DECLARED)));
+        }
+
+        // -- todo punto fisso
+
+        Environment effectEnv = SimpLanlib.cloneEnvironment(env);
+
+        body.checkEffects(effectEnv);
+
+        // argEffectList = /sigma1
+        ArrayList<ArgNode> argEffectList = new ArrayList<>();
+
+        for (ArgNode a : args) {
+            Node tmp = effectEnv.symTable.get(effectEnv.nestingLevel).get(a.getId()).getType();
+            ArgNode tmpArg = new ArgNode(a.getId(),tmp);
+            argEffectList.add(tmpArg);
+        }
+
+
+        // todo fine punto fisso
+
+        entry.addType(new ArrowTypeNode(argEffectList, this.type));
+
+        //res.addAll(body.checkEffects(env));
+        env.symTable.remove(env.nestingLevel);
+        env.nestingLevel--;
+        return res;
+    }
+
+
+    @Override
     public String codeGeneration() {
         return null;
     }
@@ -78,12 +154,11 @@ public class DecFunNode implements Node {
 
             env.symTable.add(hmn);
 
-            ArrayList<Node> argTypes = new ArrayList<>();
+            ArrayList<ArgNode> argTypes = new ArrayList<>();
             int argOffset = 1;
 
-            for (Node a : args) {
-                ArgNode arg = (ArgNode) a;
-                argTypes.add(arg.getType());
+            for (ArgNode arg : args) {
+                argTypes.add(arg);
 
                 if (hmn.put(arg.getId(), new STentry(env.nestingLevel, arg.getType(), argOffset++)) != null) {
                     res.add(new SemanticError("Parameter id " + arg.getId() + " already declared"));
@@ -93,6 +168,7 @@ public class DecFunNode implements Node {
 
             entry.addType(new ArrowTypeNode(argTypes, type));
 
+            /*
             if (args.size() > 0) {
                 env.offset = -2;
 
@@ -100,6 +176,7 @@ public class DecFunNode implements Node {
                     res.addAll(n.checkSemantics(env));
                 }
             }
+            */
 
             res.addAll(body.checkSemantics(env));
             env.symTable.remove(env.nestingLevel);
