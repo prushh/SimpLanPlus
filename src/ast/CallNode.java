@@ -66,7 +66,68 @@ public class CallNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<>();
+
+        int i = env.nestingLevel;
+        STentry tmpEntry = null;
+
+        while (i >= 0 && tmpEntry == null) {
+            tmpEntry = (env.symTable.get(i--)).get(ID);
+        }
+
+        for (Node arg : args) {
+            res.addAll(arg.checkEffects(env));
+        }
+
+        // Puntatori possibili ---> lhs (pointLevel > 0) e baseExp che contiene un puntatore
+        // Tutto il resto viene passato per valore
+
+        ArrayList<DerExpNode> pointerList = new ArrayList<>();
+        for (Node arg : args) {
+            Node tmp = arg;
+            if (arg instanceof BaseExpNode){
+                while (((BaseExpNode)tmp).getExp() instanceof BaseExpNode){
+                    tmp = ((BaseExpNode)tmp).getExp();
+                }
+           }
+           if (tmp instanceof DerExpNode){
+               DerExpNode tmpDerNode = (DerExpNode) tmp;
+               int tmpNest = env.nestingLevel;
+               while (env.symTable.get(tmpNest).get(tmpDerNode.getLhsNode().getID()) == null){
+                   tmpNest --;
+               }
+               if (env.symTable.get(tmpNest).get(tmpDerNode.getLhsNode().getID()).getType().getPointLevel() -
+                    tmpDerNode.getLhsNode().getPointLevel()>0)
+                   pointerList.add(tmpDerNode);
+           }
+        }
+
+        for (DerExpNode arg : pointerList) {
+            int tmpNest = env.nestingLevel;
+            while (env.symTable.get(tmpNest).get(arg.getLhsNode().getID()) == null){
+                tmpNest --;
+            }
+            if (env.symTable.get(tmpNest).get(arg.getLhsNode().getID()).getType().getStatus().ordinal() >= Status.DELETED.ordinal()){
+                res.add(new SemanticError("Cannot pass a deleted pointer as an actual parameter"));
+            }
+        }
+
+
+
+
+
+
+
+
+
+        for (Node arg : args){
+
+        }
+
+
+
+
+        return res;
     }
 
     @Override

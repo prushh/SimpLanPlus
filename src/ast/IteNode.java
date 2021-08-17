@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static util.SimpLanlib.cloneEnvironment;
 import static util.SimpLanlib.maxStatus;
 
 public class IteNode implements Node {
@@ -63,8 +64,8 @@ public class IteNode implements Node {
 
         if (el != null) {
 
-            Environment envThen = new Environment(env);
-            Environment envElse = new Environment(env);
+            Environment envThen = cloneEnvironment(env);
+            Environment envElse = cloneEnvironment(env);
 
             res.addAll(th.checkEffects(envThen));
             res.addAll(el.checkEffects(envElse));

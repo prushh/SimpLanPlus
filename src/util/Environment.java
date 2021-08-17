@@ -13,10 +13,9 @@ public class Environment {
 	public int nestingLevel = -1;
 	public int offset = 0;
 
-	public Environment(Environment env){
-		this.symTable = env.symTable;
-		this.nestingLevel = env.nestingLevel;
-		this.offset = env.offset;
+	public Environment(int nestingLevel, int offset){
+		this.nestingLevel = nestingLevel;
+		this.offset = offset;
 	}
 	public Environment(){
 

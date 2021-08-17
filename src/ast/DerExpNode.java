@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 public class DerExpNode implements Node {
 
-    private Node lhs;
+    private LhsNode lhs;
 
-    public DerExpNode(Node exp) {
+    public DerExpNode(LhsNode exp) {
         this.lhs = exp;
     }
 
@@ -53,6 +53,10 @@ public class DerExpNode implements Node {
     @Override
     public int getPointLevel() {
         return 0;
+    }
+
+    public LhsNode getLhsNode(){
+        return this.lhs;
     }
 
 }

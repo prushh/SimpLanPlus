@@ -55,4 +55,9 @@ public class BaseExpNode implements Node {
     public int getPointLevel() {
         return 0;
     }
+
+    public Node getExp() {
+        return this.exp;
+    }
+
 }

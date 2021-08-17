@@ -3,18 +3,21 @@
 //{int a = 1; {int b = 2; {return a+b;}} return;}
 
 {
-    ^int x = new int;
-    ^int a = new int;
-    int b (){
-        a = new int;
-        return 1;
-        }
-    int c () {
-        delete a;
-        return 1;
-    }
+^int a = new int;
+void fun (^int a, int b){
+    return ;
+}
+int f ()
+{
     delete a;
-    if (c()==b()) {print (a^);}
+    return 2;
+}
+^int b;
+fun (a, f());
+
+
+if (true) delete b; else delete b;
+
 }
 
 //sigma1 == [b -> d]
