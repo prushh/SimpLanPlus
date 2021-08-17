@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class ArrowTypeNode implements Node {
 
-    private ArrayList<Node> args;
+    private ArrayList<ArgNode> args;
     private Node ret;
 
-    public ArrowTypeNode(ArrayList<Node> args, Node ret) {
+    public ArrowTypeNode(ArrayList<ArgNode> args, Node ret) {
         this.args = args;
         this.ret = ret;
     }
@@ -20,7 +20,7 @@ public class ArrowTypeNode implements Node {
         return ret;
     }
 
-    public ArrayList<Node> getArgList() { //
+    public ArrayList<ArgNode> getArgList() { //
         return args;
     }
 

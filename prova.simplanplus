@@ -5,6 +5,7 @@
 {
 ^int a = new int;
 void fun (^int a, int b){
+    int c;
     return ;
 }
 int f ()
@@ -13,7 +14,8 @@ int f ()
     return 2;
 }
 ^int b;
-fun (a, f());
+
+fun (a, 1);
 
 
 if (true) delete b; else delete b;

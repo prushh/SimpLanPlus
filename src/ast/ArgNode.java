@@ -44,7 +44,7 @@ public class ArgNode implements Node {
 
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
-        return this.type;
+        return this.type.typeCheck(typeErr);
     }
 
     @Override

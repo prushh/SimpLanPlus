@@ -70,6 +70,8 @@ public class Test {
 					}
 						else {
 
+						System.out.println(type.toPrint("Effect checking ok! Type of the program is: "));
+
 						// CODE GENERATION  prova.SimpLan.asm
 						String code = ast.codeGeneration();
 						BufferedWriter out = new BufferedWriter(new FileWriter(fileName + ".asm"));

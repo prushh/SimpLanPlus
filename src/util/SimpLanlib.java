@@ -73,6 +73,11 @@ public class SimpLanlib {
                 Status newStatus = newType.getStatus();
                 int newOffset = entry.getValue().getOffset();
                 Node newEnvType;
+                if (newType instanceof ArgNode){
+                    System.out.println("ERRORE FATALE");
+                    System.out.println("GAGAGAGAGAGAGA");
+                    System.exit(0);
+                }
                 if (newType instanceof BoolTypeNode){
                     newEnvType = new BoolTypeNode(newPointLevel,newStatus);
                 }
@@ -80,8 +85,23 @@ public class SimpLanlib {
                     newEnvType = new IntTypeNode(newPointLevel,newStatus);
                 }
                 else {
-                    ArrayList<Node> newArgList;
-                    newArgList = (ArrayList<Node>) ((ArrowTypeNode) newType).getArgList().clone();
+                    ArrayList<ArgNode> newArgList = new ArrayList<>();
+                    ArrowTypeNode tmpArrowType =  ((ArrowTypeNode) newType);
+                    for (ArgNode arg: tmpArrowType.getArgList()) {
+                        ArgNode tmpArgNode = arg;
+                        String argId = tmpArgNode.getId();
+                        Node newArgType = tmpArgNode.getType();
+                        int newArgPoint = newArgType.getPointLevel();
+                        Status newArgStatus = newArgType.getStatus();
+                        Node newEnvArgType;
+                        if (newArgType instanceof BoolTypeNode){
+                            newEnvArgType = new BoolTypeNode(newArgPoint,newArgStatus);
+                        }
+                        else {
+                            newEnvArgType = new IntTypeNode(newArgPoint,newArgStatus);
+                        }
+                        newArgList.add(new ArgNode(argId, newEnvArgType));
+                    }
                     Node newArrowRetType = ((ArrowTypeNode) newType).getRet();
                     Node newEnvArrowRetType;
 

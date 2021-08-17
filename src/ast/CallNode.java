@@ -41,27 +41,27 @@ public class CallNode implements Node {
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
 
-        ArrowTypeNode t = null;
-        if (entry.getType() instanceof ArrowTypeNode) t = (ArrowTypeNode) entry.getType();
+        ArrowTypeNode functionType = null;
+        if (entry.getType() instanceof ArrowTypeNode) functionType = (ArrowTypeNode) entry.getType();
         else {
             typeErr.add(new SemanticError("Invocation of a non-function " + ID));
         }
-        ArrayList<Node> p = t.getArgList();
-        if (!(p.size() == args.size())) {
+        ArrayList<ArgNode> argList = functionType.getArgList();
+        if (!(argList.size() == args.size())) {
             typeErr.add(new SemanticError("Wrong number of parameters in the invocation of " + ID));
         }
         if (isCallExp) {
-            if (SimpLanlib.isSubtype(t.getRet(), new VoidTypeNode(Status.DECLARED))) {
+            if (SimpLanlib.isSubtype(functionType.getRet(), new VoidTypeNode(Status.DECLARED))) {
                 typeErr.add(new SemanticError("cannot use void function as an exp"));
             }
         }
         for (int i = 0; i < args.size(); i++) {
             Node arg_i = args.get(i).typeCheck(typeErr);
-            if (!(SimpLanlib.isSubtype(arg_i, p.get(i))) || (arg_i.getPointLevel() != p.get(i).getPointLevel())) {
+            if (!(SimpLanlib.isSubtype(arg_i, argList.get(i).getType())) || (arg_i.getPointLevel() != argList.get(i).getType().getPointLevel())) {
                 typeErr.add(new SemanticError("Wrong type for " + (i + 1) + "-th parameter in the invocation of " + ID));
             }
         }
-        return t.getRet();
+        return functionType.getRet();
     }
 
     @Override
@@ -111,21 +111,6 @@ public class CallNode implements Node {
                 res.add(new SemanticError("Cannot pass a deleted pointer as an actual parameter"));
             }
         }
-
-
-
-
-
-
-
-
-
-        for (Node arg : args){
-
-        }
-
-
-
 
         return res;
     }
