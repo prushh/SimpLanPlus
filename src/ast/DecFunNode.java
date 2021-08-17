@@ -119,7 +119,7 @@ public class DecFunNode implements Node {
         }
 
 
-        // todo fine punto fisso
+        // -- todo fine punto fisso
 
         entry.addType(new ArrowTypeNode(argEffectList, this.type));
 
