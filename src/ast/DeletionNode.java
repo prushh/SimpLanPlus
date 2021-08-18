@@ -1,9 +1,8 @@
 package ast;
 
-import parser.SimpLanPlusVisitor;
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanlib;
+import util.SimpLanPlusLib;
 import util.Status;
 
 import java.util.ArrayList;
@@ -48,15 +47,17 @@ public class DeletionNode implements Node {
         }
 
         Status deletionStatus = Status.DELETED;
-        deletionStatus = SimpLanlib.seqStatus(tmpEntry.getType().getStatus(), deletionStatus);
+        deletionStatus = SimpLanPlusLib.seqStatus(tmpEntry.getType().getStatus(), deletionStatus);
         Node lhs = tmpEntry.getType();
         lhs.setStatus(deletionStatus);
         STentry newEntry = new STentry(tmpEntry.getNestinglevel(), lhs, tmpEntry.getOffset());
         env.symTable.get(tmpEntry.getNestinglevel()).replace(ID, newEntry);
 
-        if (deletionStatus == Status.ERROR){
+        if (deletionStatus == Status.ERROR) {
             res.add(new SemanticError("Cannot delete an already deleted variable"));
         }
+
+        // TODO considerare state dell'exp su nodo return
 
         return res;
     }

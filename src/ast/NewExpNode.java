@@ -2,7 +2,7 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanlib;
+import util.SimpLanPlusLib;
 import util.Status;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class NewExpNode implements Node {
 
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
-        if (SimpLanlib.isSubtype(type, new IntTypeNode(0, Status.DECLARED)))
+        if (SimpLanPlusLib.isSubtype(type, new IntTypeNode(0, Status.DECLARED)))
             return new IntTypeNode(type.getPointLevel() + 1, Status.DECLARED);
         else
             return new BoolTypeNode(type.getPointLevel() + 1, Status.DECLARED);

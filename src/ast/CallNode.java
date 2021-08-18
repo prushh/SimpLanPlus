@@ -2,10 +2,11 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanlib;
+import util.SimpLanPlusLib;
 import util.Status;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CallNode implements Node {
 
@@ -51,13 +52,13 @@ public class CallNode implements Node {
             typeErr.add(new SemanticError("Wrong number of parameters in the invocation of " + ID));
         }
         if (isCallExp) {
-            if (SimpLanlib.isSubtype(functionType.getRet(), new VoidTypeNode(Status.DECLARED))) {
+            if (SimpLanPlusLib.isSubtype(functionType.getRet(), new VoidTypeNode(Status.DECLARED))) {
                 typeErr.add(new SemanticError("cannot use void function as an exp"));
             }
         }
         for (int i = 0; i < args.size(); i++) {
             Node arg_i = args.get(i).typeCheck(typeErr);
-            if (!(SimpLanlib.isSubtype(arg_i, argList.get(i).getType())) || (arg_i.getPointLevel() != argList.get(i).getType().getPointLevel())) {
+            if (!(SimpLanPlusLib.isSubtype(arg_i, argList.get(i).getType())) || (arg_i.getPointLevel() != argList.get(i).getType().getPointLevel())) {
                 typeErr.add(new SemanticError("Wrong type for " + (i + 1) + "-th parameter in the invocation of " + ID));
             }
         }
@@ -85,30 +86,87 @@ public class CallNode implements Node {
         ArrayList<DerExpNode> pointerList = new ArrayList<>();
         for (Node arg : args) {
             Node tmp = arg;
-            if (arg instanceof BaseExpNode){
-                while (((BaseExpNode)tmp).getExp() instanceof BaseExpNode){
-                    tmp = ((BaseExpNode)tmp).getExp();
+            if (arg instanceof BaseExpNode) {
+                while (((BaseExpNode) tmp).getExp() instanceof BaseExpNode) {
+                    tmp = ((BaseExpNode) tmp).getExp();
                 }
-           }
-           if (tmp instanceof DerExpNode){
-               DerExpNode tmpDerNode = (DerExpNode) tmp;
-               int tmpNest = env.nestingLevel;
-               while (env.symTable.get(tmpNest).get(tmpDerNode.getLhsNode().getID()) == null){
-                   tmpNest --;
-               }
-               if (env.symTable.get(tmpNest).get(tmpDerNode.getLhsNode().getID()).getType().getPointLevel() -
-                    tmpDerNode.getLhsNode().getPointLevel()>0)
-                   pointerList.add(tmpDerNode);
-           }
+            }
+            if (tmp instanceof DerExpNode) {
+                DerExpNode tmpDerNode = (DerExpNode) tmp;
+                int tmpNest = env.nestingLevel;
+                while (env.symTable.get(tmpNest).get(tmpDerNode.getLhsNode().getID()) == null) {
+                    tmpNest--;
+                }
+                if (env.symTable.get(tmpNest).get(tmpDerNode.getLhsNode().getID()).getType().getPointLevel() -
+                        tmpDerNode.getLhsNode().getPointLevel() > 0)
+                    pointerList.add(tmpDerNode);
+            }
+
         }
 
         for (DerExpNode arg : pointerList) {
             int tmpNest = env.nestingLevel;
-            while (env.symTable.get(tmpNest).get(arg.getLhsNode().getID()) == null){
-                tmpNest --;
+            while (env.symTable.get(tmpNest).get(arg.getLhsNode().getID()) == null) {
+                tmpNest--;
             }
-            if (env.symTable.get(tmpNest).get(arg.getLhsNode().getID()).getType().getStatus().ordinal() >= Status.DELETED.ordinal()){
+            if (env.symTable.get(tmpNest).get(arg.getLhsNode().getID()).getType().getStatus().ordinal() >= Status.DELETED.ordinal()) {
                 res.add(new SemanticError("Cannot pass a deleted pointer as an actual parameter"));
+            }
+        }
+
+        for (DerExpNode arg : pointerList) {
+            int tmpNest = env.nestingLevel;
+            while (env.symTable.get(tmpNest).get(arg.getLhsNode().getID()) == null) {
+                tmpNest--;
+            }
+        }
+
+
+        int tmpArrow = env.nestingLevel;
+        while (env.symTable.get(tmpArrow).get(this.ID) == null) {
+            tmpArrow--;
+        }
+
+
+        ArrowTypeNode arrowType = (ArrowTypeNode) env.symTable.get(tmpArrow).get(this.ID).getType();
+        ArrayList<ArgNode> argsArrow = arrowType.getArgList();
+
+        HashMap<String, ArrayList<Status>> aliasHsm = new HashMap<>();
+
+        for (int idx = 0; idx < args.size(); idx++) {
+            if (pointerList.contains(args.get(idx))) {
+                DerExpNode arg = (DerExpNode) args.get(idx);
+                ArgNode argArrow = argsArrow.get(idx);
+
+                String idLhs = arg.getLhsNode().getID();
+                int tmpNest = env.nestingLevel;
+                while (env.symTable.get(tmpNest).get(idLhs) == null) {
+                    tmpNest--;
+                }
+
+                Status argStatus = env.symTable.get(tmpNest).get(idLhs).getType().getStatus();
+                Status argArrowStatus = argArrow.getType().getStatus();
+
+                Status seqFinal = SimpLanPlusLib.seqStatus(argStatus, argArrowStatus);
+
+                if (aliasHsm.containsKey(idLhs)) {
+                    aliasHsm.get(idLhs).add(seqFinal);
+                } else {
+                    ArrayList<Status> tmp = new ArrayList<>();
+                    tmp.add(seqFinal);
+                    aliasHsm.put(idLhs, tmp);
+                }
+
+                // Update[/sigma', /sigma'']
+                env.symTable.get(tmpNest).get(idLhs).getType().setStatus(seqFinal);
+            }
+        }
+
+        for (String key : aliasHsm.keySet()) {
+            if (aliasHsm.get(key).size() > 1) {
+                for (Status status : aliasHsm.get(key)) {
+
+                }
             }
         }
 

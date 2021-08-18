@@ -2,7 +2,7 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanlib;
+import util.SimpLanPlusLib;
 import util.Status;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class AsgNode implements Node {
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
         Node lhs = this.lhs.typeCheck(typeErr);
         Node exp = this.exp.typeCheck(typeErr);
-        if (!(SimpLanlib.isSubtype(lhs, exp))) {
+        if (!(SimpLanPlusLib.isSubtype(lhs, exp))) {
             typeErr.add(new SemanticError("incompatible value for variable " + this.lhs.getID()));
         } else {
             if (!Objects.equals(lhs.getPointLevel(), exp.getPointLevel())) {
@@ -63,16 +63,15 @@ public class AsgNode implements Node {
         }
 
         if (exp != null) {
-            if (SimpLanlib.isSubtype(exp, new NewExpNode(new NullTypeNode(Status.DECLARED)))){
+            if (SimpLanPlusLib.isSubtype(exp, new NewExpNode(new NullTypeNode(Status.DECLARED)))) {
                 //  Case lhs.status == declared, bisognerebbe fare una seq tra declared e readwrite, quindi otteniamo readwrite
                 //  Case lhs.status == readwrite, non succede niente
                 //  Case lhs.status == deleted, riassegno una cella di memoria a lhs, torno a readwrite
                 tmpEntry.getType().setStatus(Status.READWRITE);
-            }
-            else {
+            } else {
                 res.addAll(exp.checkEffects(env));
                 Status newlhsAsg = Status.READWRITE;
-                newlhsAsg = SimpLanlib.seqStatus(tmpEntry.getType().getStatus(), newlhsAsg);
+                newlhsAsg = SimpLanPlusLib.seqStatus(tmpEntry.getType().getStatus(), newlhsAsg);
                 tmpEntry.getType().setStatus(newlhsAsg);
             }
             env.symTable.get(tmpEntry.getNestinglevel()).replace(lhs.getID(), tmpEntry);

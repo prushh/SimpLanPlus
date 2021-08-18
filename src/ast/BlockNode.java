@@ -2,7 +2,7 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanlib;
+import util.SimpLanPlusLib;
 import util.Status;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class BlockNode implements Node {
         } else {
             check = nodeList.get(0);
             for (Node ret : nodeList) {
-                if (!SimpLanlib.isSubtype(ret, check))
+                if (!SimpLanPlusLib.isSubtype(ret, check))
                     err = true;
             }
         }
@@ -62,11 +62,11 @@ public class BlockNode implements Node {
             typeErr.add(new SemanticError("Mismatching return types"));
         }
 
-        if (SimpLanlib.isSubtype(check, new BoolTypeNode(0, Status.DECLARED))) {
+        if (SimpLanPlusLib.isSubtype(check, new BoolTypeNode(0, Status.DECLARED))) {
             return new BoolTypeNode(0, Status.DECLARED);
-        } else if (SimpLanlib.isSubtype(check, new IntTypeNode(0, Status.DECLARED))) {
+        } else if (SimpLanPlusLib.isSubtype(check, new IntTypeNode(0, Status.DECLARED))) {
             return new IntTypeNode(0, Status.DECLARED);
-        } else if (SimpLanlib.isSubtype(check, new VoidTypeNode(Status.DECLARED))) {
+        } else if (SimpLanPlusLib.isSubtype(check, new VoidTypeNode(Status.DECLARED))) {
             return new VoidTypeNode(Status.DECLARED);
         } else {
             return new NullTypeNode(Status.DECLARED);

@@ -2,7 +2,7 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanlib;
+import util.SimpLanPlusLib;
 import util.Status;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class PrintNode implements Node {
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
         Node t = this.val.typeCheck(typeErr);
-        if ((!SimpLanlib.isSubtype(t, new IntTypeNode(0, Status.DECLARED)) && !SimpLanlib.isSubtype(t, new BoolTypeNode(0, Status.DECLARED)))
+        if ((!SimpLanPlusLib.isSubtype(t, new IntTypeNode(0, Status.DECLARED)) && !SimpLanPlusLib.isSubtype(t, new BoolTypeNode(0, Status.DECLARED)))
                 || (t.getPointLevel() != 0)) {
             typeErr.add(new SemanticError("incompatible type for print"));
         }

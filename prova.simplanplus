@@ -2,25 +2,46 @@
 //{int x = 1; int y; int f(^int z){ z^ = x; return 3;} print f(1);  {^^int x = new ^int; delete x;}}
 //{int a = 1; {int b = 2; {return a+b;}} return;}
 
+/*
+{
+    int a = 1;
+    int f(int b) {
+        return a+b;
+    }
+
+    print f(2);
+}*/
+
+{
+    int x = 1;
+    {
+        ^int y = new int;
+        delete y;
+        y^ = 2;
+    }
+}
+
+
+/*
 {
 ^int a = new int;
 void fun (^int a, int b){
     int c;
     return ;
 }
-int f ()
+int f (^int azzo)
 {
-    delete a;
+    delete azzo;
     return 2;
 }
 ^int b;
 
-fun (a, 1);
+fun (a, f(a));
 
 
 if (true) delete b; else delete b;
 
-}
+}*/
 
 //sigma1 == [b -> d]
 

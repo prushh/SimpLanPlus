@@ -2,7 +2,7 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanlib;
+import util.SimpLanPlusLib;
 import util.Status;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class DecVarNode implements Node {
         Node l = this.type;
         if (exp != null) {
             Node r = this.exp.typeCheck(typeErr);
-            if (!(SimpLanlib.isSubtype(l, r))) {
+            if (!(SimpLanPlusLib.isSubtype(l, r))) {
                 typeErr.add(new SemanticError("incompatible value for variable " + this.ID));
             } else {
                 if (l.getPointLevel() != r.getPointLevel()) {

@@ -2,13 +2,11 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanlib;
+import util.SimpLanPlusLib;
 import util.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static java.util.Collections.copy;
 
 public class DecFunNode implements Node {
 
@@ -47,7 +45,7 @@ public class DecFunNode implements Node {
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
         Node bodyTmp = body.typeCheck(typeErr);
         if (this.type.getPointLevel() == 0) {
-            if (!SimpLanlib.isSubtype(this.type, bodyTmp)) {
+            if (!SimpLanPlusLib.isSubtype(this.type, bodyTmp)) {
                 typeErr.add(new SemanticError("Mismatching return types <function = " + this.type + ", body = " + bodyTmp + ">"));
             }
         } else {
@@ -60,22 +58,23 @@ public class DecFunNode implements Node {
     public ArrayList<SemanticError> checkEffects(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<>();
 
+        Environment effectEnv = new Environment();
         HashMap<String, STentry> hm = env.symTable.get(env.nestingLevel);
         STentry entry = new STentry(env.nestingLevel, env.offset--);
 
         hm.put(ID, entry);
 
-        env.nestingLevel++;
+        effectEnv.nestingLevel++;
         HashMap<String, STentry> hmn = new HashMap<>();
 
         hmn.put(ID, entry);
 
-        env.symTable.add(hmn);
+        effectEnv.symTable.add(hmn);
 
         int argOffset = 1;
 
         for (ArgNode arg : args) {
-            hmn.put(arg.getId(), new STentry(env.nestingLevel, arg.getType(), argOffset++));
+            hmn.put(arg.getId(), new STentry(effectEnv.nestingLevel, arg.getType(), argOffset++));
         }
 
         entry.addType(new ArrowTypeNode(args, this.type));
@@ -90,6 +89,7 @@ public class DecFunNode implements Node {
         }
         */
 
+        // TODO rimuovere?
         ArrayList<ArgNode> argDeclared = new ArrayList<>();
         for (Node a : args) {
             argDeclared.add((ArgNode) a);
@@ -105,7 +105,7 @@ public class DecFunNode implements Node {
 
         // -- todo punto fisso
 
-        Environment effectEnv = SimpLanlib.cloneEnvironment(env);
+        //Environment effectEnv = SimpLanPlusLib.cloneEnvironment(env);
 
         body.checkEffects(effectEnv);
 
@@ -114,7 +114,7 @@ public class DecFunNode implements Node {
 
         for (ArgNode a : args) {
             Node tmp = effectEnv.symTable.get(effectEnv.nestingLevel).get(a.getId()).getType();
-            ArgNode tmpArg = new ArgNode(a.getId(),tmp);
+            ArgNode tmpArg = new ArgNode(a.getId(), tmp);
             argEffectList.add(tmpArg);
         }
 
@@ -124,8 +124,8 @@ public class DecFunNode implements Node {
         entry.addType(new ArrowTypeNode(argEffectList, this.type));
 
         //res.addAll(body.checkEffects(env));
-        env.symTable.remove(env.nestingLevel);
-        env.nestingLevel--;
+        effectEnv.symTable.remove(effectEnv.nestingLevel);
+        effectEnv.nestingLevel--;
         return res;
     }
 
@@ -145,14 +145,16 @@ public class DecFunNode implements Node {
         if (hm.put(ID, entry) != null) {
             res.add(new SemanticError("Fun id " + ID + " already declared"));
         } else {
-            env.nestingLevel++;
+            Environment funEnv = new Environment();
+            funEnv.nestingLevel++;
             HashMap<String, STentry> hmn = new HashMap<>();
 
             if (hmn.put(ID, entry) != null) {
                 res.add(new SemanticError("Fun id " + ID + " already declared"));
             }
 
-            env.symTable.add(hmn);
+            funEnv.symTable.add(hmn);
+            //env.symTable.add(hmn);
 
             ArrayList<ArgNode> argTypes = new ArrayList<>();
             int argOffset = 1;
@@ -160,7 +162,7 @@ public class DecFunNode implements Node {
             for (ArgNode arg : args) {
                 argTypes.add(arg);
 
-                if (hmn.put(arg.getId(), new STentry(env.nestingLevel, arg.getType(), argOffset++)) != null) {
+                if (hmn.put(arg.getId(), new STentry(funEnv.nestingLevel, arg.getType(), argOffset++)) != null) {
                     res.add(new SemanticError("Parameter id " + arg.getId() + " already declared"));
                 }
 
@@ -178,9 +180,9 @@ public class DecFunNode implements Node {
             }
             */
 
-            res.addAll(body.checkSemantics(env));
-            env.symTable.remove(env.nestingLevel);
-            env.nestingLevel--;
+            res.addAll(body.checkSemantics(funEnv));
+            funEnv.symTable.remove(funEnv.nestingLevel);
+            funEnv.nestingLevel--;
         }
 
         return res;

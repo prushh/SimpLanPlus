@@ -2,15 +2,15 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanlib;
+import util.SimpLanPlusLib;
 import util.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static util.SimpLanlib.cloneEnvironment;
-import static util.SimpLanlib.maxStatus;
+import static util.SimpLanPlusLib.cloneEnvironment;
+import static util.SimpLanPlusLib.maxStatus;
 
 public class IteNode implements Node {
 
@@ -42,13 +42,13 @@ public class IteNode implements Node {
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
         Node cond_type = cond.typeCheck(typeErr);
-        if (cond_type.getPointLevel() != 0 || !(SimpLanlib.isSubtype(cond_type, new BoolTypeNode(0, Status.DECLARED)))) {
+        if (cond_type.getPointLevel() != 0 || !(SimpLanPlusLib.isSubtype(cond_type, new BoolTypeNode(0, Status.DECLARED)))) {
             typeErr.add(new SemanticError("non boolean condition in if"));
         }
         Node t = th.typeCheck(typeErr);
         if (el != null) {
             Node e = el.typeCheck(typeErr);
-            if (SimpLanlib.isSubtype(t, e))
+            if (SimpLanPlusLib.isSubtype(t, e))
                 return e;
             typeErr.add(new SemanticError("Incompatible types in then else branches"));
         }

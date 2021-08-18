@@ -2,7 +2,6 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanlib;
 import util.Status;
 
 import java.util.ArrayList;

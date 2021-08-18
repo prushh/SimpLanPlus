@@ -2,7 +2,7 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanlib;
+import util.SimpLanPlusLib;
 import util.Status;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class LhsNode implements Node {
             typeErr.add(new SemanticError("too many dereferencing operations"));
         }
         Node type;
-        if (SimpLanlib.isSubtype(entry.getType(), new IntTypeNode(0, Status.DECLARED)))
+        if (SimpLanPlusLib.isSubtype(entry.getType(), new IntTypeNode(0, Status.DECLARED)))
             type = new IntTypeNode(difference, Status.DECLARED);
         else
             type = new BoolTypeNode(difference, Status.DECLARED);

@@ -1,14 +1,12 @@
 package util;
 
 import ast.*;
-import org.stringtemplate.v4.ST;
 
-import javax.management.StandardEmitterMBean;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimpLanlib {
+public class SimpLanPlusLib {
 
     private static int labCount = 0;
 

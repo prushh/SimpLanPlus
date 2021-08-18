@@ -3,7 +3,7 @@ package ast;
 import org.antlr.v4.runtime.Token;
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanlib;
+import util.SimpLanPlusLib;
 import util.Status;
 
 import java.util.ArrayList;
@@ -50,22 +50,22 @@ public class BinExpNode implements Node {
                     op.getText().equals("<=") ||
                     op.getText().equals(">") ||
                     op.getText().equals(">=")) {
-                if (!(SimpLanlib.isSubtype(l, new IntTypeNode(0, Status.DECLARED))
-                        && (SimpLanlib.isSubtype(r, new IntTypeNode(0, Status.DECLARED))))) {
+                if (!(SimpLanPlusLib.isSubtype(l, new IntTypeNode(0, Status.DECLARED))
+                        && (SimpLanPlusLib.isSubtype(r, new IntTypeNode(0, Status.DECLARED))))) {
                     typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
                 } else {
                     return new IntTypeNode(0, Status.DECLARED);
                 }
             } else if (op.getText().equals("&&") ||
                     op.getText().equals("||")) {
-                if (!(SimpLanlib.isSubtype(l, new BoolTypeNode(0, Status.DECLARED))
-                        && (SimpLanlib.isSubtype(r, new BoolTypeNode(0, Status.DECLARED))))) {
+                if (!(SimpLanPlusLib.isSubtype(l, new BoolTypeNode(0, Status.DECLARED))
+                        && (SimpLanPlusLib.isSubtype(r, new BoolTypeNode(0, Status.DECLARED))))) {
                     typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
                 } else {
                     return new BoolTypeNode(0, Status.DECLARED);
                 }
             } else {
-                if (!(SimpLanlib.isSubtype(l, r))) {
+                if (!(SimpLanPlusLib.isSubtype(l, r))) {
                     typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
                 } else {
                     return new BoolTypeNode(0, Status.DECLARED);
@@ -74,7 +74,7 @@ public class BinExpNode implements Node {
         } else if (l.getPointLevel() != 0 && r.getPointLevel() != 0 && l.getPointLevel() == r.getPointLevel()) {
             if (op.getText().equals("==") ||
                     op.getText().equals("!=")) {
-                if (!(SimpLanlib.isSubtype(l,r))) {
+                if (!(SimpLanPlusLib.isSubtype(l, r))) {
                     typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
                 } else {
                     return new BoolTypeNode(0, Status.DECLARED);
