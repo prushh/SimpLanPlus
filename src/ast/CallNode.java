@@ -149,6 +149,7 @@ public class CallNode implements Node {
 
                 Status seqFinal = SimpLanPlusLib.seqStatus(argStatus, argArrowStatus);
 
+                /*
                 if (aliasHsm.containsKey(idLhs)) {
                     aliasHsm.get(idLhs).add(seqFinal);
                 } else {
@@ -156,12 +157,14 @@ public class CallNode implements Node {
                     tmp.add(seqFinal);
                     aliasHsm.put(idLhs, tmp);
                 }
+                */
 
                 // Update[/sigma', /sigma'']
                 env.symTable.get(tmpNest).get(idLhs).getType().setStatus(seqFinal);
             }
         }
 
+        /*
         for (String key : aliasHsm.keySet()) {
             if (aliasHsm.get(key).size() > 1) {
                 for (Status status : aliasHsm.get(key)) {
@@ -169,7 +172,7 @@ public class CallNode implements Node {
                 }
             }
         }
-
+        */
         return res;
     }
 

@@ -7,6 +7,7 @@ import util.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class DecFunNode implements Node {
 
@@ -65,19 +66,41 @@ public class DecFunNode implements Node {
         hm.put(ID, entry);
 
         effectEnv.nestingLevel++;
-        HashMap<String, STentry> hmn = new HashMap<>();
+        HashMap<String, STentry> hmFun = new HashMap<>();
+        effectEnv.symTable.add(effectEnv.nestingLevel, hmFun);
 
-        hmn.put(ID, entry);
+        int getFunEnv = env.nestingLevel;
+        while (getFunEnv >= 0) {
+            for (Map.Entry<String, STentry> funEntry : env.symTable.get(getFunEnv).entrySet()) {
+                if (funEntry.getValue().getType() instanceof ArrowTypeNode) {
+                    hmFun.put(funEntry.getKey(), funEntry.getValue());
+                }
+            }
+            getFunEnv--;
+        }
+
+        entry.addType(new ArrowTypeNode(args, this.type));
+
+        hmFun.put(ID, entry);
+
+        //// ----- effectEnv == SigmaFUN
+
+        effectEnv.nestingLevel++;
+        HashMap<String, STentry> hmn = new HashMap<>();
 
         effectEnv.symTable.add(hmn);
 
         int argOffset = 1;
 
         for (ArgNode arg : args) {
-            hmn.put(arg.getId(), new STentry(effectEnv.nestingLevel, arg.getType(), argOffset++));
+            if(arg.getType() instanceof IntTypeNode){
+                hmn.put(arg.getId(), new STentry(effectEnv.nestingLevel, new IntTypeNode(arg.getType().getPointLevel(), arg.getType().getStatus()), argOffset++));
+            }else {
+                hmn.put(arg.getId(), new STentry(effectEnv.nestingLevel, new BoolTypeNode(arg.getType().getPointLevel(), arg.getType().getStatus()), argOffset++));
+            }
+
         }
 
-        entry.addType(new ArrowTypeNode(args, this.type));
 
         /* -- todo gestire offset per variabili nella funzione
         if (args.size() > 0) {
@@ -89,39 +112,74 @@ public class DecFunNode implements Node {
         }
         */
 
-        // TODO rimuovere?
-        ArrayList<ArgNode> argDeclared = new ArrayList<>();
-        for (Node a : args) {
-            argDeclared.add((ArgNode) a);
+
+        ArrayList<ArgNode> sigma0;
+        ArrayList<ArgNode> sigma1 = args;
+        boolean checkFixPoint = false;
+
+        for (ArgNode arg : args) {
+            effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().setStatus(Status.READWRITE);
         }
 
-        ArrayList<ArgNode> sigma0 = new ArrayList<>();
-        for (int i = 0; i < argDeclared.size(); i++) {
-            if (argDeclared.get(i).getType() instanceof IntTypeNode)
-                sigma0.add(new ArgNode(argDeclared.get(i).getId(), new IntTypeNode(argDeclared.get(i).getPointLevel(), Status.DECLARED)));
-            else if (argDeclared.get(i).getType() instanceof BoolTypeNode)
-                sigma0.add(new ArgNode(argDeclared.get(i).getId(), new BoolTypeNode(argDeclared.get(i).getPointLevel(), Status.DECLARED)));
+        do {
+
+            checkFixPoint = false;
+
+            sigma0 = new ArrayList<>();
+
+
+            for (int i = 0; i < sigma1.size(); i++) {
+                if (sigma1.get(i).getType() instanceof IntTypeNode)
+                    sigma0.add(new ArgNode(sigma1.get(i).getId(), new IntTypeNode(sigma1.get(i).getPointLevel(), sigma1.get(i).getType().getStatus())));
+                else if (sigma1.get(i).getType() instanceof BoolTypeNode)
+                    sigma0.add(new ArgNode(sigma1.get(i).getId(), new BoolTypeNode(sigma1.get(i).getPointLevel(), sigma1.get(i).getType().getStatus())));
+            }
+
+            //Environment effectEnv = SimpLanPlusLib.cloneEnvironment(env);
+
+            body.checkEffects(effectEnv);
+
+            // Swap local variables status with args if local vars are formal parameters
+            for (ArgNode arg : args) {
+                Status localVar = effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().getStatus();
+                //Status arrowArgStatus = arg.getType().getStatus();
+                effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().setStatus(Status.READWRITE);
+                ArrayList<ArgNode> tmpArgList = ((ArrowTypeNode) effectEnv.symTable.get(effectEnv.nestingLevel-1).get(this.ID).getType()).getArgList();
+                for (ArgNode arrowArg: tmpArgList){
+                    if ( effectEnv.symTable.get(effectEnv.nestingLevel).containsKey(arrowArg.getId())){
+                        arrowArg.getType().setStatus(localVar);
+                    }
+                }
+            }
+
+            // argEffectList = /sigma1
+            sigma1 = new ArrayList<>();
+
+            for (ArgNode a : ((ArrowTypeNode) effectEnv.symTable.get(effectEnv.nestingLevel-1).get(this.ID).getType()).getArgList()) {
+                ArgNode tmpArg = new ArgNode(a.getId(), a.getType());
+                sigma1.add(tmpArg);
+            }
+
+            // System.out.println("Size sigma0: " + sigma0.size());
+            // System.out.println("Size sigma1: " + sigma1.size());
+            for (int idx = 0; idx < sigma0.size(); idx++) {
+                if (sigma0.get(idx).getType().getStatus() != sigma1.get(idx).getType().getStatus()) {
+                    checkFixPoint = true;
+                    break;
+                }
+            }
+
+
+
         }
+        while (checkFixPoint);
 
-        // -- todo punto fisso
-
-        //Environment effectEnv = SimpLanPlusLib.cloneEnvironment(env);
-
-        body.checkEffects(effectEnv);
-
-        // argEffectList = /sigma1
-        ArrayList<ArgNode> argEffectList = new ArrayList<>();
-
-        for (ArgNode a : args) {
-            Node tmp = effectEnv.symTable.get(effectEnv.nestingLevel).get(a.getId()).getType();
-            ArgNode tmpArg = new ArgNode(a.getId(), tmp);
-            argEffectList.add(tmpArg);
-        }
-
+        res.addAll(body.checkEffects(effectEnv));
 
         // -- todo fine punto fisso
 
-        entry.addType(new ArrowTypeNode(argEffectList, this.type));
+
+        entry.addType(new ArrowTypeNode(sigma1, this.type));
 
         //res.addAll(body.checkEffects(env));
         effectEnv.symTable.remove(effectEnv.nestingLevel);
@@ -147,28 +205,43 @@ public class DecFunNode implements Node {
         } else {
             Environment funEnv = new Environment();
             funEnv.nestingLevel++;
-            HashMap<String, STentry> hmn = new HashMap<>();
+            HashMap<String, STentry> hmFun = new HashMap<>();
 
-            if (hmn.put(ID, entry) != null) {
+            if (hmFun.put(ID, entry) != null) {
                 res.add(new SemanticError("Fun id " + ID + " already declared"));
             }
 
-            funEnv.symTable.add(hmn);
+            int getFunEnv = env.nestingLevel;
+            while (getFunEnv >= 0) {
+                for (Map.Entry<String, STentry> funEntry : env.symTable.get(getFunEnv).entrySet()) {
+                    if (funEntry.getValue().getType() instanceof ArrowTypeNode) {
+                        hmFun.put(funEntry.getKey(), funEntry.getValue());
+                    }
+                }
+                getFunEnv--;
+            }
+
+            entry.addType(new ArrowTypeNode(args, this.type));
+
+            hmFun.put(ID, entry);
+
+            funEnv.symTable.add(hmFun);
             //env.symTable.add(hmn);
 
-            ArrayList<ArgNode> argTypes = new ArrayList<>();
+            funEnv.nestingLevel++;
+            HashMap<String, STentry> hmArg = new HashMap<>();
+
+            funEnv.symTable.add(hmArg);
+
             int argOffset = 1;
 
             for (ArgNode arg : args) {
-                argTypes.add(arg);
-
-                if (hmn.put(arg.getId(), new STentry(funEnv.nestingLevel, arg.getType(), argOffset++)) != null) {
+                if (hmArg.put(arg.getId(), new STentry(funEnv.nestingLevel, arg.getType(), argOffset++)) != null) {
                     res.add(new SemanticError("Parameter id " + arg.getId() + " already declared"));
                 }
-
             }
 
-            entry.addType(new ArrowTypeNode(argTypes, type));
+            entry.addType(new ArrowTypeNode(args, type));
 
             /*
             if (args.size() > 0) {

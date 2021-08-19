@@ -4,14 +4,40 @@
 
 /*
 {
-    int a = 1;
-    int f(int b) {
-        return a+b;
+    ^int a = new int;
+    int c;
+    int g(bool f){return 1;}
+    int h(){return 1;}
+    int f(^int b) {
+        print(c);
+        print (h());
+        delete b;
+        return 1;
     }
-
-    print f(2);
+    c = 1;
+    print f(a);
 }*/
 
+{
+
+void f(^int x, int n)
+{
+ if (n==0) { delete x; }
+ else { ^int y = new int ; f(y,n-1); delete x; }
+ return;
+}
+
+
+}
+
+
+
+
+}
+
+
+
+/*
 {
     int x = 1;
     {
@@ -20,17 +46,19 @@
         y^ = 2;
     }
 }
-
+*/
 
 /*
 {
 ^int a = new int;
 void fun (^int a, int b){
     int c;
+    f(new int);
     return ;
 }
 int f (^int azzo)
 {
+    fun(new int, b);
     delete azzo;
     return 2;
 }
