@@ -34,7 +34,9 @@ public class PrintNode implements Node {
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
         Node t = this.val.typeCheck(typeErr);
         if ((!SimpLanPlusLib.isSubtype(t, new IntTypeNode(0, Status.DECLARED)) && !SimpLanPlusLib.isSubtype(t, new BoolTypeNode(0, Status.DECLARED)))
-                || (t.getPointLevel() != 0)) {
+        //  Decomment this line if you want not to be able to print pointer values
+            //        || (t.getPointLevel() != 0)
+        ) {
             typeErr.add(new SemanticError("incompatible type for print"));
         }
         return new NullTypeNode(Status.DECLARED);

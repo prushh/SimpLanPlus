@@ -1,104 +1,34 @@
-//{bool x; int y = 3; int fun(bool w){}; x = true; y = 2; y =fun(x); print fun(true); if (1) x = false else x = true; return 4;}
-//{int x = 1; int y; int f(^int z){ z^ = x; return 3;} print f(1);  {^^int x = new ^int; delete x;}}
-//{int a = 1; {int b = 2; {return a+b;}} return;}
+
+{
+void f(int m, int n){
+	if (m>n) {
+	    print(m+n) ;
+	}
+	else {
+	    int x = 1 ;
+	    f(m+1,n+1) ;
+	}
+	return ;
+}
+f(5,4) ;
 
 /*
+// cosa succede se la invoco con f(4,5)?
+=====
+
+
 {
-    ^int a = new int;
-    int c;
-    int g(bool f){return 1;}
-    int h(){return 1;}
-    int f(^int b) {
-        print(c);
-        print (h());
-        delete b;
-        return 1;
+int x = 1;
+
+f(int y){
+    if (y == 0) {
+        print(x);
     }
-    c = 1;
-    print f(a);
-}*/
-
-/*
-{
-    ^int a = new int;
-    ^int b = a;
-    void fun(^int c, ^int d) {
-        delete c;
-        delete d;
-        return;
+    else {
+        f(y-1) ;
     }
-    fun(a, b);
-}*/
+f(54) ;
 
-
-{
-    ^int a = new int;
-    ^int b = new int;
-    void f(^int x, ^int y) {
-        delete x;
-        y^ = y^+1;
-        return ;
-    }
-    f(a,b);
-    f(b,b);
 }
 
-
-/*
-{
-    int x = 1;
-    {
-        ^int y = new int;
-        delete y;
-        y^ = 2;
-    }
-}
-*/
-
-/*
-{
-^int a = new int;
-void fun (^int a, int b){
-    int c;
-    f(new int);
-    return ;
-}
-int f (^int azzo)
-{
-    fun(new int, b);
-    delete azzo;
-    return 2;
-}
-^int b;
-
-fun (a, f(a));
-
-
-if (true) delete b; else delete b;
-
-}*/
-
-//sigma1 == [b -> d]
-
-/*
-{
-^int a;
-delete a;               [a --> del]
-
-if true
-    a = new int;        [a --> del] update [a --> rw1]
-    delete a;
-    a = new int;        [a --> rw2]
-else
-    a = new int;        [a --> del] update [a --> rw1]
-    delete a;           [a --> del1]
-}
-
-{
-int a;
-int c (int d){a = 3}
-int b = 2;
-c();
-a = a;
-}
 */
