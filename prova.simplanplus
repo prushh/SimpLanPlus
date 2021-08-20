@@ -18,23 +18,30 @@
     print f(a);
 }*/
 
+/*
 {
+    ^int a = new int;
+    ^int b = a;
+    void fun(^int c, ^int d) {
+        delete c;
+        delete d;
+        return;
+    }
+    fun(a, b);
+}*/
 
-void f(^int x, int n)
+
 {
- if (n==0) { delete x; }
- else { ^int y = new int ; f(y,n-1); delete x; }
- return;
+    ^int a = new int;
+    ^int b = new int;
+    void f(^int x, ^int y) {
+        delete x;
+        y^ = y^+1;
+        return ;
+    }
+    f(a,b);
+    f(b,b);
 }
-
-
-}
-
-
-
-
-}
-
 
 
 /*

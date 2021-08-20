@@ -149,7 +149,6 @@ public class CallNode implements Node {
 
                 Status seqFinal = SimpLanPlusLib.seqStatus(argStatus, argArrowStatus);
 
-                /*
                 if (aliasHsm.containsKey(idLhs)) {
                     aliasHsm.get(idLhs).add(seqFinal);
                 } else {
@@ -157,22 +156,49 @@ public class CallNode implements Node {
                     tmp.add(seqFinal);
                     aliasHsm.put(idLhs, tmp);
                 }
-                */
 
                 // Update[/sigma', /sigma'']
                 env.symTable.get(tmpNest).get(idLhs).getType().setStatus(seqFinal);
             }
         }
 
-        /*
         for (String key : aliasHsm.keySet()) {
-            if (aliasHsm.get(key).size() > 1) {
-                for (Status status : aliasHsm.get(key)) {
+            ArrayList<Status> values = aliasHsm.get(key);
+            int size = values.size();
+            if (size > 1) {
+                Status maxLocal = values.get(0);
+                for (int idx = 0; idx < size; idx++) {
+                    for (int jdx = idx; jdx < size; jdx++) {
+                        if (idx != jdx) {
+                            Status prev = values.get(idx);
+                            Status foll = values.get(jdx);
+                            maxLocal = SimpLanPlusLib.parStatus(prev, foll);
 
+                            values.clear();
+                            values.add(maxLocal);
+                        }
+                    }
                 }
             }
         }
-        */
+
+        for (String key : aliasHsm.keySet()) {
+            int level = env.nestingLevel;
+            STentry entry = null;
+            while (level >= 0 && entry == null) {
+                entry = env.symTable.get(level--).get(key);
+            }
+
+            Status max = aliasHsm.get(key).get(0);
+            entry.getType().setStatus(max);
+        }
+
+        for (String key : aliasHsm.keySet()) {
+            if (aliasHsm.get(key).get(0) == Status.ERROR) {
+                res.add(new SemanticError("Aliasing error in function call " + this.ID + "on pointer: " + key));
+            }
+        }
+
         return res;
     }
 

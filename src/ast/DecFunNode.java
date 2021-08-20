@@ -93,9 +93,9 @@ public class DecFunNode implements Node {
         int argOffset = 1;
 
         for (ArgNode arg : args) {
-            if(arg.getType() instanceof IntTypeNode){
+            if (arg.getType() instanceof IntTypeNode) {
                 hmn.put(arg.getId(), new STentry(effectEnv.nestingLevel, new IntTypeNode(arg.getType().getPointLevel(), arg.getType().getStatus()), argOffset++));
-            }else {
+            } else {
                 hmn.put(arg.getId(), new STentry(effectEnv.nestingLevel, new BoolTypeNode(arg.getType().getPointLevel(), arg.getType().getStatus()), argOffset++));
             }
 
@@ -144,9 +144,10 @@ public class DecFunNode implements Node {
                 Status localVar = effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().getStatus();
                 //Status arrowArgStatus = arg.getType().getStatus();
                 effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().setStatus(Status.READWRITE);
-                ArrayList<ArgNode> tmpArgList = ((ArrowTypeNode) effectEnv.symTable.get(effectEnv.nestingLevel-1).get(this.ID).getType()).getArgList();
-                for (ArgNode arrowArg: tmpArgList){
-                    if ( effectEnv.symTable.get(effectEnv.nestingLevel).containsKey(arrowArg.getId())){
+                ArrayList<ArgNode> tmpArgList = ((ArrowTypeNode) effectEnv.symTable.get(effectEnv.nestingLevel - 1).get(this.ID).getType()).getArgList();
+                for (ArgNode arrowArg : tmpArgList) {
+                    if (effectEnv.symTable.get(effectEnv.nestingLevel).containsKey(arrowArg.getId()) &&
+                            arrowArg.getId() == arg.getId()) {
                         arrowArg.getType().setStatus(localVar);
                     }
                 }
@@ -155,7 +156,7 @@ public class DecFunNode implements Node {
             // argEffectList = /sigma1
             sigma1 = new ArrayList<>();
 
-            for (ArgNode a : ((ArrowTypeNode) effectEnv.symTable.get(effectEnv.nestingLevel-1).get(this.ID).getType()).getArgList()) {
+            for (ArgNode a : ((ArrowTypeNode) effectEnv.symTable.get(effectEnv.nestingLevel - 1).get(this.ID).getType()).getArgList()) {
                 ArgNode tmpArg = new ArgNode(a.getId(), a.getType());
                 sigma1.add(tmpArg);
             }
@@ -168,7 +169,6 @@ public class DecFunNode implements Node {
                     break;
                 }
             }
-
 
 
         }
