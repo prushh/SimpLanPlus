@@ -39,7 +39,16 @@ public class DecFunNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        StringBuilder builder = new StringBuilder();
+        String str = indent + "DecFun: " +
+                ID + "\n" +
+                type.toPrint(indent + "\t");
+        builder.append(str);
+        for (ArgNode arg : args) {
+            builder.append(arg.toPrint(indent + "\t"));
+        }
+        builder.append(body.toPrint(indent + "\t"));
+        return builder.toString();
     }
 
     @Override

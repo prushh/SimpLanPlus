@@ -27,7 +27,7 @@ public class BaseExpNode implements Node {
     @Override
     public String toPrint(String indent) {
         return indent + "BaseExp\n" +
-                exp.toPrint(indent + " ");
+                exp.toPrint(indent + "\t");
     }
 
     @Override

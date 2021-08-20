@@ -30,9 +30,9 @@ public class AsgNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return indent + "Asg\n" +
-                lhs.toPrint(indent + " ") +
-                exp.toPrint(indent + " ");
+        return indent + "Assignment\n" +
+                lhs.toPrint(indent + "\t") +
+                exp.toPrint(indent + "\t");
     }
 
     @Override

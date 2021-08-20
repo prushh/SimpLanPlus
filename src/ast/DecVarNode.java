@@ -32,7 +32,15 @@ public class DecVarNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        StringBuilder builder = new StringBuilder();
+        String str = indent + "DecVar: " +
+                ID + "\n" +
+                type.toPrint(indent + "\t");
+        builder.append(str);
+        if (exp != null) {
+            builder.append(exp.toPrint(indent + "\t"));
+        }
+        return builder.toString();
     }
 
     @Override
@@ -64,8 +72,7 @@ public class DecVarNode implements Node {
             Node tmpLhs = type;
             tmpLhs.setStatus(newDecAsg);
             entry = new STentry(env.nestingLevel, tmpLhs, env.offset--);
-        }
-        else {
+        } else {
             entry = new STentry(env.nestingLevel, type, env.offset--);
         }
         hm.put(ID, entry);

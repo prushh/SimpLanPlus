@@ -26,7 +26,11 @@ public class RetNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        if (val != null) {
+            return indent + "Return\n" +
+                    val.toPrint(indent + "\t");
+        }
+        return indent + "Return\n";
     }
 
     @Override

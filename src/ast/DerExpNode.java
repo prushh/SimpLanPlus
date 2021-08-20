@@ -25,7 +25,7 @@ public class DerExpNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "DerExp\n" + lhs.toPrint(indent + "\t");
     }
 
     @Override
@@ -54,7 +54,7 @@ public class DerExpNode implements Node {
         return 0;
     }
 
-    public LhsNode getLhsNode(){
+    public LhsNode getLhsNode() {
         return this.lhs;
     }
 

@@ -26,7 +26,8 @@ public class CallExpNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "CallExp\n" +
+                callNode.toPrint(indent + "\t");
     }
 
     @Override

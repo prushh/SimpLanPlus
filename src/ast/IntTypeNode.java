@@ -17,8 +17,12 @@ public class IntTypeNode implements Node {
     }
 
     @Override
-    public String toPrint(String s) {
-        return s + "IntType\n";
+    public String toPrint(String indent) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < pointLevel; i++) {
+            builder.append("^");
+        }
+        return indent + builder + "IntType\n";
     }
 
     @Override

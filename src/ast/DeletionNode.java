@@ -26,7 +26,8 @@ public class DeletionNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "Deletion: " +
+                ID + "\n";
     }
 
     @Override
@@ -80,8 +81,7 @@ public class DeletionNode implements Node {
 
         if (tmpEntry == null) {
             res.add(new SemanticError("Id " + ID + " not declared"));
-        }
-        else {
+        } else {
             if (env.symTable.get(tmpEntry.getNestinglevel()).get(ID).getType().getPointLevel() == 0) {
                 res.add(new SemanticError("cannot delete a non pointer id"));
             }

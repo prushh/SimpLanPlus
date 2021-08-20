@@ -36,7 +36,14 @@ public class CallNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        StringBuilder builder = new StringBuilder();
+        String str = indent + "Call: " +
+                ID + "\n";
+        builder.append(str);
+        for (Node exp : args) {
+            builder.append(exp.toPrint(indent + "\t"));
+        }
+        return builder.toString();
     }
 
     @Override
@@ -166,7 +173,7 @@ public class CallNode implements Node {
             ArrayList<Status> values = aliasHsm.get(key);
             int size = values.size();
             if (size > 1) {
-                Status maxLocal = values.get(0);
+                Status maxLocal;
                 for (int idx = 0; idx < size; idx++) {
                     for (int jdx = idx; jdx < size; jdx++) {
                         if (idx != jdx) {
@@ -179,6 +186,8 @@ public class CallNode implements Node {
                         }
                     }
                 }
+            } else {
+                aliasHsm.remove(key);
             }
         }
 

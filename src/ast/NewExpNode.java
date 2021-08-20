@@ -27,7 +27,8 @@ public class NewExpNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "NewExp\n" +
+                type.toPrint(indent + "\t");
     }
 
     @Override
