@@ -58,17 +58,21 @@ public class CallNode implements Node {
         if (!(argList.size() == args.size())) {
             typeErr.add(new SemanticError("Wrong number of parameters in the invocation of " + ID));
         }
-        if (isCallExp) {
-            if (SimpLanPlusLib.isSubtype(functionType.getRet(), new VoidTypeNode(Status.DECLARED))) {
-                typeErr.add(new SemanticError("cannot use void function as an exp"));
-            }
-        }
+
         for (int i = 0; i < args.size(); i++) {
             Node arg_i = args.get(i).typeCheck(typeErr);
             if (!(SimpLanPlusLib.isSubtype(arg_i, argList.get(i).getType())) || (arg_i.getPointLevel() != argList.get(i).getType().getPointLevel())) {
                 typeErr.add(new SemanticError("Wrong type for " + (i + 1) + "-th parameter in the invocation of " + ID));
             }
         }
+        if (isCallExp) {
+            if (SimpLanPlusLib.isSubtype(functionType.getRet(), new VoidTypeNode(Status.DECLARED))) {
+                typeErr.add(new SemanticError("cannot use void function as an exp"));
+            }
+        } else {
+            return new NullTypeNode(Status.DECLARED);
+        }
+
         return functionType.getRet();
     }
 
