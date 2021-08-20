@@ -193,9 +193,6 @@ public class CallNode implements Node {
             } else {
                 aliasHsm.remove(key);
             }
-            else {
-                aliasHsm.remove(key);
-            }
         }
 
         for (String key : aliasHsm.keySet()) {
