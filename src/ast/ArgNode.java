@@ -37,7 +37,7 @@ public class ArgNode implements Node {
     @Override
     public String toPrint(String indent) {
         return indent + "Arg\n" +
-                type.toPrint(indent + " ") +
+                type.toPrint(indent + "\t") +
                 ID +
                 "\n";
     }
@@ -51,7 +51,7 @@ public class ArgNode implements Node {
     public ArrayList<SemanticError> checkEffects(Environment env) {
         return null;
     }
-    
+
     @Override
     public String codeGeneration() {
         return null;

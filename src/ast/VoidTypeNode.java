@@ -25,8 +25,8 @@ public class VoidTypeNode implements Node {
     }
 
     @Override
-    public String toPrint(String s) {
-        return s + "VoidType\n";
+    public String toPrint(String indent) {
+        return indent + "VoidType\n";
     }
 
     //non utilizzato

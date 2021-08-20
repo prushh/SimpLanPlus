@@ -32,10 +32,9 @@ public class BinExpNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return indent + "BinExp\n" +
-                left.toPrint(indent + " ") +
-                op.getText() +
-                right.toPrint(indent + " ");
+        return indent + "BinExp[" + op.getText() + "]\n" +
+                left.toPrint(indent + "\t") +
+                right.toPrint(indent + "\t");
     }
 
     public Node typeCheck(ArrayList<SemanticError> typeErr) {

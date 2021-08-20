@@ -24,8 +24,8 @@ public class NullTypeNode implements Node {
         this.status = status;
     }
 
-    public String toPrint(String s) {
-        return s + "NullType\n";
+    public String toPrint(String indent) {
+        return indent + "NullType\n";
     }
 
     //non utilizzato

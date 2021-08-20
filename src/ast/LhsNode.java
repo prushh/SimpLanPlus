@@ -32,6 +32,7 @@ public class LhsNode implements Node {
 
     @Override
     public String toPrint(String indent) {
+        //TODO
         return null;
     }
 
@@ -67,7 +68,7 @@ public class LhsNode implements Node {
 
         if (isRightHandSide) {
 
-            if (tmpEntry.getType().getStatus() != Status.READWRITE){
+            if (tmpEntry.getType().getStatus() != Status.READWRITE) {
 
                 if (tmpEntry.getType().getStatus() == Status.DECLARED) {
                     res.add(new SemanticError("Id --" + ID + "-- has not been assigned"));
@@ -87,7 +88,7 @@ public class LhsNode implements Node {
             }
         }
 
-        if (this.pointLevel > 0 && tmpEntry.getType().getStatus() == Status.DELETED){
+        if (this.pointLevel > 0 && tmpEntry.getType().getStatus() == Status.DELETED) {
             res.add(new SemanticError("Cannot dereference an already deleted pointer"));
             Node tmpLhs = tmpEntry.getType();
             tmpLhs.setStatus(Status.ERROR);

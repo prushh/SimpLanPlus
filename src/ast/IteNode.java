@@ -36,7 +36,15 @@ public class IteNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        StringBuilder builder = new StringBuilder();
+        String str = indent + "Ite\n" +
+                cond.toPrint(indent + "\t") +
+                th.toPrint(indent + "\t");
+        builder.append(str);
+        if (el != null) {
+            builder.append(el.toPrint(indent + "\t"));
+        }
+        return builder.toString();
     }
 
     @Override
@@ -86,8 +94,7 @@ public class IteNode implements Node {
                     env.symTable.get(nestLevel).replace(key, newEntry);
                 }
             }
-        }
-        else {
+        } else {
             res.addAll(th.checkEffects(env));
         }
         return res;

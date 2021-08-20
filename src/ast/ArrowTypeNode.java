@@ -36,11 +36,11 @@ public class ArrowTypeNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        StringBuilder argList = new StringBuilder();
-        for (Node arg : args)
-            argList.append(arg.toPrint(indent + " "));
+        StringBuilder builder = new StringBuilder();
+        for (ArgNode arg : args)
+            builder.append(arg.toPrint(indent + "\t"));
         return indent + "ArrowType\n" +
-                argList +
+                builder +
                 ret.toPrint(indent + " -> ");
     }
 

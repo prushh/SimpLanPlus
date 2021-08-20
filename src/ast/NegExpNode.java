@@ -27,7 +27,7 @@ public class NegExpNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "NegExp\n" + exp.toPrint(indent + "\t");
     }
 
     @Override

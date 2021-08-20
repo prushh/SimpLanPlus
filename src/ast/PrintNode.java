@@ -27,7 +27,7 @@ public class PrintNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "Print\n" + val.toPrint(indent + "\t");
     }
 
     @Override

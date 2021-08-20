@@ -27,7 +27,7 @@ public class NotExpNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "NotExp\n" + exp.toPrint(indent + "\t");
     }
 
     @Override

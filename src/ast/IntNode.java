@@ -26,7 +26,7 @@ public class IntNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "ValExp: " + val + "\n";
     }
 
     @Override

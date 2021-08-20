@@ -31,7 +31,12 @@ public class BlockNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        StringBuilder builder = new StringBuilder();
+        for (Node dec : decList)
+            builder.append(dec.toPrint(indent + "  "));
+        for (Node stm : stmList)
+            builder.append(stm.toPrint(indent + "  "));
+        return indent + "Block\n" + builder;
     }
 
     @Override

@@ -26,9 +26,7 @@ public class BoolNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        if (val)
-            return indent + "Bool: true\n";
-        return indent + "Bool: false\n";
+        return indent + "BoolExp: " + val + "\n";
     }
 
     @Override
