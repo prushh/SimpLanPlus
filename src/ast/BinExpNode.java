@@ -44,16 +44,25 @@ public class BinExpNode implements Node {
             if (op.getText().equals("*") ||
                     op.getText().equals("/") ||
                     op.getText().equals("+") ||
-                    op.getText().equals("-") ||
-                    op.getText().equals("<") ||
-                    op.getText().equals("<=") ||
-                    op.getText().equals(">") ||
-                    op.getText().equals(">=")) {
+                    op.getText().equals("-")) {
                 if (!(SimpLanPlusLib.isSubtype(l, new IntTypeNode(0, Status.DECLARED))
                         && (SimpLanPlusLib.isSubtype(r, new IntTypeNode(0, Status.DECLARED))))) {
                     typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
-                } else {
+                }else {
                     return new IntTypeNode(0, Status.DECLARED);
+                }
+            }
+            else if ( op.getText().equals("<") ||
+                        op.getText().equals("<=") ||
+                        op.getText().equals(">") ||
+                        op.getText().equals(">=") ){
+
+                if (!(SimpLanPlusLib.isSubtype(l, new IntTypeNode(0, Status.DECLARED))
+                        && (SimpLanPlusLib.isSubtype(r, new IntTypeNode(0, Status.DECLARED))))) {
+                    typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
+
+                }else {
+                    return new BoolTypeNode(0, Status.DECLARED);
                 }
             } else if (op.getText().equals("&&") ||
                     op.getText().equals("||")) {

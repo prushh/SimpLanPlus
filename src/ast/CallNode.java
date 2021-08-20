@@ -193,6 +193,9 @@ public class CallNode implements Node {
             } else {
                 aliasHsm.remove(key);
             }
+            else {
+                aliasHsm.remove(key);
+            }
         }
 
         for (String key : aliasHsm.keySet()) {
@@ -201,14 +204,13 @@ public class CallNode implements Node {
             while (level >= 0 && entry == null) {
                 entry = env.symTable.get(level--).get(key);
             }
-
             Status max = aliasHsm.get(key).get(0);
             entry.getType().setStatus(max);
         }
 
         for (String key : aliasHsm.keySet()) {
             if (aliasHsm.get(key).get(0) == Status.ERROR) {
-                res.add(new SemanticError("Aliasing error in function call " + this.ID + "on pointer: " + key));
+                res.add(new SemanticError("Aliasing error in function call " + this.ID + " on pointer: " + key));
             }
         }
 

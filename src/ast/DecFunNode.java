@@ -179,7 +179,6 @@ public class DecFunNode implements Node {
                 }
             }
 
-
         }
         while (checkFixPoint);
 
