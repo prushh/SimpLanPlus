@@ -37,7 +37,7 @@ public class ArgNode implements Node {
     @Override
     public String toPrint(String indent) {
         return indent + "Arg\n" +
-                type.toPrint(indent + "\t") +
+                type.toPrint(indent + "\t") + "\t\t" +
                 ID +
                 "\n";
     }

@@ -28,8 +28,13 @@ public class BoolTypeNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return indent + "BoolType\n";
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < pointLevel; i++) {
+            builder.append("^");
+        }
+        return indent + builder + "BoolType\n";
     }
+
 
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {

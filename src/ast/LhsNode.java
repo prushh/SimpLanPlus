@@ -32,8 +32,11 @@ public class LhsNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        //TODO
-        return null;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < pointLevel; i++) {
+            builder.append("^");
+        }
+        return indent + this.ID + builder + "\n";
     }
 
     @Override
