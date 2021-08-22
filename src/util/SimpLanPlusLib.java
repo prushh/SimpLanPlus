@@ -1,6 +1,12 @@
 package util;
 
-import ast.*;
+import ast.Node;
+import ast.STentry;
+import ast.node.other.ArgNode;
+import ast.node.type.ArrowTypeNode;
+import ast.node.type.BoolTypeNode;
+import ast.node.type.IntTypeNode;
+import ast.node.type.VoidTypeNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +54,7 @@ public class SimpLanPlusLib {
         if (tmp.ordinal() <= Status.READWRITE.ordinal())
             return (tmp);
         else if ((s1.ordinal() <= Status.READWRITE.ordinal() && s2 == Status.DELETED)
-                //       || (s1 == Status.DELETED && s2 == Status.DECLARED)
+                || (s1 == Status.DELETED && s2 == Status.DECLARED)
         )
             return Status.DELETED;
         else
