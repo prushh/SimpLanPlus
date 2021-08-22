@@ -41,6 +41,9 @@ public class LhsNode implements Node {
         for (int i = 0; i < pointLevel; i++) {
             builder.append("^");
         }
+        String str = "\n" + indent + "at nesting level " + this.entry.getNestinglevel() +
+                " with offset " + this.entry.getOffset();
+        builder.append(str);
         return indent + this.ID + builder + "\n";
     }
 

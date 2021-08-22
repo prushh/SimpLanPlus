@@ -260,15 +260,9 @@ public class DecFunNode implements Node {
 
             entry.addType(new ArrowTypeNode(args, type));
 
-            /*
             if (args.size() > 0) {
                 env.offset = -2;
-
-                for (Node n : args) {
-                    res.addAll(n.checkSemantics(env));
-                }
             }
-            */
 
             res.addAll(body.checkSemantics(funEnv));
             funEnv.symTable.remove(funEnv.nestingLevel);

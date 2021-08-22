@@ -10,6 +10,3 @@
     f(x,x^);
 
 }
-
-
-max (seq(b,a), seq(a,b))
