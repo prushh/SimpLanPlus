@@ -1,9 +1,11 @@
 package ast;
 
-import java.util.HashMap;
-
 import Interpreter.ExecuteVM;
-import parser.*;
+import parser.SVMBaseVisitor;
+import parser.SVMLexer;
+import parser.SVMParser;
+
+import java.util.HashMap;
 
 
 public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
@@ -70,8 +72,10 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 code[i++] = SVMParser.BRANCHLESSEQ;
                 labelRef.put(i++, (ctx.l != null ? ctx.l.getText() : null));
                 break;
-            case SVMLexer.JS:
-                code[i++] = SVMParser.JS;
+            case SVMLexer.JAL:
+                code[i++] = SVMParser.JAL;
+            case SVMLexer.JR:
+                code[i++] = SVMParser.JR;
                 break;
             case SVMLexer.LOADRA:
                 code[i++] = SVMParser.LOADRA;
