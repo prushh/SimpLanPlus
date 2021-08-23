@@ -86,7 +86,7 @@ public class LhsNode implements Node {
                 if (tmpEntry.getType().getStatus() != Status.READWRITE) {
 
                     if (tmpEntry.getType().getStatus() == Status.DECLARED) {
-                        res.add(new SemanticError("Id --" + ID + "-- has not been assigned"));
+                        res.add(new SemanticError("Id --" + ID + "-- has not been initialized"));
                     } else if (tmpEntry.getType().getStatus() == Status.DELETED) {
                         res.add(new SemanticError("Id --" + ID + "-- has been deleted"));
                     } else if (tmpEntry.getType().getStatus() == Status.ERROR) {
@@ -99,9 +99,11 @@ public class LhsNode implements Node {
                 }
             } else {
 
-                if (tmpEntry.getType().getStatus().ordinal() > Status.READWRITE.ordinal()) {
+                if (tmpEntry.getType().getStatus().ordinal() != Status.READWRITE.ordinal()) {
 
-                    if (tmpEntry.getType().getStatus() == Status.DELETED) {
+                    if (tmpEntry.getType().getStatus() == Status.DECLARED) {
+                        res.add(new SemanticError("Pointer --" + ID + "-- has not been initialized"));
+                    } else if (tmpEntry.getType().getStatus() == Status.DELETED) {
                         res.add(new SemanticError("Pointer --" + ID + "-- has been deleted"));
                     } else if (tmpEntry.getType().getStatus() == Status.ERROR) {
                         res.add(new SemanticError("Pointer --" + ID + "-- has returned an error status"));
@@ -112,6 +114,16 @@ public class LhsNode implements Node {
 
                 }
             }
+        } else {
+            if (tmpEntry.getType().getStatus() != Status.READWRITE &&
+                    (this.pointLevel > 0) &&
+                    tmpEntry.getType().getPointLevel() > 0
+            ) {
+                res.add(new SemanticError("Pointer --" + ID + "-- cannot be dereferenced since it has still not been assigned"));
+                tmpEntry.getType().setStatus(Status.ERROR);
+                env.symTable.get(tmpEntry.getNestinglevel()).replace(this.ID, tmpEntry);
+            }
+
         }
 
         if (this.pointLevel > 0 && tmpEntry.getType().getStatus() == Status.DELETED) {

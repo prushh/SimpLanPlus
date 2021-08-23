@@ -134,7 +134,7 @@ public class DecFunNode implements Node {
         boolean checkFixPoint = false;
 
         for (ArgNode arg : args) {
-            effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().setStatus(Status.DECLARED);
+            effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().setStatus(Status.READWRITE);
         }
 
         do {
@@ -161,7 +161,7 @@ public class DecFunNode implements Node {
             for (ArgNode arg : args) {
                 Status localVar = effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().getStatus();
                 //Status arrowArgStatus = arg.getType().getStatus();
-                effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().setStatus(Status.DECLARED);
+                effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().setStatus(Status.READWRITE);
                 ArrayList<ArgNode> tmpArgList = ((ArrowTypeNode) effectEnv.symTable.get(effectEnv.nestingLevel - 1).get(this.ID).getType()).getArgList();
                 for (ArgNode arrowArg : tmpArgList) {
                     if (effectEnv.symTable.get(effectEnv.nestingLevel).containsKey(arrowArg.getId()) &&

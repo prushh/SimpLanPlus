@@ -68,22 +68,22 @@ public class CallNode implements Node {
         ArrayList<ArgNode> argList = functionType.getArgList();
         if (!(argList.size() == args.size())) {
             typeErr.add(new SemanticError("Wrong number of parameters in the invocation of " + ID));
-        }
-
-        for (int i = 0; i < args.size(); i++) {
-            Node arg_i = args.get(i).typeCheck(typeErr);
-            if (!(SimpLanPlusLib.isSubtype(arg_i, argList.get(i).getType())) || (arg_i.getPointLevel() != argList.get(i).getType().getPointLevel())) {
-                typeErr.add(new SemanticError("Wrong type for " + (i + 1) + "-th parameter in the invocation of " + ID));
-            }
-        }
-        if (isCallExp) {
-            if (SimpLanPlusLib.isSubtype(functionType.getRet(), new VoidTypeNode(Status.DECLARED))) {
-                typeErr.add(new SemanticError("cannot use void function as an exp"));
-            }
         } else {
-            return new NullTypeNode(Status.DECLARED);
-        }
 
+            for (int i = 0; i < args.size(); i++) {
+                Node arg_i = args.get(i).typeCheck(typeErr);
+                if (!(SimpLanPlusLib.isSubtype(arg_i, argList.get(i).getType())) || (arg_i.getPointLevel() != argList.get(i).getType().getPointLevel())) {
+                    typeErr.add(new SemanticError("Wrong type for " + (i + 1) + "-th parameter in the invocation of " + ID));
+                }
+            }
+            if (isCallExp) {
+                if (SimpLanPlusLib.isSubtype(functionType.getRet(), new VoidTypeNode(Status.DECLARED))) {
+                    typeErr.add(new SemanticError("cannot use void function as an exp"));
+                }
+            } else {
+                return new NullTypeNode(Status.DECLARED);
+            }
+        }
         return functionType.getRet();
     }
 
@@ -169,7 +169,7 @@ public class CallNode implements Node {
                 }
 
                 //Status argStatus = env.symTable.get(tmpNest).get(idLhs).getType().getStatus();
-                Status argStatusStart = Status.DECLARED;
+                Status argStatusStart = Status.READWRITE;
                 Status argStatus = env.symTable.get(tmpNest).get(idLhs).getType().getStatus();
                 Status argArrowStatus = argArrow.getType().getStatus();
 
@@ -191,8 +191,9 @@ public class CallNode implements Node {
         for (String key : aliasHsm.keySet()) {
             ArrayList<Status> values = aliasHsm.get(key);
             int size = values.size();
+            Status finalStatus = Status.DECLARED;
             if (size > 1) {
-                Status maxLocal;
+                Status maxLocal = Status.DECLARED;
                 for (int idx = 0; idx < size; idx++) {
                     for (int jdx = idx; jdx < size; jdx++) {
                         if (idx != jdx) {
@@ -200,29 +201,39 @@ public class CallNode implements Node {
                             Status foll = values.get(jdx);
                             maxLocal = SimpLanPlusLib.parStatus(prev, foll);
 
-                            values.clear();
-                            values.add(maxLocal);
+                            //values.remove(jdx);
+                            //values.add(maxLocal);
+                        } else {
+                            maxLocal = values.get(idx);
                         }
                     }
+                    finalStatus = SimpLanPlusLib.maxStatus(maxLocal, finalStatus);
                 }
+                values.clear();
+                values.add(finalStatus);
             } else {
-                aliasHsm.remove(key);
+                aliasHsm.get(key).clear();
+            }
+        }
+
+
+        for (String key : aliasHsm.keySet()) {
+            if (aliasHsm.get(key).size() != 0) {
+                int level = env.nestingLevel;
+                STentry entry = null;
+                while (level >= 0 && entry == null) {
+                    entry = env.symTable.get(level--).get(key);
+                }
+                Status max = aliasHsm.get(key).get(0);
+                entry.getType().setStatus(max);
             }
         }
 
         for (String key : aliasHsm.keySet()) {
-            int level = env.nestingLevel;
-            STentry entry = null;
-            while (level >= 0 && entry == null) {
-                entry = env.symTable.get(level--).get(key);
-            }
-            Status max = aliasHsm.get(key).get(0);
-            entry.getType().setStatus(max);
-        }
-
-        for (String key : aliasHsm.keySet()) {
-            if (aliasHsm.get(key).get(0) == Status.ERROR) {
-                res.add(new SemanticError("Aliasing error in function call " + this.ID + " on pointer: " + key));
+            if (aliasHsm.get(key).size() != 0) {
+                if (aliasHsm.get(key).get(0) == Status.ERROR) {
+                    res.add(new SemanticError("Aliasing error in function call " + this.ID + " on pointer: " + key));
+                }
             }
         }
 

@@ -1,28 +1,29 @@
 package mainPackage;
+
+import Interpreter.ExecuteVM;
+import ast.Node;
+import ast.SVMVisitorImpl;
+import ast.SimpLanPlusVisitorImpl;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import parser.SVMLexer;
+import parser.SVMParser;
+import parser.SimpLanPlusLexer;
+import parser.SimpLanPlusParser;
+import util.Environment;
+import util.SemanticError;
+
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-
-import Interpreter.ExecuteVM;
-
-import parser.SimpLanPlusLexer;
-import parser.SimpLanPlusParser;
-import parser.SVMLexer;
-import parser.SVMParser;
-import util.Environment;
-import util.SemanticError;
-import ast.SimpLanPlusVisitorImpl;
-import ast.Node;
-import ast.SVMVisitorImpl;
-
 public class Test {
 	public static void main(String[] args) throws Exception {
 
 		String fileName = "prova.simplanplus";
+
+		//String fileName = "./examples/example33.simplan";
 
 		FileInputStream is = new FileInputStream(fileName);
 		ANTLRInputStream input = new ANTLRInputStream(is);
