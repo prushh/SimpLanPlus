@@ -43,7 +43,7 @@ public class BaseExpNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return this.exp.codeGeneration();
     }
 
     @Override

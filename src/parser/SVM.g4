@@ -20,15 +20,23 @@ instruction:
 	  | PUSH r=REGISTER
 	  | POP
 	  | ADD	r1=REGISTER r2=REGISTER res=REGISTER
+	  | ADDI r1=REGISTER val=NUMBER
 	  | SUB	r1=REGISTER r2=REGISTER res=REGISTER
 	  | MULT r1=REGISTER r2=REGISTER res=REGISTER
 	  | DIV	r1=REGISTER r2=REGISTER res=REGISTER
       | STOREW val=REGISTER dest=REGISTER offset=NUMBER
 	  | LOADW val=REGISTER source=REGISTER offset=NUMBER
+	  | LOADI dest=REGISTER val=NUMBER
 	  | l=LABEL COL
 	  | BRANCH l=LABEL
 	  | BRANCHEQ l=LABEL e1=REGISTER e2=REGISTER
 	  | BRANCHLESSEQ l=LABEL e1=REGISTER e2=REGISTER
+	  | LESS e1=REGISTER e2=REGISTER res=REGISTER
+	  | LESSEQ e1=REGISTER e2=REGISTER res=REGISTER
+	  | EQ e1=REGISTER e2=REGISTER res=REGISTER
+	  | NEQ e1=REGISTER e2=REGISTER res=REGISTER
+	  | AND e1=REGISTER e2=REGISTER res=REGISTER
+	  | OR e1=REGISTER e2=REGISTER res=REGISTER
 	  | JAL l=LABEL
       | JR ra=REGISTER
 	  | LOADRA dest=REGISTER ra=REGISTER
@@ -51,14 +59,22 @@ instruction:
 PUSH  	 : 'push' ; 	// pushes constant in the stack
 POP	 : 'pop' ; 	// pops from stack
 ADD	 : 'add' ;  	// add two values from the stack
+ADDI : 'addi';      // --todo--
 SUB	 : 'sub' ;	// add two values from the stack
 MULT	 : 'mult' ;  	// add two values from the stack
 DIV	 : 'div' ;	// add two values from the stack
 STOREW	 : 'sw' ; 	// store in the memory cell pointed by top the value next
 LOADW	 : 'lw' ;	// load a value from the memory cell pointed by top
+LOADI    : 'li' ;   // --todo--
 BRANCH	 : 'b' ;	// jump to label
 BRANCHEQ : 'beq' ;	// jump to label if top == next
 BRANCHLESSEQ:'bleq' ;	// jump to label if top <= next
+LESS:'less' ;	// --todo--
+LESSEQ:'leq' ;	// --todo--
+EQ:'eq' ;	//  --todo--
+NEQ:'neq' ;	//  --todo--
+AND:'and' ;	// --todo--
+OR:'or' ;	// --todo--
 JR       : 'jr' ;   // --todo--
 JAL       : 'jal' ;     // --todo--
 LOADRA	 : 'lra' ;	// load from ra

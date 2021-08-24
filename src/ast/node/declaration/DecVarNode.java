@@ -86,7 +86,20 @@ public class DecVarNode implements Node {
 
     @Override
     public String codeGeneration() {
-       return null;
+        StringBuilder builder = new StringBuilder();
+        if (getPointLevel() == 0) {
+            if (exp != null) {
+                builder.append(exp.codeGeneration());
+                builder.append("push $a0\n");
+            } else {
+                //builder.append("addi $fp -1\n");
+                builder.append("addi $sp -1\n");
+            }
+        } else {
+            // --todo-- pointer side
+        }
+
+        return builder.toString();
     }
 
     @Override

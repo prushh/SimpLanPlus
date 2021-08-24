@@ -51,6 +51,7 @@ public class CallNode implements Node {
         String entryStr = indent + "at nesting level " + this.entry.getNestinglevel() +
                 " with offset " + this.entry.getOffset() + "\n";
         builder.append(entryStr);
+
         for (Node exp : args) {
             builder.append(exp.toPrint(indent + "\t"));
         }

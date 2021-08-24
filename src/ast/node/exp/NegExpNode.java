@@ -48,7 +48,10 @@ public class NegExpNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        // per trovare il negativo si sottrae l'intero con 0
+        return this.exp.codeGeneration() +
+                "li $t0 0\n" +
+                "sub $t0 $a0 $a0\n";
     }
 
     @Override

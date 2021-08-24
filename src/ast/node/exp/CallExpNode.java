@@ -44,7 +44,7 @@ public class CallExpNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return this.callNode.codeGeneration();
     }
 
     @Override

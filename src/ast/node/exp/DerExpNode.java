@@ -42,7 +42,7 @@ public class DerExpNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return this.lhs.codeGeneration();
     }
 
     @Override

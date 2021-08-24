@@ -112,7 +112,25 @@ public class BlockNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        StringBuilder builder = new StringBuilder();
+
+        if (!isBlockFunction) {
+        }
+
+        for (Node dec : decList) {
+            builder.append(dec.codeGeneration());
+        }
+
+        builder.append("lw $fp $sp 0\n");
+
+        for (Node stm : stmList) {
+            builder.append(stm.codeGeneration());
+        }
+
+        if (!isBlockFunction) {
+        }
+
+        return builder.toString();
     }
 
     @Override
@@ -123,6 +141,7 @@ public class BlockNode implements Node {
             HashMap<String, STentry> hm = new HashMap<>();
             env.symTable.add(hm);
             env.nestingLevel++;
+            env.offset = 0;
         }
 
         for (Node dec : decList) {

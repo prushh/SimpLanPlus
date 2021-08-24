@@ -105,7 +105,18 @@ public class IteNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        StringBuilder builder = new StringBuilder();
+
+        // --todo-- Create newLabel() function
+
+        builder.append(this.cond.codeGeneration());
+        builder.append("li $t0 0\n");
+        // l is the false branch label got through newLabel() func
+        builder.append("beq l $a0 $t0");
+        builder.append(this.th.codeGeneration());
+        // here need to append false branch label
+        builder.append(this.el.codeGeneration());
+        return builder.toString();
     }
 
     @Override

@@ -48,7 +48,9 @@ public class NotExpNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return this.exp.codeGeneration() +
+                "li $t0 1\n" +
+                "sub $a0 $t0 $a0\n";
     }
 
     @Override

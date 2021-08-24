@@ -207,7 +207,7 @@ public class DecFunNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return "";
     }
 
     @Override
@@ -250,19 +250,19 @@ public class DecFunNode implements Node {
 
             funEnv.symTable.add(hmArg);
 
-            int argOffset = 1;
-
             for (ArgNode arg : args) {
-                if (hmArg.put(arg.getId(), new STentry(funEnv.nestingLevel, arg.getType(), argOffset++)) != null) {
+                if (hmArg.put(arg.getId(), new STentry(funEnv.nestingLevel, arg.getType(), funEnv.offset--)) != null) {
                     res.add(new SemanticError("Parameter id " + arg.getId() + " already declared"));
                 }
             }
 
             entry.addType(new ArrowTypeNode(args, type));
 
+            /*
+            --todo--
             if (args.size() > 0) {
                 env.offset = -2;
-            }
+            }*/
 
             res.addAll(body.checkSemantics(funEnv));
             funEnv.symTable.remove(funEnv.nestingLevel);

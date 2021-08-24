@@ -38,7 +38,7 @@ public class BoolNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return "li $a0 " + (val ? 1 : 0) + "\n";
     }
 
     @Override

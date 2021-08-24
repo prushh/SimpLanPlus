@@ -52,20 +52,19 @@ public class BinExpNode implements Node {
                 if (!(SimpLanPlusLib.isSubtype(l, new IntTypeNode(0, Status.DECLARED))
                         && (SimpLanPlusLib.isSubtype(r, new IntTypeNode(0, Status.DECLARED))))) {
                     typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
-                }else {
+                } else {
                     return new IntTypeNode(0, Status.DECLARED);
                 }
-            }
-            else if ( op.getText().equals("<") ||
-                        op.getText().equals("<=") ||
-                        op.getText().equals(">") ||
-                        op.getText().equals(">=") ){
+            } else if (op.getText().equals("<") ||
+                    op.getText().equals("<=") ||
+                    op.getText().equals(">") ||
+                    op.getText().equals(">=")) {
 
                 if (!(SimpLanPlusLib.isSubtype(l, new IntTypeNode(0, Status.DECLARED))
                         && (SimpLanPlusLib.isSubtype(r, new IntTypeNode(0, Status.DECLARED))))) {
                     typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
 
-                }else {
+                } else {
                     return new BoolTypeNode(0, Status.DECLARED);
                 }
             } else if (op.getText().equals("&&") ||
@@ -114,7 +113,62 @@ public class BinExpNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        StringBuilder builder = new StringBuilder();
+        builder.append(left.codeGeneration());
+        builder.append("push $a0\n");
+        builder.append(right.codeGeneration());
+        builder.append("lw $t0 $sp 0\n");
+        switch (op.getText()) {
+            case "+":
+                builder.append("add $a0 $t0 $a0\n");
+                break;
+            case "-":
+                builder.append("sub $a0 $t0 $a0\n");
+                break;
+            case "/":
+                builder.append("div $a0 $t0 $a0\n");
+                break;
+            case "*":
+                builder.append("mult $a0 $t0 $a0\n");
+                break;
+            case "<":
+                // $a0 < $t0
+                builder.append("less $a0 $t0 $a0\n");
+                break;
+            case "<=":
+                // $a0 <= $t0
+                builder.append("leq $a0 $t0 $a0\n");
+                break;
+            case ">":
+                // $t0 < $a0
+                builder.append("leq $t0 $a0 $a0\n");
+                break;
+            case ">=":
+                // $t0 <= $a0
+                builder.append("less $t0 $a0 $a0\n");
+                break;
+            case "==":
+                // $a0 == $t0
+                builder.append("eq $a0 $t0 $a0\n");
+                break;
+            case "!=":
+                // $a0 == $t0
+                builder.append("neq $a0 $t0 $a0\n");
+                break;
+            case "&&":
+                // $a0 && $t0
+                builder.append("and $a0 $t0 $a0\n");
+                break;
+            case "||":
+                // $a0 || $t0
+                builder.append("or $a0 $t0 $a0\n");
+                break;
+            default:
+        }
+
+        builder.append("pop\n");
+
+        return builder.toString();
     }
 
     @Override

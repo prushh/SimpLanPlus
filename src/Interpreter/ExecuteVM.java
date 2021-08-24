@@ -16,6 +16,7 @@ public class ExecuteVM {
     private int fp = MEMSIZE;
     private int ra;
     private int rv;
+    private int al;
 
     public ExecuteVM(int[] code) {
         this.code = code;
@@ -29,6 +30,7 @@ public class ExecuteVM {
             } else {
                 int bytecode = code[ip++]; // fetch
                 int v1, v2;
+                int a0, t0;
                 int address;
                 switch (bytecode) {
                     case SVMParser.PUSH:
@@ -41,6 +43,9 @@ public class ExecuteVM {
                         v1 = pop();
                         v2 = pop();
                         push(v2 + v1);
+                        break;
+                    case SVMParser.ADDI:
+
                         break;
                     case SVMParser.MULT:
                         v1 = pop();

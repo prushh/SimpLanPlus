@@ -43,7 +43,7 @@ public class IntNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return "li $a0 " + val + "\n";
     }
 
     @Override

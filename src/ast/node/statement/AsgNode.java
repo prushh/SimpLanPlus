@@ -87,7 +87,16 @@ public class AsgNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        StringBuilder builder = new StringBuilder();
+        builder.append(lhs.codeGeneration());
+
+        // --todo-- assegnamento vero e proprio
+
+        builder.append(exp.codeGeneration());
+
+        // --todo-- assegnamento vero e proprio
+
+        return builder.toString();
     }
 
     @Override
