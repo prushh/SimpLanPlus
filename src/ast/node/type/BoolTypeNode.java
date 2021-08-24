@@ -48,8 +48,8 @@ public class BoolTypeNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(int nestingLevel) {
+        return "";
     }
 
     @Override

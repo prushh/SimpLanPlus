@@ -48,8 +48,10 @@ public class NewExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(int nestingLevel) {
+        return "addi $hp 1\n" +
+                "si 0 $hp\n" +
+                "lw $a0 $hp\n";
     }
 
     @Override

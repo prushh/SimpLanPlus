@@ -112,12 +112,12 @@ public class BinExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
+    public String codeGeneration(int nestingLevel) {
         StringBuilder builder = new StringBuilder();
-        builder.append(left.codeGeneration());
+        builder.append(left.codeGeneration(nestingLevel));
         builder.append("push $a0\n");
-        builder.append(right.codeGeneration());
-        builder.append("lw $t0 $sp 0\n");
+        builder.append(right.codeGeneration(nestingLevel));
+        builder.append("lw $t0 $sp\n");
         switch (op.getText()) {
             case "+":
                 builder.append("add $a0 $t0 $a0\n");

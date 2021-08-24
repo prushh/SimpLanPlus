@@ -48,7 +48,7 @@ public class VoidTypeNode implements Node {
 
     //non utilizzato
     @Override
-    public String codeGeneration() {
+    public String codeGeneration(int nestingLevel) {
         return "";
     }
 

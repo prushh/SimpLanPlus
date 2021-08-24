@@ -47,8 +47,8 @@ public class NotExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return this.exp.codeGeneration() +
+    public String codeGeneration(int nestingLevel) {
+        return this.exp.codeGeneration(nestingLevel) +
                 "li $t0 1\n" +
                 "sub $a0 $t0 $a0\n";
     }

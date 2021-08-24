@@ -37,8 +37,8 @@ public class IntTypeNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(int nestingLevel) {
+        return "";
     }
 
     @Override

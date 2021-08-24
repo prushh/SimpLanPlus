@@ -206,7 +206,7 @@ public class DecFunNode implements Node {
 
 
     @Override
-    public String codeGeneration() {
+    public String codeGeneration(int nestingLevel) {
         return "";
     }
 

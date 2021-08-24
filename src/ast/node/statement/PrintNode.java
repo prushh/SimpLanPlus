@@ -52,8 +52,8 @@ public class PrintNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(int nestingLevel) {
+        return this.val.codeGeneration(nestingLevel) + "print $a0\n";
     }
 
     @Override

@@ -1,7 +1,5 @@
-// Generated from C:/Users/Prush/Documents/Magistrale/Compilatori_Interpreti/Project/SimpLanPlus/src/parser\SVM.g4 by ANTLR 4.9.1
+// Generated from C:/Users/bruki/IdeaProjects/SimpLanPlus/src/parser\SVM.g4 by ANTLR 4.9.1
 package parser;
-
-import java.util.HashMap;
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 

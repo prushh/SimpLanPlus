@@ -16,7 +16,7 @@ public interface Node {
 
     Node typeCheck(ArrayList<SemanticError> typeErr);
 
-    String codeGeneration();
+    String codeGeneration(int nestingLevel);
 
     ArrayList<SemanticError> checkSemantics(Environment env);
 

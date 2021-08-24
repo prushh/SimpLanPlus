@@ -42,8 +42,8 @@ public class BaseExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return this.exp.codeGeneration();
+    public String codeGeneration(int nestingLevel) {
+        return this.exp.codeGeneration(nestingLevel);
     }
 
     @Override

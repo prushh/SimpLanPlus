@@ -24,9 +24,10 @@ instruction:
 	  | SUB	r1=REGISTER r2=REGISTER res=REGISTER
 	  | MULT r1=REGISTER r2=REGISTER res=REGISTER
 	  | DIV	r1=REGISTER r2=REGISTER res=REGISTER
-      | STOREW val=REGISTER dest=REGISTER offset=NUMBER
-	  | LOADW val=REGISTER source=REGISTER offset=NUMBER
-	  | LOADI dest=REGISTER val=NUMBER
+      | STOREW val=REGISTER dest=REGISTER
+      | STOREI val=NUMBER dest=REGISTER
+	  | LOADW val=REGISTER source=REGISTER
+	  | LOADI val=REGISTER source=NUMBER
 	  | l=LABEL COL
 	  | BRANCH l=LABEL
 	  | BRANCHEQ l=LABEL e1=REGISTER e2=REGISTER
@@ -64,6 +65,7 @@ SUB	 : 'sub' ;	// add two values from the stack
 MULT	 : 'mult' ;  	// add two values from the stack
 DIV	 : 'div' ;	// add two values from the stack
 STOREW	 : 'sw' ; 	// store in the memory cell pointed by top the value next
+STOREI    : 'si' ;   // --todo--
 LOADW	 : 'lw' ;	// load a value from the memory cell pointed by top
 LOADI    : 'li' ;   // --todo--
 BRANCH	 : 'b' ;	// jump to label

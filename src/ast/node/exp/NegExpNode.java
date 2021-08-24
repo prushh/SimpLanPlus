@@ -47,9 +47,9 @@ public class NegExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
+    public String codeGeneration(int nestingLevel) {
         // per trovare il negativo si sottrae l'intero con 0
-        return this.exp.codeGeneration() +
+        return this.exp.codeGeneration(nestingLevel) +
                 "li $t0 0\n" +
                 "sub $t0 $a0 $a0\n";
     }

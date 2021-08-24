@@ -86,17 +86,14 @@ public class AsgNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(lhs.codeGeneration());
+    public String codeGeneration(int nestingLevel) {
 
-        // --todo-- assegnamento vero e proprio
-
-        builder.append(exp.codeGeneration());
-
-        // --todo-- assegnamento vero e proprio
-
-        return builder.toString();
+        return exp.codeGeneration(nestingLevel) +
+                "push $a0\n" +
+                lhs.codeGeneration(nestingLevel) +
+                "lw $t0 $sp\n" +
+                "pop\n" +
+                "sw $t0 $a0\n";
     }
 
     @Override

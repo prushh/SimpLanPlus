@@ -139,8 +139,14 @@ public class LhsNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(int nestingLevel) {
+        String lookup = "";
+        for (int i = nestingLevel; i > this.entry.getNestinglevel(); i--)
+            lookup += "lw $al $al\n";
+        return "lw $al $fp\n" +
+                lookup +
+                "addi $al " + this.entry.getOffset() + "\n" +
+                "lw $a0 $al\n";
     }
 
     @Override

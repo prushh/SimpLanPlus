@@ -111,20 +111,22 @@ public class BlockNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
+    public String codeGeneration(int nestingLevel) {
         StringBuilder builder = new StringBuilder();
+        nestingLevel++;
 
+        // --todo-- check if function blocks differ from normal block
         if (!isBlockFunction) {
         }
 
         for (Node dec : decList) {
-            builder.append(dec.codeGeneration());
+            builder.append(dec.codeGeneration(nestingLevel));
         }
 
-        builder.append("lw $fp $sp 0\n");
+        builder.append("lw $fp $sp\n");
 
         for (Node stm : stmList) {
-            builder.append(stm.codeGeneration());
+            builder.append(stm.codeGeneration(nestingLevel));
         }
 
         if (!isBlockFunction) {

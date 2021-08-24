@@ -37,7 +37,7 @@ public class BoolNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
+    public String codeGeneration(int nestingLevel) {
         return "li $a0 " + (val ? 1 : 0) + "\n";
     }
 

@@ -1,7 +1,9 @@
 {
-    int tmp = 10;
-    int dec = -1;
-    bool flag= !true;
-    tmp = ;
-    dec = 1;
+int a = 1;
+    {
+        {
+            print (a);
+        }
+    }
+
 }

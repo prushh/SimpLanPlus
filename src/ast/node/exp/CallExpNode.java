@@ -43,8 +43,8 @@ public class CallExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return this.callNode.codeGeneration();
+    public String codeGeneration(int nestingLevel) {
+        return this.callNode.codeGeneration(nestingLevel);
     }
 
     @Override

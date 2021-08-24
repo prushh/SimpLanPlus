@@ -57,8 +57,8 @@ public class ArrowTypeNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(int nestingLevel) {
+        return "";
     }
 
     @Override

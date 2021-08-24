@@ -60,8 +60,14 @@ public class RetNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(int nestingLevel) {
+        String exp = "";
+        if (this.val != null) {
+            exp = this.val.codeGeneration(nestingLevel) +
+                    "lw $rv $a0\n";
+        }
+        // -- todo -- jump to current program counter
+        return exp;
     }
 
     @Override

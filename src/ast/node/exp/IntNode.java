@@ -42,7 +42,7 @@ public class IntNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
+    public String codeGeneration(int nestingLevel) {
         return "li $a0 " + val + "\n";
     }
 

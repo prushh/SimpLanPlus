@@ -45,7 +45,7 @@ public class NullTypeNode implements Node {
     }
 
     //non utilizzato
-    public String codeGeneration() {
+    public String codeGeneration(int nestingLevel) {
         return "";
     }
 

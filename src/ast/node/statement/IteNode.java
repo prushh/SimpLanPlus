@@ -3,10 +3,7 @@ package ast.node.statement;
 import ast.Node;
 import ast.STentry;
 import ast.node.type.BoolTypeNode;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,19 +101,16 @@ public class IteNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        StringBuilder builder = new StringBuilder();
-
-        // --todo-- Create newLabel() function
-
-        builder.append(this.cond.codeGeneration());
-        builder.append("li $t0 0\n");
-        // l is the false branch label got through newLabel() func
-        builder.append("beq l $a0 $t0");
-        builder.append(this.th.codeGeneration());
-        // here need to append false branch label
-        builder.append(this.el.codeGeneration());
-        return builder.toString();
+    public String codeGeneration(int nestingLevel) {
+        Label label = new Label();
+        return this.cond.codeGeneration(nestingLevel) +
+                "li $t0 0\n" +
+                // l is the false branch label got through newLabel() func
+                "beq " + label.getLabel() + " $a0 $t0\n" +
+                this.th.codeGeneration(nestingLevel) +
+                // here appends false branch label
+                label.getLabel() + ":\n" +
+                this.el.codeGeneration(nestingLevel);
     }
 
     @Override
