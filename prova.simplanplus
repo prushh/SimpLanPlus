@@ -1,5 +1,6 @@
 {
-    ^int a = new int;
+    ^^int a = new ^int;
+    print(a^);
 }
 
 /*

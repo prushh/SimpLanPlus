@@ -1,19 +1,14 @@
-f:
-cfp $sp $fp
-push $ra
-lw $fp $sp
-li $a0 1
-lw $rv $a0
-sra $ra $sp
-addi $sp 1addi $sp 1sfp $sp $fppopjr $raaddi $sp -1
-lw $fp $sp
-lfp
+addi $hp 1
+si 0 $hp
+lw $t0 $hp
+addi $hp 1
+sw $t0 $hp
+lw $a0 $hp
 push $a0
-jal f
-push $a0
+cfp
 lw $al $fp
-addi $al -1
+addi $al 0
+lw $al $al
 lw $a0 $al
-lw $t0 $sp
-pop
-sw $t0 $a0
+print $a0
+75412c2f
