@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class DeletionNode implements Node {
 
     private String ID;
+    private STentry entry;
 
     public DeletionNode(String ID) {
         this.ID = ID;
@@ -35,7 +36,9 @@ public class DeletionNode implements Node {
 
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
-        // need symbol table
+        if (this.entry.getType().getPointLevel() == 0) {
+            typeErr.add(new SemanticError("cannot delete a non pointer id"));
+        }
         return new NullTypeNode(Status.DECLARED);
     }
 
@@ -68,7 +71,13 @@ public class DeletionNode implements Node {
 
     @Override
     public String codeGeneration(int nestingLevel) {
-        return null;
+        String lookup = "";
+        for (int i = nestingLevel; i > this.entry.getNestinglevel(); i--)
+            lookup += "lw $al $al\n";
+        return "lw $al $fp\n" +
+                lookup +
+                "addi $al " + this.entry.getOffset() + "\n" +
+                "si -1 $al\n";
     }
 
     @Override
@@ -85,9 +94,7 @@ public class DeletionNode implements Node {
         if (tmpEntry == null) {
             res.add(new SemanticError("Id " + ID + " not declared"));
         } else {
-            if (env.symTable.get(tmpEntry.getNestinglevel()).get(ID).getType().getPointLevel() == 0) {
-                res.add(new SemanticError("cannot delete a non pointer id"));
-            }
+            this.entry = tmpEntry;
         }
         return res;
     }

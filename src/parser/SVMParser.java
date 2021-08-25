@@ -182,11 +182,6 @@ public class SVMParser extends Parser {
 		public Token source;
 		public Token e1;
 		public Token e2;
-		public Token ra;
-		public Token rv;
-		public Token fp;
-		public Token stack;
-		public Token frame;
 		public Token hp;
 
 		public TerminalNode PUSH() {
@@ -373,7 +368,7 @@ public class SVMParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(118);
+				setState(104);
 				_errHandler.sync(this);
 				switch (getInterpreter().adaptivePredict(_input, 1, _ctx)) {
 					case 1: {
@@ -604,99 +599,71 @@ public class SVMParser extends Parser {
 						setState(86);
 						match(JR);
 						setState(87);
-						((InstructionContext) _localctx).ra = match(REGISTER);
+						((InstructionContext) _localctx).r = match(REGISTER);
 					}
 					break;
 					case 26: {
 						setState(88);
 						match(LOADRA);
-						setState(89);
-						((InstructionContext) _localctx).dest = match(REGISTER);
-						setState(90);
-						((InstructionContext) _localctx).ra = match(REGISTER);
 					}
 					break;
 					case 27: {
-						setState(91);
+						setState(89);
 						match(STORERA);
-						setState(92);
-						((InstructionContext) _localctx).source = match(REGISTER);
-						setState(93);
-						((InstructionContext) _localctx).ra = match(REGISTER);
 					}
 					break;
 					case 28: {
-						setState(94);
+						setState(90);
 						match(LOADRV);
-						setState(95);
-						((InstructionContext) _localctx).dest = match(REGISTER);
-						setState(96);
-						((InstructionContext) _localctx).rv = match(REGISTER);
 					}
 					break;
 					case 29: {
-						setState(97);
+						setState(91);
 						match(STORERV);
-						setState(98);
-						((InstructionContext) _localctx).source = match(REGISTER);
-						setState(99);
-						((InstructionContext) _localctx).rv = match(REGISTER);
 					}
 					break;
 					case 30: {
-						setState(100);
+						setState(92);
 						match(LOADFP);
-						setState(101);
-						((InstructionContext) _localctx).dest = match(REGISTER);
-						setState(102);
-						((InstructionContext) _localctx).fp = match(REGISTER);
 					}
 					break;
 					case 31: {
-						setState(103);
+						setState(93);
 						match(STOREFP);
-						setState(104);
-						((InstructionContext) _localctx).source = match(REGISTER);
-						setState(105);
-						((InstructionContext) _localctx).fp = match(REGISTER);
 					}
 					break;
 					case 32: {
-						setState(106);
+						setState(94);
 						match(COPYFP);
-						setState(107);
-						((InstructionContext) _localctx).stack = match(REGISTER);
-						setState(108);
-						((InstructionContext) _localctx).frame = match(REGISTER);
 					}
 					break;
 					case 33: {
-						setState(109);
+						setState(95);
 						match(LOADHP);
-						setState(110);
-						((InstructionContext) _localctx).dest = match(REGISTER);
-						setState(111);
+						setState(96);
+						((InstructionContext) _localctx).source = match(REGISTER);
+						setState(97);
 						((InstructionContext) _localctx).hp = match(REGISTER);
 					}
 					break;
 					case 34: {
-						setState(112);
+						setState(98);
 						match(STOREHP);
-						setState(113);
+						setState(99);
 						((InstructionContext) _localctx).source = match(REGISTER);
-						setState(114);
+						setState(100);
 						((InstructionContext) _localctx).hp = match(REGISTER);
 					}
 					break;
 					case 35: {
-						setState(115);
+						setState(101);
 						match(PRINT);
-						setState(116);
+						setState(102);
 						((InstructionContext) _localctx).val = match(REGISTER);
 					}
 					break;
 					case 36: {
-						setState(117);
+						setState(103);
 						match(HALT);
 					}
 					break;
@@ -715,39 +682,36 @@ public class SVMParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-			"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3){\4\2\t\2\4\3\t\3" +
+			"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3)m\4\2\t\2\4\3\t\3" +
 					"\3\2\7\2\b\n\2\f\2\16\2\13\13\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3" +
 					"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3" +
 					"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3" +
 					"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3" +
 					"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3" +
-					"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3" +
-					"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3y\n\3\3\3\2\2\4\2\4\2" +
-					"\2\2\u009c\2\t\3\2\2\2\4x\3\2\2\2\6\b\5\4\3\2\7\6\3\2\2\2\b\13\3\2\2\2" +
-					"\t\7\3\2\2\2\t\n\3\2\2\2\n\3\3\2\2\2\13\t\3\2\2\2\f\r\7\3\2\2\ry\7&\2" +
-					"\2\16\17\7\3\2\2\17y\7%\2\2\20\21\7\3\2\2\21y\7\'\2\2\22y\7\4\2\2\23\24" +
-					"\7\5\2\2\24\25\7\'\2\2\25\26\7\'\2\2\26y\7\'\2\2\27\30\7\6\2\2\30\31\7" +
-					"\'\2\2\31y\7&\2\2\32\33\7\7\2\2\33\34\7\'\2\2\34\35\7\'\2\2\35y\7\'\2" +
-					"\2\36\37\7\b\2\2\37 \7\'\2\2 !\7\'\2\2!y\7\'\2\2\"#\7\t\2\2#$\7\'\2\2" +
-					"$%\7\'\2\2%y\7\'\2\2&\'\7\n\2\2\'(\7\'\2\2(y\7\'\2\2)*\7\13\2\2*+\7&\2" +
-					"\2+y\7\'\2\2,-\7\f\2\2-.\7\'\2\2.y\7\'\2\2/\60\7\r\2\2\60\61\7\'\2\2\61" +
-					"y\7&\2\2\62\63\7%\2\2\63y\7$\2\2\64\65\7\16\2\2\65y\7%\2\2\66\67\7\17" +
-					"\2\2\678\7%\2\289\7\'\2\29y\7\'\2\2:;\7\20\2\2;<\7%\2\2<=\7\'\2\2=y\7" +
-					"\'\2\2>?\7\21\2\2?@\7\'\2\2@A\7\'\2\2Ay\7\'\2\2BC\7\22\2\2CD\7\'\2\2D" +
-					"E\7\'\2\2Ey\7\'\2\2FG\7\23\2\2GH\7\'\2\2HI\7\'\2\2Iy\7\'\2\2JK\7\24\2" +
-					"\2KL\7\'\2\2LM\7\'\2\2My\7\'\2\2NO\7\25\2\2OP\7\'\2\2PQ\7\'\2\2Qy\7\'" +
-					"\2\2RS\7\26\2\2ST\7\'\2\2TU\7\'\2\2Uy\7\'\2\2VW\7\30\2\2Wy\7%\2\2XY\7" +
-					"\27\2\2Yy\7\'\2\2Z[\7\31\2\2[\\\7\'\2\2\\y\7\'\2\2]^\7\32\2\2^_\7\'\2" +
-					"\2_y\7\'\2\2`a\7\33\2\2ab\7\'\2\2by\7\'\2\2cd\7\34\2\2de\7\'\2\2ey\7\'" +
-					"\2\2fg\7\35\2\2gh\7\'\2\2hy\7\'\2\2ij\7\36\2\2jk\7\'\2\2ky\7\'\2\2lm\7" +
-					"\37\2\2mn\7\'\2\2ny\7\'\2\2op\7 \2\2pq\7\'\2\2qy\7\'\2\2rs\7!\2\2st\7" +
-					"\'\2\2ty\7\'\2\2uv\7\"\2\2vy\7\'\2\2wy\7#\2\2x\f\3\2\2\2x\16\3\2\2\2x" +
-					"\20\3\2\2\2x\22\3\2\2\2x\23\3\2\2\2x\27\3\2\2\2x\32\3\2\2\2x\36\3\2\2" +
-					"\2x\"\3\2\2\2x&\3\2\2\2x)\3\2\2\2x,\3\2\2\2x/\3\2\2\2x\62\3\2\2\2x\64" +
-					"\3\2\2\2x\66\3\2\2\2x:\3\2\2\2x>\3\2\2\2xB\3\2\2\2xF\3\2\2\2xJ\3\2\2\2" +
-					"xN\3\2\2\2xR\3\2\2\2xV\3\2\2\2xX\3\2\2\2xZ\3\2\2\2x]\3\2\2\2x`\3\2\2\2" +
-					"xc\3\2\2\2xf\3\2\2\2xi\3\2\2\2xl\3\2\2\2xo\3\2\2\2xr\3\2\2\2xu\3\2\2\2" +
-					"xw\3\2\2\2y\5\3\2\2\2\4\tx";
+					"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3k\n\3\3" +
+					"\3\2\2\4\2\4\2\2\2\u008e\2\t\3\2\2\2\4j\3\2\2\2\6\b\5\4\3\2\7\6\3\2\2" +
+					"\2\b\13\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\3\3\2\2\2\13\t\3\2\2\2\f\r\7" +
+					"\3\2\2\rk\7&\2\2\16\17\7\3\2\2\17k\7%\2\2\20\21\7\3\2\2\21k\7\'\2\2\22" +
+					"k\7\4\2\2\23\24\7\5\2\2\24\25\7\'\2\2\25\26\7\'\2\2\26k\7\'\2\2\27\30" +
+					"\7\6\2\2\30\31\7\'\2\2\31k\7&\2\2\32\33\7\7\2\2\33\34\7\'\2\2\34\35\7" +
+					"\'\2\2\35k\7\'\2\2\36\37\7\b\2\2\37 \7\'\2\2 !\7\'\2\2!k\7\'\2\2\"#\7" +
+					"\t\2\2#$\7\'\2\2$%\7\'\2\2%k\7\'\2\2&\'\7\n\2\2\'(\7\'\2\2(k\7\'\2\2)" +
+					"*\7\13\2\2*+\7&\2\2+k\7\'\2\2,-\7\f\2\2-.\7\'\2\2.k\7\'\2\2/\60\7\r\2" +
+					"\2\60\61\7\'\2\2\61k\7&\2\2\62\63\7%\2\2\63k\7$\2\2\64\65\7\16\2\2\65" +
+					"k\7%\2\2\66\67\7\17\2\2\678\7%\2\289\7\'\2\29k\7\'\2\2:;\7\20\2\2;<\7" +
+					"%\2\2<=\7\'\2\2=k\7\'\2\2>?\7\21\2\2?@\7\'\2\2@A\7\'\2\2Ak\7\'\2\2BC\7" +
+					"\22\2\2CD\7\'\2\2DE\7\'\2\2Ek\7\'\2\2FG\7\23\2\2GH\7\'\2\2HI\7\'\2\2I" +
+					"k\7\'\2\2JK\7\24\2\2KL\7\'\2\2LM\7\'\2\2Mk\7\'\2\2NO\7\25\2\2OP\7\'\2" +
+					"\2PQ\7\'\2\2Qk\7\'\2\2RS\7\26\2\2ST\7\'\2\2TU\7\'\2\2Uk\7\'\2\2VW\7\30" +
+					"\2\2Wk\7%\2\2XY\7\27\2\2Yk\7\'\2\2Zk\7\31\2\2[k\7\32\2\2\\k\7\33\2\2]" +
+					"k\7\34\2\2^k\7\35\2\2_k\7\36\2\2`k\7\37\2\2ab\7 \2\2bc\7\'\2\2ck\7\'\2" +
+					"\2de\7!\2\2ef\7\'\2\2fk\7\'\2\2gh\7\"\2\2hk\7\'\2\2ik\7#\2\2j\f\3\2\2" +
+					"\2j\16\3\2\2\2j\20\3\2\2\2j\22\3\2\2\2j\23\3\2\2\2j\27\3\2\2\2j\32\3\2" +
+					"\2\2j\36\3\2\2\2j\"\3\2\2\2j&\3\2\2\2j)\3\2\2\2j,\3\2\2\2j/\3\2\2\2j\62" +
+					"\3\2\2\2j\64\3\2\2\2j\66\3\2\2\2j:\3\2\2\2j>\3\2\2\2jB\3\2\2\2jF\3\2\2" +
+					"\2jJ\3\2\2\2jN\3\2\2\2jR\3\2\2\2jV\3\2\2\2jX\3\2\2\2jZ\3\2\2\2j[\3\2\2" +
+					"\2j\\\3\2\2\2j]\3\2\2\2j^\3\2\2\2j_\3\2\2\2j`\3\2\2\2ja\3\2\2\2jd\3\2" +
+					"\2\2jg\3\2\2\2ji\3\2\2\2k\5\3\2\2\2\4\tj";
 	public static final ATN _ATN =
 			new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
