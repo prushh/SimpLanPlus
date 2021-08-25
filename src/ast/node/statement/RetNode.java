@@ -14,6 +14,16 @@ public class RetNode implements Node {
 
     private Node val;
 
+    private boolean isFunctionReturn;
+
+    public boolean isFunctionReturn() {
+        return isFunctionReturn;
+    }
+
+    public void setFunctionReturn(boolean functionReturn) {
+        isFunctionReturn = functionReturn;
+    }
+
     public RetNode(Node val) {
         this.val = val;
     }

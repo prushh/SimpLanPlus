@@ -73,13 +73,18 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         TypeContext tmp = ctx.type();
         Node type;
         if (tmp != null)
-             type = visit(ctx.type());
+            type = visit(ctx.type());
         else
             type = new VoidTypeNode(Status.DECLARED);
         DecFunNode res;
 
         BlockNode block = visitBlock(ctx.block());
         block.setBlockFunction();
+        for (Node st : block.getStmList()) {
+            if (st instanceof RetNode) {
+                ((RetNode) st).setFunctionReturn(block.getBlockFunction());
+            }
+        }
 
         res = new DecFunNode(id, type, block);
 
@@ -154,10 +159,16 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     public IteNode visitIte(IteContext ctx) {
         Node condExp = visit(ctx.exp());
         Node thenExp = visit(ctx.statement(0));
+        if (thenExp instanceof BlockNode) {
+            ((BlockNode) thenExp).setBlockIte();
+        }
         Node elseExp = null;
 
         if (ctx.statement().size() > 1) {
             elseExp = visit(ctx.statement(1));
+            if (elseExp instanceof BlockNode) {
+                ((BlockNode) elseExp).setBlockIte();
+            }
         }
 
         return new IteNode(condExp, thenExp, elseExp);

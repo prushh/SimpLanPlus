@@ -16,6 +16,7 @@ public class BlockNode implements Node {
     private ArrayList<Node> decList;
     private ArrayList<Node> stmList;
     private boolean isBlockFunction = false;
+    private boolean isBlockIte = false;
 
     public BlockNode(ArrayList<Node> decList, ArrayList<Node> stmList) {
         this.decList = decList;
@@ -172,6 +173,21 @@ public class BlockNode implements Node {
         isBlockFunction = true;
     }
 
+    public boolean getBlockFunction() {
+        return this.isBlockFunction;
+    }
+
+    public boolean isBlockIte() {
+        return isBlockIte;
+    }
+
+    public void setBlockIte() {
+        isBlockIte = true;
+    }
+
+    public ArrayList<Node> getStmList() {
+        return stmList;
+    }
 
     @Override
     public int getPointLevel() {
