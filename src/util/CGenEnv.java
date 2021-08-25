@@ -1,9 +1,11 @@
 package util;
 
+import java.util.ArrayList;
+
 public class CGenEnv {
 
     private int nestingLevel = -1;
-    private String label = "";
+    private ArrayList<String> labels = new ArrayList<>();
 
     public CGenEnv() {
 
@@ -13,16 +15,16 @@ public class CGenEnv {
         return nestingLevel;
     }
 
-    public void setNestingLevel(int nestingLevel) {
-        this.nestingLevel = nestingLevel;
+    public String getLabel() {
+        return labels.get(labels.size() - 1);
     }
 
-    public String getLabel() {
-        return label;
+    public void removeLabel() {
+        this.labels.remove(labels.size() - 1);
     }
 
     public void setLabel(String label) {
-        this.label = label;
+        this.labels.add(label);
     }
 
     public void incrementNestingLevel() {

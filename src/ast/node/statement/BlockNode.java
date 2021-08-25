@@ -131,6 +131,11 @@ public class BlockNode implements Node {
         if (!isBlockFunction) {
             env.decrementNestingLevel();
             builder.append(blockLabel.getLabel());
+            builder.append(":\n");
+            env.removeLabel();
+            if (env.getNestingLevel() == -1) {
+                builder.append("halt\n");
+            }
         }
 
         return builder.toString();
