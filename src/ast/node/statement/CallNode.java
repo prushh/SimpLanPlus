@@ -243,7 +243,16 @@ public class CallNode implements Node {
 
     @Override
     public String codeGeneration(int nestingLevel) {
-        return null;
+        StringBuilder builder = new StringBuilder();
+        builder.append("lfp\n");
+        for (int i = args.size() - 1; i >= 0; i--) {
+            args.get(i).codeGeneration(nestingLevel);
+            builder.append("push $a0\n");
+        }
+        builder.append("jal __");
+        builder.append(this.ID);
+        builder.append("\n");
+        return builder.toString();
     }
 
     @Override

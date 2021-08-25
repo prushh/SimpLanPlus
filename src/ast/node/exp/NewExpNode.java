@@ -49,9 +49,18 @@ public class NewExpNode implements Node {
 
     @Override
     public String codeGeneration(int nestingLevel) {
-        return "addi $hp 1\n" +
-                "si 0 $hp\n" +
-                "lw $a0 $hp\n";
+        int pointLevel = this.type.getPointLevel();
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("addi $hp 1\n");
+        builder.append("si 0 $hp\n");
+        for (int idx = 0; idx < pointLevel; idx++) {
+            builder.append("lw $t0 $hp\n");
+            builder.append("addi $hp 1\n");
+            builder.append("sw $t0 $hp\n");
+        }
+        builder.append("lw $a0 $hp\n");
+        return builder.toString();
     }
 
     @Override

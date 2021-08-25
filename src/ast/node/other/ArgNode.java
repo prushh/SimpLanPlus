@@ -55,7 +55,7 @@ public class ArgNode implements Node {
 
     @Override
     public String codeGeneration(int nestingLevel) {
-        return "";
+        return null;
     }
 
     @Override

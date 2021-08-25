@@ -39,15 +39,15 @@ instruction:
 	  | AND e1=REGISTER e2=REGISTER res=REGISTER
 	  | OR e1=REGISTER e2=REGISTER res=REGISTER
 	  | JAL l=LABEL
-      | JR ra=REGISTER
-	  | LOADRA dest=REGISTER ra=REGISTER
-	  | STORERA source=REGISTER ra=REGISTER
-	  | LOADRV dest=REGISTER rv=REGISTER
-	  | STORERV source=REGISTER rv=REGISTER
-	  | LOADFP dest=REGISTER fp=REGISTER
-	  | STOREFP source=REGISTER fp=REGISTER
-	  | COPYFP stack=REGISTER frame=REGISTER
-	  | LOADHP dest=REGISTER hp=REGISTER
+      | JR r=REGISTER
+	  | LOADRA
+	  | STORERA
+	  | LOADRV
+	  | STORERV
+	  | LOADFP
+	  | STOREFP
+	  | COPYFP
+	  | LOADHP source=REGISTER hp=REGISTER
 	  | STOREHP source=REGISTER hp=REGISTER
 	  | PRINT val=REGISTER
 	  | HALT
@@ -80,7 +80,7 @@ OR:'or' ;	// --todo--
 JR       : 'jr' ;   // --todo--
 JAL       : 'jal' ;     // --todo--
 LOADRA	 : 'lra' ;	// load from ra
-STORERA  : 'sra' ;	// store top into ra
+STORERA  : 'sra' ;	// store $a0
 LOADRV	 : 'lrv' ;	// load from rv
 STORERV  : 'srv' ;	// store top into rv
 LOADFP	 : 'lfp' ;	// load frame pointer in the stack
@@ -92,7 +92,7 @@ PRINT	 : 'print' ;	// print top of stack
 HALT	 : 'halt' ;	// stop execution
 
 COL	 : ':' ;
-LABEL	 : ('a'..'z'|'A'..'Z')('a'..'z' | 'A'..'Z' | '0'..'9')* ;
+LABEL	 : ('__')?('a'..'z'|'A'..'Z')('a'..'z' | 'A'..'Z' | '0'..'9')* ;
 NUMBER	 : '0' | ('-')?(('1'..'9')('0'..'9')*) ;
 REGISTER : '$a0' | '$t0' | '$sp' | '$ra' | '$fp' | '$al';
 

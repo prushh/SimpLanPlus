@@ -1,9 +1,23 @@
 {
-int a = 1;
-    {
-        {
-            print (a);
-        }
-    }
-
+    ^int a = new int;
 }
+
+/*
+
+    ^^int a = new ^int;
+
+    $hp_inizio = 0x0;
+
+                          0x1     0x2
+    stack: [/] -> heap ->  0  ->  0x1
+
+    addi $hp 1      //$hp <- 0x1
+    si 0 $hp        //mem[$hp] <- 0
+    lw $t0 $hp      //$t0 <- $hp = 0x1
+    addi $hp 1      //$hp <- 0x2
+    sw $t0 $hp      //mem[$hp] <- $t0
+    lw $a0 $hp      //$a0 <- $hp = 0x2
+    push $a0        //stack[0x2]
+    lw $fp $sp     ----------
+
+*/

@@ -14,6 +14,8 @@ public class ExecuteVM {
     private int sp = MEMSIZE;
     private int hp = 0;
     private int fp = MEMSIZE;
+    private int a0;
+    private int t0;
     private int ra;
     private int rv;
     private int al;
@@ -30,7 +32,6 @@ public class ExecuteVM {
             } else {
                 int bytecode = code[ip++]; // fetch
                 int v1, v2;
-                int a0, t0;
                 int address;
                 switch (bytecode) {
                     case SVMParser.PUSH:
@@ -96,9 +97,10 @@ public class ExecuteVM {
                         break;
                     case SVMParser.JR: //
                         // --todo--
+
                         break;
                     case SVMParser.STORERA: //
-                        ra = pop();
+                        ra = a0;
                         break;
                     case SVMParser.LOADRA: //
                         push(ra);

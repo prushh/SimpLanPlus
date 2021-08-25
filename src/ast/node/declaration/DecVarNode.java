@@ -2,7 +2,6 @@ package ast.node.declaration;
 
 import ast.Node;
 import ast.STentry;
-import ast.node.exp.NewExpNode;
 import ast.node.type.NullTypeNode;
 import util.Environment;
 import util.SemanticError;
@@ -88,29 +87,11 @@ public class DecVarNode implements Node {
     @Override
     public String codeGeneration(int nestingLevel) {
         StringBuilder builder = new StringBuilder();
-        if (this.type.getPointLevel() == 0) {
-            if (exp != null) {
-                builder.append(exp.codeGeneration(nestingLevel));
-                builder.append("push $a0\n");
-            } else {
-                builder.append("addi $sp -1\n");
-            }
+        if (exp != null) {
+            builder.append(exp.codeGeneration(nestingLevel));
+            builder.append("push $a0\n");
         } else {
-            if (exp != null) {
-                //builder.append(exp.codeGeneration(nestingLevel));
-                if (exp instanceof NewExpNode) {
-                    builder.append(exp.codeGeneration(nestingLevel));
-                    // $a0 valore di hp
-                    builder.append("push $a0\n");
-                    // -- todo -- gestire casi di puntatori multipli
-                } else {
-                    builder.append(exp.codeGeneration(nestingLevel));
-                    // $a0 valore di LHS o altra exp
-                    builder.append("push $a0\n");
-                }
-            } else {
-                builder.append("addi $sp -1\n");
-            }
+            builder.append("addi $sp -1\n");
         }
 
         return builder.toString();

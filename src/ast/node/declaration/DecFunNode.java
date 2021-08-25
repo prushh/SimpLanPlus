@@ -207,7 +207,26 @@ public class DecFunNode implements Node {
 
     @Override
     public String codeGeneration(int nestingLevel) {
-        return "";
+        StringBuilder builder = new StringBuilder();
+        // label
+        builder.append("__");
+        builder.append(this.ID);
+        builder.append(":\n");
+        // copy stack pointer into frame pointer
+        builder.append("cfp\n");
+        builder.append("push $ra\n");
+        builder.append(this.body.codeGeneration(nestingLevel));
+        // not so sure of $sp, may we should use $a0 instead?
+        builder.append("sra\n");
+        // pop elements from stack
+        for (int i = 0; i < this.args.size(); i++)
+            builder.append("addi $sp 1\n");
+        builder.append("addi $sp 1\n");
+        // reload old fp
+        builder.append("sfp\n");
+        builder.append("pop\n");
+        builder.append("jr $ra\n");
+        return builder.toString();
     }
 
     @Override
