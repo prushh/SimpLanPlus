@@ -93,7 +93,9 @@ public class ExecuteVM {
                         if (v2 <= v1) ip = address;
                         break;
                     case SVMParser.JAL: //
-                        // --todo--
+                        // may we use just ip
+                        ra = code[ip++];
+                        // ip = adress_of_label
                         break;
                     case SVMParser.JR: //
                         // --todo--

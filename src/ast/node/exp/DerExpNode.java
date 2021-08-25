@@ -2,6 +2,7 @@ package ast.node.exp;
 
 import ast.Node;
 import ast.node.other.LhsNode;
+import util.CGenEnv;
 import util.Environment;
 import util.SemanticError;
 import util.Status;
@@ -41,8 +42,8 @@ public class DerExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
-        return this.lhs.codeGeneration(nestingLevel);
+    public String codeGeneration(CGenEnv env) {
+        return this.lhs.codeGeneration(env);
     }
 
     @Override

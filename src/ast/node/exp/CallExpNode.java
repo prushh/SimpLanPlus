@@ -2,6 +2,7 @@ package ast.node.exp;
 
 import ast.Node;
 import ast.node.statement.CallNode;
+import util.CGenEnv;
 import util.Environment;
 import util.SemanticError;
 import util.Status;
@@ -43,8 +44,8 @@ public class CallExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
-        return this.callNode.codeGeneration(nestingLevel);
+    public String codeGeneration(CGenEnv env) {
+        return this.callNode.codeGeneration(env);
     }
 
     @Override

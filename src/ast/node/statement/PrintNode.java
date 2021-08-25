@@ -4,10 +4,7 @@ import ast.Node;
 import ast.node.type.BoolTypeNode;
 import ast.node.type.IntTypeNode;
 import ast.node.type.NullTypeNode;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 
@@ -52,8 +49,8 @@ public class PrintNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
-        return this.val.codeGeneration(nestingLevel) + "print $a0\n";
+    public String codeGeneration(CGenEnv env) {
+        return this.val.codeGeneration(env) + "print $a0\n";
     }
 
     @Override

@@ -80,7 +80,7 @@ OR:'or' ;	// --todo--
 JR       : 'jr' ;   // --todo--
 JAL       : 'jal' ;     // --todo--
 LOADRA	 : 'lra' ;	// load from ra
-STORERA  : 'sra' ;	// store $a0
+STORERA  : 'sra' ;	// store $a0 into $ra
 LOADRV	 : 'lrv' ;	// load from rv
 STORERV  : 'srv' ;	// store top into rv
 LOADFP	 : 'lfp' ;	// load frame pointer in the stack

@@ -1,6 +1,7 @@
 package ast.node.other;
 
 import ast.Node;
+import util.CGenEnv;
 import util.Environment;
 import util.SemanticError;
 import util.Status;
@@ -54,7 +55,7 @@ public class ArgNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
         return null;
     }
 

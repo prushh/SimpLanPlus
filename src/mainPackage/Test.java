@@ -10,6 +10,7 @@ import parser.SVMLexer;
 import parser.SVMParser;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
+import util.CGenEnv;
 import util.Environment;
 import util.SemanticError;
 
@@ -74,7 +75,7 @@ public class Test {
 						System.out.println(type.toPrint("Effect checking ok! Type of the program is: "));
 
 						// CODE GENERATION  prova.SimpLan.asm
-						String code = ast.codeGeneration(-1);
+						String code = ast.codeGeneration(new CGenEnv());
 						BufferedWriter out = new BufferedWriter(new FileWriter(fileName + ".asm"));
 						out.write(code);
 						out.close();

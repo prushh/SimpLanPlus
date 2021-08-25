@@ -3,10 +3,7 @@ package ast.node.declaration;
 import ast.Node;
 import ast.STentry;
 import ast.node.type.NullTypeNode;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,10 +82,10 @@ public class DecVarNode implements Node {
 
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
         StringBuilder builder = new StringBuilder();
         if (exp != null) {
-            builder.append(exp.codeGeneration(nestingLevel));
+            builder.append(exp.codeGeneration(env));
             builder.append("push $a0\n");
         } else {
             builder.append("addi $sp -1\n");

@@ -1,6 +1,7 @@
 package ast.node.exp;
 
 import ast.Node;
+import util.CGenEnv;
 import util.Environment;
 import util.SemanticError;
 import util.Status;
@@ -42,8 +43,8 @@ public class BaseExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
-        return this.exp.codeGeneration(nestingLevel);
+    public String codeGeneration(CGenEnv env) {
+        return this.exp.codeGeneration(env);
     }
 
     @Override

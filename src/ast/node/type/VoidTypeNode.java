@@ -1,6 +1,7 @@
 package ast.node.type;
 
 import ast.Node;
+import util.CGenEnv;
 import util.Environment;
 import util.SemanticError;
 import util.Status;
@@ -30,7 +31,6 @@ public class VoidTypeNode implements Node {
         return indent + "VoidType\n";
     }
 
-    //non utilizzato
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
         return null;
@@ -46,10 +46,9 @@ public class VoidTypeNode implements Node {
         return new ArrayList<>();
     }
 
-    //non utilizzato
     @Override
-    public String codeGeneration(int nestingLevel) {
-        return "";
+    public String codeGeneration(CGenEnv env) {
+        return null;
     }
 
     @Override

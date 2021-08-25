@@ -3,10 +3,7 @@ package ast.node.statement;
 import ast.Node;
 import ast.STentry;
 import ast.node.type.NullTypeNode;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 
@@ -70,9 +67,9 @@ public class DeletionNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
         String lookup = "";
-        for (int i = nestingLevel; i > this.entry.getNestinglevel(); i--)
+        for (int i = env.getNestingLevel(); i > this.entry.getNestinglevel(); i--)
             lookup += "lw $al $al\n";
         return "lw $al $fp\n" +
                 lookup +

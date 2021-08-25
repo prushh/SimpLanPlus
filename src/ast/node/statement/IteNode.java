@@ -101,16 +101,16 @@ public class IteNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
         Label label = new Label();
-        return this.cond.codeGeneration(nestingLevel) +
+        return this.cond.codeGeneration(env) +
                 "li $t0 0\n" +
                 // l is the false branch label got through newLabel() func
                 "beq " + label.getLabel() + " $a0 $t0\n" +
-                this.th.codeGeneration(nestingLevel) +
+                this.th.codeGeneration(env) +
                 // here appends false branch label
                 label.getLabel() + ":\n" +
-                this.el.codeGeneration(nestingLevel);
+                this.el.codeGeneration(env);
     }
 
     @Override

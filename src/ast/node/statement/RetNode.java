@@ -3,6 +3,7 @@ package ast.node.statement;
 import ast.Node;
 import ast.node.type.NullTypeNode;
 import ast.node.type.VoidTypeNode;
+import util.CGenEnv;
 import util.Environment;
 import util.SemanticError;
 import util.Status;
@@ -60,13 +61,14 @@ public class RetNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
         String exp = "";
         if (this.val != null) {
-            exp = this.val.codeGeneration(nestingLevel) +
+            exp = this.val.codeGeneration(env) +
                     "lw $rv $a0\n";
         }
         // -- todo -- jump to current program counter
+
         return exp;
     }
 

@@ -2,6 +2,7 @@ package ast.node.type;
 
 import ast.Node;
 import ast.node.other.ArgNode;
+import util.CGenEnv;
 import util.Environment;
 import util.SemanticError;
 import util.Status;
@@ -57,8 +58,8 @@ public class ArrowTypeNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
-        return "";
+    public String codeGeneration(CGenEnv env) {
+        return null;
     }
 
     @Override

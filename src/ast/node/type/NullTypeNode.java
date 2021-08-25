@@ -1,6 +1,7 @@
 package ast.node.type;
 
 import ast.Node;
+import util.CGenEnv;
 import util.Environment;
 import util.SemanticError;
 import util.Status;
@@ -29,7 +30,7 @@ public class NullTypeNode implements Node {
         return indent + "NullType\n";
     }
 
-    //non utilizzato
+    @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
         return null;
     }
@@ -44,9 +45,9 @@ public class NullTypeNode implements Node {
         return new ArrayList<>();
     }
 
-    //non utilizzato
-    public String codeGeneration(int nestingLevel) {
-        return "";
+    @Override
+    public String codeGeneration(CGenEnv env) {
+        return null;
     }
 
     @Override

@@ -3,10 +3,7 @@ package ast.node.exp;
 import ast.Node;
 import ast.node.type.BoolTypeNode;
 import ast.node.type.IntTypeNode;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 
@@ -48,7 +45,7 @@ public class NewExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
         int pointLevel = this.type.getPointLevel();
 
         StringBuilder builder = new StringBuilder();

@@ -5,10 +5,7 @@ import ast.STentry;
 import ast.node.exp.NewExpNode;
 import ast.node.other.LhsNode;
 import ast.node.type.NullTypeNode;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -86,11 +83,11 @@ public class AsgNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
 
-        return exp.codeGeneration(nestingLevel) +
+        return exp.codeGeneration(env) +
                 "push $a0\n" +
-                lhs.codeGeneration(nestingLevel) +
+                lhs.codeGeneration(env) +
                 "lw $t0 $sp\n" +
                 "pop\n" +
                 "sw $t0 $a0\n";

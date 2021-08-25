@@ -8,10 +8,7 @@ import ast.node.other.ArgNode;
 import ast.node.type.ArrowTypeNode;
 import ast.node.type.NullTypeNode;
 import ast.node.type.VoidTypeNode;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -242,11 +239,11 @@ public class CallNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
         StringBuilder builder = new StringBuilder();
         builder.append("lfp\n");
         for (int i = args.size() - 1; i >= 0; i--) {
-            args.get(i).codeGeneration(nestingLevel);
+            args.get(i).codeGeneration(env);
             builder.append("push $a0\n");
         }
         builder.append("jal __");

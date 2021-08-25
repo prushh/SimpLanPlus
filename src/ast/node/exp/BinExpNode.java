@@ -5,10 +5,7 @@ import ast.node.type.BoolTypeNode;
 import ast.node.type.IntTypeNode;
 import ast.node.type.NullTypeNode;
 import org.antlr.v4.runtime.Token;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 
@@ -112,11 +109,11 @@ public class BinExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
         StringBuilder builder = new StringBuilder();
-        builder.append(left.codeGeneration(nestingLevel));
+        builder.append(left.codeGeneration(env));
         builder.append("push $a0\n");
-        builder.append(right.codeGeneration(nestingLevel));
+        builder.append(right.codeGeneration(env));
         builder.append("lw $t0 $sp\n");
         switch (op.getText()) {
             case "+":

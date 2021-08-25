@@ -5,10 +5,7 @@ import ast.STentry;
 import ast.node.type.ArrowTypeNode;
 import ast.node.type.BoolTypeNode;
 import ast.node.type.IntTypeNode;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 
@@ -139,14 +136,20 @@ public class LhsNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
+        int difference = entry.getType().getPointLevel() - this.pointLevel;
         String lookup = "";
-        for (int i = nestingLevel; i > this.entry.getNestinglevel(); i--)
+        for (int i = env.getNestingLevel(); i > this.entry.getNestinglevel(); i--)
             lookup += "lw $al $al\n";
-        return "lw $al $fp\n" +
+        String res = "";
+        res += "lw $al $fp\n" +
                 lookup +
-                "addi $al " + this.entry.getOffset() + "\n" +
-                "lw $a0 $al\n";
+                "addi $al " + this.entry.getOffset() + "\n";
+        for (int i = 0; i < this.pointLevel; i++) {
+            res += "lw $al $al";
+        }
+        res += "lw $a0 $al\n";
+        return res;
     }
 
     @Override

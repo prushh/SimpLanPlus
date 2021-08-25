@@ -2,10 +2,7 @@ package ast.node.exp;
 
 import ast.Node;
 import ast.node.type.IntTypeNode;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 
@@ -47,9 +44,9 @@ public class NegExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
         // per trovare il negativo si sottrae l'intero con 0
-        return this.exp.codeGeneration(nestingLevel) +
+        return this.exp.codeGeneration(env) +
                 "li $t0 0\n" +
                 "sub $t0 $a0 $a0\n";
     }

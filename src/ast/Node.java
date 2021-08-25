@@ -1,5 +1,6 @@
 package ast;
 
+import util.CGenEnv;
 import util.Environment;
 import util.SemanticError;
 import util.Status;
@@ -16,7 +17,7 @@ public interface Node {
 
     Node typeCheck(ArrayList<SemanticError> typeErr);
 
-    String codeGeneration(int nestingLevel);
+    String codeGeneration(CGenEnv env);
 
     ArrayList<SemanticError> checkSemantics(Environment env);
 

@@ -6,10 +6,7 @@ import ast.node.other.ArgNode;
 import ast.node.type.ArrowTypeNode;
 import ast.node.type.BoolTypeNode;
 import ast.node.type.IntTypeNode;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -206,7 +203,7 @@ public class DecFunNode implements Node {
 
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
         StringBuilder builder = new StringBuilder();
         // label
         builder.append("__");
@@ -215,7 +212,7 @@ public class DecFunNode implements Node {
         // copy stack pointer into frame pointer
         builder.append("cfp\n");
         builder.append("push $ra\n");
-        builder.append(this.body.codeGeneration(nestingLevel));
+        builder.append(this.body.codeGeneration(env));
         // not so sure of $sp, may we should use $a0 instead?
         builder.append("sra\n");
         // pop elements from stack

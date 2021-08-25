@@ -2,10 +2,7 @@ package ast.node.exp;
 
 import ast.Node;
 import ast.node.type.BoolTypeNode;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 
@@ -47,8 +44,8 @@ public class NotExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
-        return this.exp.codeGeneration(nestingLevel) +
+    public String codeGeneration(CGenEnv env) {
+        return this.exp.codeGeneration(env) +
                 "li $t0 1\n" +
                 "sub $a0 $t0 $a0\n";
     }

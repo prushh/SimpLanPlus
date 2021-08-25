@@ -6,10 +6,7 @@ import ast.node.type.BoolTypeNode;
 import ast.node.type.IntTypeNode;
 import ast.node.type.NullTypeNode;
 import ast.node.type.VoidTypeNode;
-import util.Environment;
-import util.SemanticError;
-import util.SimpLanPlusLib;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,25 +108,29 @@ public class BlockNode implements Node {
     }
 
     @Override
-    public String codeGeneration(int nestingLevel) {
+    public String codeGeneration(CGenEnv env) {
         StringBuilder builder = new StringBuilder();
-        nestingLevel++;
 
+        Label blockLabel = new Label();
         // --todo-- check if function blocks differ from normal block
         if (!isBlockFunction) {
+            env.incrementNestingLevel();
+            env.setLabel(blockLabel.getLabel());
         }
 
         for (Node dec : decList) {
-            builder.append(dec.codeGeneration(nestingLevel));
+            builder.append(dec.codeGeneration(env));
         }
 
-        builder.append("lw $fp $sp\n");
+        builder.append("cfp\n");
 
         for (Node stm : stmList) {
-            builder.append(stm.codeGeneration(nestingLevel));
+            builder.append(stm.codeGeneration(env));
         }
 
         if (!isBlockFunction) {
+            env.decrementNestingLevel();
+            builder.append(blockLabel);
         }
 
         return builder.toString();
