@@ -122,8 +122,11 @@ public class BlockNode implements Node {
             builder.append(dec.codeGeneration(env));
         }
 
-        if (!isBlockFunction)
+        if (!isBlockFunction) {
+            builder.append("cal\n");
+            builder.append("push $al\n");
             builder.append("cfp\n");
+        }
 
         for (Node stm : stmList) {
             builder.append(stm.codeGeneration(env));
@@ -187,6 +190,10 @@ public class BlockNode implements Node {
 
     public ArrayList<Node> getStmList() {
         return stmList;
+    }
+
+    public ArrayList<Node> getDecList() {
+        return decList;
     }
 
     @Override

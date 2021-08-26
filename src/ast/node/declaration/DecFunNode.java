@@ -3,6 +3,7 @@ package ast.node.declaration;
 import ast.Node;
 import ast.STentry;
 import ast.node.other.ArgNode;
+import ast.node.statement.BlockNode;
 import ast.node.type.ArrowTypeNode;
 import ast.node.type.BoolTypeNode;
 import ast.node.type.IntTypeNode;
@@ -205,26 +206,36 @@ public class DecFunNode implements Node {
     @Override
     public String codeGeneration(CGenEnv env) {
         Label label = new Label();
-        String exp = "";
+        StringBuilder popArgs = new StringBuilder();
         for (int i = 0; i < args.size(); i++)
-            exp += "addi $sp 1\n";
-        exp += "addi $sp 1\n";
-        return "b " +
-                label.getLabel() +
-                "\n" +
-                "__" +
-                this.ID +
-                ":\n" +
-                "cfp\n" +
-                "push $ra\n" +
-                this.body.codeGeneration(env) +
-                "sra\n" +
-                exp +
-                "sfp\n" +
-                "pop\n" +
-                "jr $ra\n" +
-                label.getLabel() +
-                ":\n";
+            popArgs.append("pop\n");
+        popArgs.append("pop\n");
+
+        StringBuilder popLocal = new StringBuilder();
+        ArrayList<Node> decList = ((BlockNode) body).getDecList();
+        for (int i = 0; i < decList.size(); i++)
+            popLocal.append("pop\n");
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("b ")
+                .append(label.getLabel())
+                .append("\n")
+                .append("__")
+                .append(this.ID)
+                .append(":\n")
+                .append("cfp\n")
+                .append("push $ra\n")
+                .append(this.body.codeGeneration(env))
+                .append(popLocal)
+                .append("sra\n")
+                .append(popArgs)
+                .append("sfp\n")
+                .append("pop\n")
+                .append("jr $ra\n")
+                .append(label.getLabel())
+                .append(":\n");
+
+        return builder.toString();
     }
 
     @Override
@@ -239,6 +250,7 @@ public class DecFunNode implements Node {
         } else {
             Environment funEnv = new Environment();
             funEnv.nestingLevel++;
+            funEnv.offset++; // because at $fp there's the access link
             HashMap<String, STentry> hmFun = new HashMap<>();
 
             if (hmFun.put(ID, entry) != null) {
