@@ -223,12 +223,17 @@ public class DecFunNode implements Node {
                 .append("__")
                 .append(this.ID)
                 .append(":\n")
+                .append("cal\n")
+                .append("cfp\n")
+                .append("push $al\n")
                 .append("cfp\n")
                 .append("push $ra\n")
                 .append(this.body.codeGeneration(env))
                 .append(popLocal)
+                .append("lw $a0 $sp\n")
                 .append("sra\n")
                 .append(popArgs)
+                .append("lw $a0 $sp\n")
                 .append("sfp\n")
                 .append("pop\n")
                 .append("jr $ra\n")
@@ -291,7 +296,8 @@ public class DecFunNode implements Node {
             --todo--
             if (args.size() > 0) {
                 env.offset = -2;
-            }*/
+            }
+            */
             funEnv.offset = -2;
 
             res.addAll(body.checkSemantics(funEnv));

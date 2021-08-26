@@ -116,16 +116,13 @@ public class BlockNode implements Node {
         if (!isBlockFunction) {
             env.incrementNestingLevel();
             env.setLabel(blockLabel.getLabel());
+            builder.append("cal\n");
+            builder.append("push $al\n");
+            builder.append("cfp\n");
         }
 
         for (Node dec : decList) {
             builder.append(dec.codeGeneration(env));
-        }
-
-        if (!isBlockFunction) {
-            builder.append("cal\n");
-            builder.append("push $al\n");
-            builder.append("cfp\n");
         }
 
         for (Node stm : stmList) {
@@ -134,6 +131,10 @@ public class BlockNode implements Node {
 
         if (!isBlockFunction) {
             env.decrementNestingLevel();
+            StringBuilder popLocal = new StringBuilder();
+            for (int i = 0; i < this.decList.size(); i++)
+                popLocal.append("pop\n");
+            builder.append(popLocal);
             builder.append(blockLabel.getLabel());
             builder.append(":\n");
             env.removeLabel();
@@ -153,7 +154,7 @@ public class BlockNode implements Node {
             HashMap<String, STentry> hm = new HashMap<>();
             env.symTable.add(hm);
             env.nestingLevel++;
-            env.offset = 0;
+            env.offset = -1;
         }
 
         for (Node dec : decList) {

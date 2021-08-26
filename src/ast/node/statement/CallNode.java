@@ -242,6 +242,7 @@ public class CallNode implements Node {
     public String codeGeneration(CGenEnv env) {
         StringBuilder builder = new StringBuilder();
         builder.append("lfp\n");
+        builder.append("push $a0\n");
         for (int i = this.args.size() - 1; i >= 0; i--) {
             builder.append(args.get(i).codeGeneration(env));
             builder.append("push $a0\n");
