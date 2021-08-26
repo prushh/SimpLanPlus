@@ -74,7 +74,7 @@ public class DeletionNode implements Node {
         return "lw $al $fp\n" +
                 lookup +
                 "addi $al " + this.entry.getOffset() + "\n" +
-                "si -1 $al\n";
+                "si -10000 $al\n";
     }
 
     @Override
