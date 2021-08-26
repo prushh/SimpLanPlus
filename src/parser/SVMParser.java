@@ -29,7 +29,7 @@ public class SVMParser extends Parser {
 			LOADRV = 25, STORERV = 26, LOADFP = 27, STOREFP = 28, COPYFP = 29, LOADAL = 30, STOREAL = 31,
 			COPYAL = 32, LOADHP = 33, STOREHP = 34, PRINT = 35, HALT = 36, COL = 37, NUMBER = 38,
 			LABEL = 39, REGISTER = 40, A0 = 41, T0 = 42, SP = 43, RA = 44, FP = 45, AL = 46, HP = 47,
-			WHITESP = 48, ERR = 49;
+			RV = 48, WHITESP = 49, ERR = 50;
 	public static final int
 			RULE_assembly = 0, RULE_instruction = 1;
 
@@ -48,7 +48,7 @@ public class SVMParser extends Parser {
 				"'eq'", "'neq'", "'and'", "'or'", "'jr'", "'jal'", "'lra'", "'sra'",
 				"'lrv'", "'srv'", "'lfp'", "'sfp'", "'cfp'", "'lal'", "'sal'", "'cal'",
 				"'lhp'", "'shp'", "'print'", "'halt'", "':'", null, null, null, "'$a0'",
-				"'$t0'", "'$sp'", "'$ra'", "'$fp'", "'$al'", "'$hp'"
+				"'$t0'", "'$sp'", "'$ra'", "'$fp'", "'$al'", "'$hp'", "'$rv'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -59,7 +59,7 @@ public class SVMParser extends Parser {
 				"EQ", "NEQ", "AND", "OR", "JR", "JAL", "LOADRA", "STORERA", "LOADRV",
 				"STORERV", "LOADFP", "STOREFP", "COPYFP", "LOADAL", "STOREAL", "COPYAL",
 				"LOADHP", "STOREHP", "PRINT", "HALT", "COL", "NUMBER", "LABEL", "REGISTER",
-				"A0", "T0", "SP", "RA", "FP", "AL", "HP", "WHITESP", "ERR"
+				"A0", "T0", "SP", "RA", "FP", "AL", "HP", "RV", "WHITESP", "ERR"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -699,7 +699,7 @@ public class SVMParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-			"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\63k\4\2\t\2\4\3\t" +
+			"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\64k\4\2\t\2\4\3\t" +
 					"\3\3\2\7\2\b\n\2\f\2\16\2\13\13\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3" +
 					"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3" +
 					"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3" +

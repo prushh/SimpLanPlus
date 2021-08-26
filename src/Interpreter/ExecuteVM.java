@@ -248,6 +248,9 @@ public class ExecuteVM {
             case SVMParser.HP:
                 this.hp = val;
                 break;
+            case SVMParser.RV:
+                this.rv = val;
+                break;
             default:
                 break;
         }
@@ -269,6 +272,8 @@ public class ExecuteVM {
                 return this.al;
             case SVMParser.HP:
                 return this.hp;
+            case SVMParser.RV:
+                return this.rv;
             default:
                 return -1;
         }

@@ -143,6 +143,8 @@ public class SimpLanPlusLib {
                 return SVMParser.AL;
             case "$hp":
                 return SVMParser.HP;
+            case "$rv":
+                return SVMParser.RV;
             default:
                 return -1;
         }

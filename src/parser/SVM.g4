@@ -100,7 +100,7 @@ HALT	 : 'halt' ;	// stop execution
 COL	 : ':' ;
 NUMBER	 : '0' | ('-')?(('1'..'9')('0'..'9')*) ;
 LABEL	 : ('_')?('_')('a'..'z' | 'A'..'Z' | '0'..'9')+('_') ;
-REGISTER : A0 | T0 | SP | RA | FP | AL | HP;
+REGISTER : A0 | T0 | SP | RA | FP | AL | HP | RV;
 A0 : '$a0';
 T0 : '$t0';
 SP : '$sp';
@@ -108,6 +108,7 @@ RA : '$ra';
 FP : '$fp';
 AL : '$al';
 HP : '$hp';
+RV : '$rv';
 
 WHITESP  : ( '\t' | ' ' | '\r' | '\n' )+   -> channel(HIDDEN);
 
