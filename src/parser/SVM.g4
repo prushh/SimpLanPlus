@@ -89,8 +89,8 @@ STORERV  : 'srv' ;	// store $a0 into rv
 LOADFP	 : 'lfp' ;	// load $fp into $a0
 STOREFP	 : 'sfp' ;	// store $a0 into $fp
 COPYFP   : 'cfp' ;  // copy $sp into $fp
-LOADAL   : 'lal' ;  // load $a0 into $al
-STOREAL  : 'sal' ;  // store $al into $a0
+LOADAL   : 'lal' ;  // load $al into $a0
+STOREAL  : 'sal' ;  // store $a0 into $al
 COPYAL   : 'cal' ;  // copy $fp intp $al
 LOADHP	 : 'lhp' ;	// load $hp into $a0
 STOREHP	 : 'shp' ;	// store $a0 into $hp
@@ -98,8 +98,8 @@ PRINT	 : 'print' ; // print value of $a0
 HALT	 : 'halt' ;	// stop execution
 
 COL	 : ':' ;
-LABEL	 : ('__')?('a'..'z'|'A'..'Z')('a'..'z' | 'A'..'Z' | '0'..'9')* ;
 NUMBER	 : '0' | ('-')?(('1'..'9')('0'..'9')*) ;
+LABEL	 : ('_')?('_')('a'..'z' | 'A'..'Z' | '0'..'9')+('_') ;
 REGISTER : A0 | T0 | SP | RA | FP | AL | HP;
 A0 : '$a0';
 T0 : '$t0';

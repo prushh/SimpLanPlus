@@ -52,9 +52,9 @@ public class NewExpNode implements Node {
         builder.append("addi $hp 1\n");
         builder.append("si -1 $hp\n");
         for (int idx = 0; idx < pointLevel; idx++) {
-            builder.append("lw $t0 $hp\n");
+            builder.append("lhp\n");
             builder.append("addi $hp 1\n");
-            builder.append("sw $t0 $hp\n");
+            builder.append("sw $a0 $hp\n");
         }
         builder.append("lhp\n");
         return builder.toString();

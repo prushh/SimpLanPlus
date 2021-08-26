@@ -222,7 +222,7 @@ public class DecFunNode implements Node {
                 .append("\n")
                 .append("__")
                 .append(this.ID)
-                .append(":\n")
+                .append("_:\n")
                 .append("cal\n")
                 .append("cfp\n")
                 .append("push $al\n")

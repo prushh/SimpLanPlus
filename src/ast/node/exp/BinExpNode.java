@@ -117,48 +117,48 @@ public class BinExpNode implements Node {
         builder.append("lw $t0 $sp\n");
         switch (op.getText()) {
             case "+":
-                builder.append("add $a0 $t0 $a0\n");
+                builder.append("add $t0 $a0 $a0\n");
                 break;
             case "-":
-                builder.append("sub $a0 $t0 $a0\n");
+                builder.append("sub $t0 $a0 $a0\n");
                 break;
             case "/":
-                builder.append("div $a0 $t0 $a0\n");
+                builder.append("div $t0 $a0 $a0\n");
                 break;
             case "*":
-                builder.append("mult $a0 $t0 $a0\n");
+                builder.append("mult $t0 $a0 $a0\n");
                 break;
             case "<":
                 // $a0 < $t0
-                builder.append("less $a0 $t0 $a0\n");
+                builder.append("less $t0 $a0 $a0\n");
                 break;
             case "<=":
                 // $a0 <= $t0
-                builder.append("leq $a0 $t0 $a0\n");
+                builder.append("leq $t0 $a0 $a0\n");
                 break;
             case ">":
                 // $t0 < $a0
-                builder.append("leq $t0 $a0 $a0\n");
+                builder.append("leq $a0 $t0 $a0\n");
                 break;
             case ">=":
                 // $t0 <= $a0
-                builder.append("less $t0 $a0 $a0\n");
+                builder.append("less $a0 $t0 $a0\n");
                 break;
             case "==":
                 // $a0 == $t0
-                builder.append("eq $a0 $t0 $a0\n");
+                builder.append("eq $t0 $a0 $a0\n");
                 break;
             case "!=":
                 // $a0 == $t0
-                builder.append("neq $a0 $t0 $a0\n");
+                builder.append("neq $t0 $a0 $a0\n");
                 break;
             case "&&":
                 // $a0 && $t0
-                builder.append("and $a0 $t0 $a0\n");
+                builder.append("and $t0 $a0 $a0\n");
                 break;
             case "||":
                 // $a0 || $t0
-                builder.append("or $a0 $t0 $a0\n");
+                builder.append("or $t0 $a0 $a0\n");
                 break;
             default:
         }

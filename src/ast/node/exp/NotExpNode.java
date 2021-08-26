@@ -47,7 +47,7 @@ public class NotExpNode implements Node {
     public String codeGeneration(CGenEnv env) {
         return this.exp.codeGeneration(env) +
                 "li $t0 1\n" +
-                "sub $a0 $t0 $a0\n";
+                "sub $t0 $a0 $a0\n";
     }
 
     @Override

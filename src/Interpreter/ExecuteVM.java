@@ -31,7 +31,7 @@ public class ExecuteVM {
                 return;
             } else {
                 int bytecode = code[ip++]; // fetch
-                int v1, v2;
+                int v1, v2, v3;
                 int address;
                 switch (bytecode) {
                     case SVMParser.PUSH:
@@ -43,7 +43,7 @@ public class ExecuteVM {
                     case SVMParser.ADD:
                         v1 = getRegister(code[ip++]);
                         v2 = getRegister(code[ip++]);
-                        setRegister(getRegister(code[ip++]), v1 + v2);
+                        setRegister(code[ip++], v1 + v2);
                         break;
                     case SVMParser.ADDI:
                         setRegister(code[ip], getRegister(code[ip++]) + code[ip++]);
@@ -51,21 +51,21 @@ public class ExecuteVM {
                     case SVMParser.SUB:
                         v1 = getRegister(code[ip++]);
                         v2 = getRegister(code[ip++]);
-                        setRegister(getRegister(code[ip++]), v1 - v2);
+                        setRegister(code[ip++], v1 - v2);
                         break;
                     case SVMParser.MULT:
                         v1 = getRegister(code[ip++]);
                         v2 = getRegister(code[ip++]);
-                        setRegister(getRegister(code[ip++]), v1 * v2);
+                        setRegister(code[ip++], v1 * v2);
                         break;
                     case SVMParser.DIV:
                         v1 = getRegister(code[ip++]);
                         v2 = getRegister(code[ip++]);
-                        setRegister(getRegister(code[ip++]), v1 / v2);
+                        setRegister(code[ip++], v1 / v2);
                         break;
                     case SVMParser.STOREW:
                         v1 = getRegister(code[ip++]);
-                        setRegister(getRegister(code[ip++]), v1);
+                        memory[getRegister(code[ip++])] = v1;
                         break;
                     case SVMParser.STOREI:
                         v1 = code[ip++];
@@ -107,7 +107,61 @@ public class ExecuteVM {
                         address = code[ip++];
                         v1 = getRegister(code[ip++]);
                         v2 = getRegister(code[ip++]);
-                        if (v2 <= v1) ip = address;
+                        if (v2 > v1) ip = address;
+                        break;
+                    case SVMParser.LESS:
+                        v1 = getRegister(code[ip++]);
+                        v2 = getRegister(code[ip++]);
+                        if (v1 < v2)
+                            v3 = 1;
+                        else
+                            v3 = 0;
+                        setRegister(code[ip++], v3);
+                        break;
+                    case SVMParser.LESSEQ:
+                        v1 = getRegister(code[ip++]);
+                        v2 = getRegister(code[ip++]);
+                        if (v1 <= v2)
+                            v3 = 1;
+                        else
+                            v3 = 0;
+                        setRegister(code[ip++], v3);
+                        break;
+                    case SVMParser.EQ:
+                        v1 = getRegister(code[ip++]);
+                        v2 = getRegister(code[ip++]);
+                        if (v1 == v2)
+                            v3 = 1;
+                        else
+                            v3 = 0;
+                        setRegister(code[ip++], v3);
+                        break;
+                    case SVMParser.NEQ:
+                        v1 = getRegister(code[ip++]);
+                        v2 = getRegister(code[ip++]);
+                        if (v1 != v2)
+                            v3 = 1;
+                        else
+                            v3 = 0;
+                        setRegister(code[ip++], v3);
+                        break;
+                    case SVMParser.AND:
+                        v1 = getRegister(code[ip++]);
+                        v2 = getRegister(code[ip++]);
+                        if (v1 + v2 == 2)
+                            v3 = 1;
+                        else
+                            v3 = 0;
+                        setRegister(code[ip++], v3);
+                        break;
+                    case SVMParser.OR:
+                        v1 = getRegister(code[ip++]);
+                        v2 = getRegister(code[ip++]);
+                        if (v1 + v2 != 0)
+                            v3 = 1;
+                        else
+                            v3 = 0;
+                        setRegister(code[ip++], v3);
                         break;
                     case SVMParser.JAL: //
                         address = code[ip++];
