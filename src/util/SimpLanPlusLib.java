@@ -7,6 +7,8 @@ import ast.node.type.ArrowTypeNode;
 import ast.node.type.BoolTypeNode;
 import ast.node.type.IntTypeNode;
 import ast.node.type.VoidTypeNode;
+import org.antlr.v4.runtime.Token;
+import parser.SVMParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -124,5 +126,25 @@ public class SimpLanPlusLib {
 
         return newEnv;
     }
+
+    public static int getRegister(Token register) {
+        switch (register.getText()) {
+            case "$a0":
+                return SVMParser.A0;
+            case "$t0":
+                return SVMParser.T0;
+            case "$sp":
+                return SVMParser.SP;
+            case "$ra":
+                return SVMParser.RA;
+            case "$fp":
+                return SVMParser.FP;
+            case "$al":
+                return SVMParser.AL;
+            default:
+                return -1;
+        }
+    }
+
 
 }

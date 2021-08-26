@@ -39,7 +39,7 @@ instruction:
 	  | AND e1=REGISTER e2=REGISTER res=REGISTER
 	  | OR e1=REGISTER e2=REGISTER res=REGISTER
 	  | JAL l=LABEL
-      | JR r=REGISTER
+      | JR
 	  | LOADRA
 	  | STORERA
 	  | LOADRV
@@ -47,7 +47,8 @@ instruction:
 	  | LOADFP
 	  | STOREFP
 	  | COPYFP
-	  | LOADHP source=REGISTER hp=REGISTER
+	  | COPYAL
+	  | LOADHP dest=REGISTER hp=REGISTER
 	  | STOREHP source=REGISTER hp=REGISTER
 	  | PRINT val=REGISTER
 	  | HALT
@@ -79,22 +80,29 @@ AND:'and' ;	// --todo--
 OR:'or' ;	// --todo--
 JR       : 'jr' ;   // --todo--
 JAL       : 'jal' ;     // --todo--
-LOADRA	 : 'lra' ;	// load from ra
+LOADRA	 : 'lra' ;	// load $ra into $a0
 STORERA  : 'sra' ;	// store $a0 into $ra
-LOADRV	 : 'lrv' ;	// load from rv
-STORERV  : 'srv' ;	// store top into rv
-LOADFP	 : 'lfp' ;	// load frame pointer in the stack
-STOREFP	 : 'sfp' ;	// store top into frame pointer
-COPYFP   : 'cfp' ;      // copy stack pointer into frame pointer
-LOADHP	 : 'lhp' ;	// load heap pointer in the stack
-STOREHP	 : 'shp' ;	// store top into heap pointer
-PRINT	 : 'print' ;	// print top of stack
+LOADRV	 : 'lrv' ;	// load $rv into $a0
+STORERV  : 'srv' ;	// store $a0 into rv
+LOADFP	 : 'lfp' ;	// load $fp into $a0
+STOREFP	 : 'sfp' ;	// store $a0 into $fp
+COPYFP   : 'cfp' ;  // copy $sp into $fp
+COPYAL   : 'cal' ;  // copy $fp intp $al
+LOADHP	 : 'lhp' ;	// load $hp into $a0
+STOREHP	 : 'shp' ;	// store $a0 into $hp
+PRINT	 : 'print' ; // print value of $a0
 HALT	 : 'halt' ;	// stop execution
 
 COL	 : ':' ;
 LABEL	 : ('__')?('a'..'z'|'A'..'Z')('a'..'z' | 'A'..'Z' | '0'..'9')* ;
 NUMBER	 : '0' | ('-')?(('1'..'9')('0'..'9')*) ;
-REGISTER : '$a0' | '$t0' | '$sp' | '$ra' | '$fp' | '$al';
+REGISTER : A0 | T0 | SP | RA | FP | AL;
+A0 : '$a0';
+T0 : '$t0';
+SP : '$sp';
+RA : '$ra';
+FP : '$fp';
+AL : '$al';
 
 WHITESP  : ( '\t' | ' ' | '\r' | '\n' )+   -> channel(HIDDEN);
 
