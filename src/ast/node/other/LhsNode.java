@@ -137,18 +137,23 @@ public class LhsNode implements Node {
 
     @Override
     public String codeGeneration(CGenEnv env) {
+        int difference = entry.getType().getPointLevel() - this.pointLevel;
         String lookup = "";
         for (int i = env.getNestingLevel(); i > this.entry.getNestinglevel(); i--)
             lookup += "lw $al $al\n";
         String res = "";
-        res += "lw $al $fp\n" +
+        res += "cal\n" +
                 lookup +
                 "addi $al " + this.entry.getOffset() + "\n";
 
         for (int i = 0; i < this.pointLevel; i++) {
             res += "lw $al $al\n";
         }
-        res += "lw $a0 $al\n";
+        if (isRightHandSide) {
+            res += "lw $a0 $al\n";
+        } else {
+            res += "lal\n";
+        }
         return res;
     }
 

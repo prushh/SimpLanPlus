@@ -96,6 +96,7 @@ public class Test {
 						if (lexerASM.lexicalErrors > 0 || parserASM.getNumberOfSyntaxErrors() > 0) System.exit(1);
 
 						System.out.println("Starting Virtual Machine...");
+                        System.out.println("--------------------------------------------------------------------------");
 						ExecuteVM vm = new ExecuteVM(visitorSVM.code);
 						vm.cpu();
 					}

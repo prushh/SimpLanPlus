@@ -79,7 +79,7 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 code[i++] = getRegister(ctx.dest);
                 break;
             case SVMLexer.STOREI:
-                code[i++] = SVMParser.STOREW;
+                code[i++] = SVMParser.STOREI;
                 code[i++] = Integer.parseInt(ctx.val.getText());
                 code[i++] = getRegister(ctx.dest);
                 break;
@@ -176,18 +176,20 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
             case SVMLexer.COPYFP:
                 code[i++] = SVMParser.COPYFP;
                 break;
+            case SVMLexer.LOADAL:
+                code[i++] = SVMParser.LOADAL;
+                break;
+            case SVMLexer.STOREAL:
+                code[i++] = SVMParser.STOREAL;
+                break;
             case SVMLexer.COPYAL:
-                code[i++] = SVMParser.COPYFP;
+                code[i++] = SVMParser.COPYAL;
                 break;
             case SVMLexer.LOADHP:
                 code[i++] = SVMParser.LOADHP;
-                code[i++] = getRegister(ctx.dest);
-                code[i++] = getRegister(ctx.hp);
                 break;
             case SVMLexer.STOREHP:
                 code[i++] = SVMParser.STOREHP;
-                code[i++] = getRegister(ctx.source);
-                code[i++] = getRegister(ctx.hp);
                 break;
             case SVMLexer.PRINT:
                 code[i++] = SVMParser.PRINT;

@@ -141,6 +141,8 @@ public class SimpLanPlusLib {
                 return SVMParser.FP;
             case "$al":
                 return SVMParser.AL;
+            case "$hp":
+                return SVMParser.HP;
             default:
                 return -1;
         }

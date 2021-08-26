@@ -12,8 +12,8 @@ public class ExecuteVM {
 
     private int ip = 0;
     private int sp = MEMSIZE;
-    private int hp = 0;
-    private int fp = MEMSIZE;
+    private int hp = -1;
+    private int fp = MEMSIZE - 1;
     private int a0;
     private int t0;
     private int ra;
@@ -31,7 +31,7 @@ public class ExecuteVM {
                 return;
             } else {
                 int bytecode = code[ip++]; // fetch
-                int v1, v2, v3;
+                int v1, v2;
                 int address;
                 switch (bytecode) {
                     case SVMParser.PUSH:
@@ -69,23 +69,27 @@ public class ExecuteVM {
                         break;
                     case SVMParser.STOREI:
                         v1 = code[ip++];
-                        setRegister(getRegister(code[ip++]), v1);
+                        memory[getRegister(code[ip++])] = v1;
                         break;
                     case SVMParser.LOADW:
                         // check if object address where we take the method label
                         // is null value (-10000)
-                        if (memory[sp] == -10000) {
-                            System.out.println("\nError: Null pointer exception");
-                            return;
+                        if (sp < 10000) {
+                            if (memory[sp] == -10000) {
+                                System.out.println("\nError: Null pointer exception");
+                                return;
+                            }
                         }
                         setRegister(code[ip++], memory[getRegister(code[ip++])]);
                         break;
                     case SVMParser.LOADI: //
                         // check if object address where we take the method label
                         // is null value (-10000)
-                        if (memory[sp] == -10000) {
-                            System.out.println("\nError: Null pointer exception");
-                            return;
+                        if (sp < 10000) {
+                            if (memory[sp] == -10000) {
+                                System.out.println("\nError: Null pointer exception");
+                                return;
+                            }
                         }
                         setRegister(code[ip++], code[ip++]);
                         break;
@@ -113,54 +117,58 @@ public class ExecuteVM {
                     case SVMParser.JR: //
                         ip = ra;
                         break;
-                    case SVMParser.STORERA: //
+                    case SVMParser.LOADRA: //
                         a0 = ra;
                         break;
-                    case SVMParser.LOADRA: //
+                    case SVMParser.STORERA: //
                         ra = a0;
-                        break;
-                    case SVMParser.STORERV: //
-                        rv = a0;
                         break;
                     case SVMParser.LOADRV: //
                         a0 = rv;
                         break;
-                    case SVMParser.STOREFP: //
-                        fp = a0;
+                    case SVMParser.STORERV: //
+                        rv = a0;
                         break;
                     case SVMParser.LOADFP: //
                         a0 = fp;
                         break;
+                    case SVMParser.STOREFP: //
+                        fp = a0;
+                        break;
                     case SVMParser.COPYFP: //
                         fp = sp;
+                        break;
+                    case SVMParser.LOADAL: //
+                        a0 = al;
+                        break;
+                    case SVMParser.STOREAL: //
+                        al = a0;
                         break;
                     case SVMParser.COPYAL: //
                         al = fp;
                         break;
+                    case SVMParser.LOADHP: //
+                        a0 = hp;
+                        break;
                     case SVMParser.STOREHP: //
                         hp = a0;
                         break;
-                    case SVMParser.LOADHP: //
-                        a0 = sp;
-                        break;
                     case SVMParser.PRINT:
-                        System.out.println((sp < MEMSIZE) ? getRegister(code[ip++]) : "Empty stack!");
+                        System.out.println(getRegister(code[ip++]));
                         break;
                     case SVMParser.HALT:
                         //to print the result
-                        System.out.println("\nExit: no Errors \n");
+                        System.out.println("--------------------------------------------------------------------------");
+                        System.out.println("\nExit: no Errors -- Halt\n");
+                        System.exit(0);
                         return;
+                    default:
+                        System.out.println("--------------------------------------------------------------------------");
+                        System.out.println("\nExit: no Errors \n");
+                        System.exit(0);
                 }
             }
         }
-    }
-
-    private int pop() {
-        return memory[sp++];
-    }
-
-    private void push(int v) {
-        memory[--sp] = v;
     }
 
     private void setRegister(int token, int val) {
@@ -183,6 +191,9 @@ public class ExecuteVM {
             case SVMParser.AL:
                 this.al = val;
                 break;
+            case SVMParser.HP:
+                this.hp = val;
+                break;
             default:
                 break;
         }
@@ -202,9 +213,19 @@ public class ExecuteVM {
                 return this.fp;
             case SVMParser.AL:
                 return this.al;
+            case SVMParser.HP:
+                return this.hp;
             default:
                 return -1;
         }
+    }
+
+    private int pop() {
+        return memory[sp++];
+    }
+
+    private void push(int v) {
+        memory[--sp] = v;
     }
 
 }

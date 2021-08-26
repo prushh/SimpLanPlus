@@ -47,9 +47,11 @@ instruction:
 	  | LOADFP
 	  | STOREFP
 	  | COPYFP
+	  | STOREAL
+	  | LOADAL
 	  | COPYAL
-	  | LOADHP dest=REGISTER hp=REGISTER
-	  | STOREHP source=REGISTER hp=REGISTER
+	  | LOADHP
+	  | STOREHP
 	  | PRINT val=REGISTER
 	  | HALT
 	  ) ;
@@ -87,6 +89,8 @@ STORERV  : 'srv' ;	// store $a0 into rv
 LOADFP	 : 'lfp' ;	// load $fp into $a0
 STOREFP	 : 'sfp' ;	// store $a0 into $fp
 COPYFP   : 'cfp' ;  // copy $sp into $fp
+LOADAL   : 'lal' ;  // load $a0 into $al
+STOREAL  : 'sal' ;  // store $al into $a0
 COPYAL   : 'cal' ;  // copy $fp intp $al
 LOADHP	 : 'lhp' ;	// load $hp into $a0
 STOREHP	 : 'shp' ;	// store $a0 into $hp
@@ -96,13 +100,14 @@ HALT	 : 'halt' ;	// stop execution
 COL	 : ':' ;
 LABEL	 : ('__')?('a'..'z'|'A'..'Z')('a'..'z' | 'A'..'Z' | '0'..'9')* ;
 NUMBER	 : '0' | ('-')?(('1'..'9')('0'..'9')*) ;
-REGISTER : A0 | T0 | SP | RA | FP | AL;
+REGISTER : A0 | T0 | SP | RA | FP | AL | HP;
 A0 : '$a0';
 T0 : '$t0';
 SP : '$sp';
 RA : '$ra';
 FP : '$fp';
 AL : '$al';
+HP : '$hp';
 
 WHITESP  : ( '\t' | ' ' | '\r' | '\n' )+   -> channel(HIDDEN);
 
