@@ -69,12 +69,17 @@ public class DeletionNode implements Node {
     @Override
     public String codeGeneration(CGenEnv env) {
         String lookup = "";
+
         for (int i = env.getNestingLevel(); i > this.entry.getNestinglevel(); i--)
             lookup += "lw $al $al\n";
-        return "lw $al $fp\n" +
+
+        String res = "";
+        res += "cal\n" +
                 lookup +
                 "addi $al " + this.entry.getOffset() + "\n" +
                 "si -10000 $al\n";
+
+        return res;
     }
 
     @Override
