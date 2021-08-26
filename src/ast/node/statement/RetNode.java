@@ -75,7 +75,7 @@ public class RetNode implements Node {
         String exp = "";
         if (this.val != null) {
             exp = this.val.codeGeneration(env) +
-                    "lw $rv $a0\n";
+                    "srv\n";
         }
 
         if (isFunctionReturn) {

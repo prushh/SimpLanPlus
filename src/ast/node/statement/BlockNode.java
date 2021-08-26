@@ -135,6 +135,8 @@ public class BlockNode implements Node {
             for (int i = 0; i < this.decList.size(); i++)
                 popLocal.append("pop\n");
             builder.append(popLocal);
+            // pop w.r.t push in at line 120
+            builder.append("pop\n");
             builder.append(blockLabel.getLabel());
             builder.append(":\n");
             env.removeLabel();

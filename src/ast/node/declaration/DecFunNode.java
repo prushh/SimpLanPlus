@@ -209,7 +209,6 @@ public class DecFunNode implements Node {
         StringBuilder popArgs = new StringBuilder();
         for (int i = 0; i < args.size(); i++)
             popArgs.append("pop\n");
-        popArgs.append("pop\n");
 
         StringBuilder popLocal = new StringBuilder();
         ArrayList<Node> decList = ((BlockNode) body).getDecList();
@@ -224,7 +223,6 @@ public class DecFunNode implements Node {
                 .append(this.ID)
                 .append("_:\n")
                 .append("cal\n")
-                .append("cfp\n")
                 .append("push $al\n")
                 .append("cfp\n")
                 .append("push $ra\n")
@@ -232,10 +230,12 @@ public class DecFunNode implements Node {
                 .append(popLocal)
                 .append("lw $a0 $sp\n")
                 .append("sra\n")
-                .append(popArgs)
+                .append("pop\n")
                 .append("lw $a0 $sp\n")
                 .append("sfp\n")
                 .append("pop\n")
+                .append(popArgs)
+                .append("push $rv")
                 .append("jr $ra\n")
                 .append(label.getLabel())
                 .append(":\n");
