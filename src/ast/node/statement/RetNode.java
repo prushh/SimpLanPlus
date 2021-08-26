@@ -77,7 +77,10 @@ public class RetNode implements Node {
             exp = this.val.codeGeneration(env) +
                     "lw $rv $a0\n";
         }
-        // -- todo -- jump to current program counter
+
+        if (isFunctionReturn) {
+
+        }
 
         return exp;
     }

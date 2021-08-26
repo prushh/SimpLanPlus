@@ -145,6 +145,7 @@ public class LhsNode implements Node {
         res += "lw $al $fp\n" +
                 lookup +
                 "addi $al " + this.entry.getOffset() + "\n";
+
         for (int i = 0; i < this.pointLevel; i++) {
             res += "lw $al $al\n";
         }

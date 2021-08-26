@@ -99,10 +99,9 @@ public class ExecuteVM {
                         break;
                     case SVMParser.JR: //
                         // --todo--
-
                         break;
                     case SVMParser.STORERA: //
-                        ra = a0;
+                        ra = pop();
                         break;
                     case SVMParser.LOADRA: //
                         push(ra);

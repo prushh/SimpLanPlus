@@ -112,7 +112,6 @@ public class DecVarNode implements Node {
         return res;
     }
 
-
     @Override
     public int getPointLevel() {
         return 0;

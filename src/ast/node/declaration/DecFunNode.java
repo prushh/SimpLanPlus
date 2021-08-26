@@ -204,26 +204,27 @@ public class DecFunNode implements Node {
 
     @Override
     public String codeGeneration(CGenEnv env) {
-        StringBuilder builder = new StringBuilder();
-        // label
-        builder.append("__");
-        builder.append(this.ID);
-        builder.append(":\n");
-        // copy stack pointer into frame pointer
-        builder.append("cfp\n");
-        builder.append("push $ra\n");
-        builder.append(this.body.codeGeneration(env));
-        // not so sure of $sp, may we should use $a0 instead?
-        builder.append("sra\n");
-        // pop elements from stack
-        for (int i = 0; i < this.args.size(); i++)
-            builder.append("addi $sp 1\n");
-        builder.append("addi $sp 1\n");
-        // reload old fp
-        builder.append("sfp\n");
-        builder.append("pop\n");
-        builder.append("jr $ra\n");
-        return builder.toString();
+        Label label = new Label();
+        String exp = "";
+        for (int i = 0; i < args.size(); i++)
+            exp += "addi $sp 1\n";
+        exp += "addi $sp 1\n";
+        return "b " +
+                label.getLabel() +
+                "\n" +
+                "__" +
+                this.ID +
+                ":\n" +
+                "cfp\n" +
+                "push $ra\n" +
+                this.body.codeGeneration(env) +
+                "sra\n" +
+                exp +
+                "sfp\n" +
+                "pop\n" +
+                "jr $ra\n" +
+                label.getLabel() +
+                ":\n";
     }
 
     @Override
@@ -267,7 +268,7 @@ public class DecFunNode implements Node {
             funEnv.symTable.add(hmArg);
 
             for (ArgNode arg : args) {
-                if (hmArg.put(arg.getId(), new STentry(funEnv.nestingLevel, arg.getType(), funEnv.offset--)) != null) {
+                if (hmArg.put(arg.getId(), new STentry(funEnv.nestingLevel, arg.getType(), funEnv.offset++)) != null) {
                     res.add(new SemanticError("Parameter id " + arg.getId() + " already declared"));
                 }
             }
@@ -279,6 +280,7 @@ public class DecFunNode implements Node {
             if (args.size() > 0) {
                 env.offset = -2;
             }*/
+            funEnv.offset = -2;
 
             res.addAll(body.checkSemantics(funEnv));
             funEnv.symTable.remove(funEnv.nestingLevel);

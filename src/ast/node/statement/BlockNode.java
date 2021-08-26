@@ -113,7 +113,6 @@ public class BlockNode implements Node {
         StringBuilder builder = new StringBuilder();
 
         Label blockLabel = new Label();
-        // --todo-- check if function blocks differ from normal block
         if (!isBlockFunction) {
             env.incrementNestingLevel();
             env.setLabel(blockLabel.getLabel());
@@ -123,7 +122,8 @@ public class BlockNode implements Node {
             builder.append(dec.codeGeneration(env));
         }
 
-        builder.append("cfp\n");
+        if (!isBlockFunction)
+            builder.append("cfp\n");
 
         for (Node stm : stmList) {
             builder.append(stm.codeGeneration(env));

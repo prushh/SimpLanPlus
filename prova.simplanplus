@@ -1,7 +1,25 @@
 {
-    ^^int a = new ^int;
-    print(a^);
+
+    int f(int a, int b){
+        int c = b;
+        return 1;
+    }
+
+    int d = f(3, 4);
+
+    {
+        int d=4;
+    }
 }
+
+/*
+
+return adress
+
+-2 c <- fp
+-1 b
+0  a
+*/
 
 /*
 
