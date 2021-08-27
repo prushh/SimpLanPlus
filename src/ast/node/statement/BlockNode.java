@@ -2,6 +2,7 @@ package ast.node.statement;
 
 import ast.Node;
 import ast.STentry;
+import ast.node.declaration.DecFunNode;
 import ast.node.type.BoolTypeNode;
 import ast.node.type.IntTypeNode;
 import ast.node.type.NullTypeNode;
@@ -132,8 +133,11 @@ public class BlockNode implements Node {
         if (!isBlockFunction) {
             env.decrementNestingLevel();
             StringBuilder popLocal = new StringBuilder();
-            for (int i = 0; i < this.decList.size(); i++)
-                popLocal.append("pop\n");
+            for (int i = 0; i < this.decList.size(); i++) {
+                if (!(decList.get(i) instanceof DecFunNode)) {
+                    popLocal.append("pop\n");
+                }
+            }
             builder.append(popLocal);
             // pop w.r.t push in at line 120
             builder.append("pop\n");

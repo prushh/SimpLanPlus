@@ -212,8 +212,11 @@ public class DecFunNode implements Node {
 
         StringBuilder popLocal = new StringBuilder();
         ArrayList<Node> decList = ((BlockNode) body).getDecList();
-        for (int i = 0; i < decList.size(); i++)
-            popLocal.append("pop\n");
+        for (int i = 0; i < decList.size(); i++) {
+            if (!(decList.get(i) instanceof DecFunNode)) {
+                popLocal.append("pop\n");
+            }
+        }
 
         StringBuilder builder = new StringBuilder();
         builder.append("b ")
@@ -235,8 +238,7 @@ public class DecFunNode implements Node {
                 .append("sfp\n")
                 .append("pop\n")
                 .append(popArgs)
-                .append("push $rv\n")
-                .append("lw $a0 $sp\n")
+                .append("lrv\n")
                 .append("jr\n")
                 .append(label.getLabel())
                 .append(":\n");
@@ -293,12 +295,6 @@ public class DecFunNode implements Node {
 
             entry.addType(new ArrowTypeNode(args, type));
 
-            /*
-            --todo--
-            if (args.size() > 0) {
-                env.offset = -2;
-            }
-            */
             funEnv.offset = -2;
 
             res.addAll(body.checkSemantics(funEnv));
