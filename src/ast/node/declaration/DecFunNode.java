@@ -74,7 +74,7 @@ public class DecFunNode implements Node {
 
         Environment effectEnv = new Environment();
         HashMap<String, STentry> hm = env.symTable.get(env.nestingLevel);
-        STentry entry = new STentry(env.nestingLevel, env.offset--);
+        STentry entry = new STentry(env.nestingLevel, env.offset);
 
         hm.put(ID, entry);
 
@@ -264,9 +264,13 @@ public class DecFunNode implements Node {
             res.add(new SemanticError("Fun id " + ID + " already declared"));
         } else {
             Environment funEnv = new Environment();
-            funEnv.nestingLevel++;
+            funEnv.nestingLevel = env.nestingLevel;
             funEnv.offset++; // because at $fp there's the access link
             HashMap<String, STentry> hmFun = new HashMap<>();
+
+            for (int i = env.nestingLevel; i > 0; i--) {
+                funEnv.symTable.add(new HashMap<>());
+            }
 
             if (hmFun.put(ID, entry) != null) {
                 res.add(new SemanticError("Fun id " + ID + " already declared"));
