@@ -163,13 +163,13 @@ public class ExecuteVM {
                             v3 = 0;
                         setRegister(code[ip++], v3);
                         break;
+                    case SVMParser.JR: //
+                        ip = ra;
+                        break;
                     case SVMParser.JAL: //
                         address = code[ip++];
                         ra = ip;
                         ip = address;
-                        break;
-                    case SVMParser.JR: //
-                        ip = ra;
                         break;
                     case SVMParser.LOADRA: //
                         a0 = ra;

@@ -38,8 +38,8 @@ instruction:
 	  | NEQ e1=REGISTER e2=REGISTER res=REGISTER
 	  | AND e1=REGISTER e2=REGISTER res=REGISTER
 	  | OR e1=REGISTER e2=REGISTER res=REGISTER
-	  | JAL l=LABEL
       | JR
+	  | JAL l=LABEL
 	  | LOADRA
 	  | STORERA
 	  | LOADRV
@@ -60,42 +60,42 @@ instruction:
  * LEXER RULES
  *------------------------------------------------------------------*/
 
-PUSH  	 : 'push' ; 	// pushes constant in the stack
-POP	 : 'pop' ; 	// pops from stack
-ADD	 : 'add' ;  	// add two values from the stack
-ADDI : 'addi';      // --todo--
-SUB	 : 'sub' ;	// add two values from the stack
-MULT	 : 'mult' ;  	// add two values from the stack
-DIV	 : 'div' ;	// add two values from the stack
-STOREW	 : 'sw' ; 	// store in the memory cell pointed by top the value next
-STOREI    : 'si' ;   // --todo--
-LOADW	 : 'lw' ;	// load a value from the memory cell pointed by top
-LOADI    : 'li' ;   // --todo--
-BRANCH	 : 'b' ;	// jump to label
-BRANCHEQ : 'beq' ;	// jump to label if top == next
+PUSH  	    : 'push' ; 	// pushes constant in the stack
+POP	        : 'pop' ; 	// pops from stack
+ADD	        : 'add' ;  	// add two values from the stack
+ADDI        : 'addi';      // --todo--
+SUB	        : 'sub' ;	// add two values from the stack
+MULT	    : 'mult' ;  	// add two values from the stack
+DIV	        : 'div' ;	// add two values from the stack
+STOREW	    : 'sw' ; 	// store in the memory cell pointed by top the value next
+STOREI      : 'si' ;   // --todo--
+LOADW	    : 'lw' ;	// load a value from the memory cell pointed by top
+LOADI       : 'li' ;   // --todo--
+BRANCH	    : 'b' ;	// jump to label
+BRANCHEQ    : 'beq' ;	// jump to label if top == next
 BRANCHLESSEQ:'bleq' ;	// jump to label if top <= next
-LESS:'less' ;	// --todo--
-LESSEQ:'leq' ;	// --todo--
-EQ:'eq' ;	//  --todo--
-NEQ:'neq' ;	//  --todo--
-AND:'and' ;	// --todo--
-OR:'or' ;	// --todo--
-JR       : 'jr' ;   // --todo--
-JAL       : 'jal' ;     // --todo--
-LOADRA	 : 'lra' ;	// load $ra into $a0
-STORERA  : 'sra' ;	// store $a0 into $ra
-LOADRV	 : 'lrv' ;	// load $rv into $a0
-STORERV  : 'srv' ;	// store $a0 into rv
-LOADFP	 : 'lfp' ;	// load $fp into $a0
-STOREFP	 : 'sfp' ;	// store $a0 into $fp
-COPYFP   : 'cfp' ;  // copy $sp into $fp
-LOADAL   : 'lal' ;  // load $al into $a0
-STOREAL  : 'sal' ;  // store $a0 into $al
-COPYAL   : 'cal' ;  // copy $fp intp $al
-LOADHP	 : 'lhp' ;	// load $hp into $a0
-STOREHP	 : 'shp' ;	// store $a0 into $hp
-PRINT	 : 'print' ; // print value of $a0
-HALT	 : 'halt' ;	// stop execution
+LESS        :'less' ;	// --todo--
+LESSEQ      :'leq' ;	// --todo--
+EQ          :'eq' ;	//  --todo--
+NEQ         :'neq' ;	//  --todo--
+AND         :'and' ;	// --todo--
+OR          :'or' ;	// --todo--
+JR          : 'jr' ;   // --todo--
+JAL         : 'jal' ;     // --todo--
+LOADRA	    : 'lra' ;	// load $ra into $a0
+STORERA     : 'sra' ;	// store $a0 into $ra
+LOADRV	    : 'lrv' ;	// load $rv into $a0
+STORERV     : 'srv' ;	// store $a0 into rv
+LOADFP	    : 'lfp' ;	// load $fp into $a0
+STOREFP	    : 'sfp' ;	// store $a0 into $fp
+COPYFP      : 'cfp' ;  // copy $sp into $fp
+LOADAL      : 'lal' ;  // load $al into $a0
+STOREAL     : 'sal' ;  // store $a0 into $al
+COPYAL      : 'cal' ;  // copy $fp intp $al
+LOADHP	    : 'lhp' ;	// load $hp into $a0
+STOREHP	    : 'shp' ;	// store $a0 into $hp
+PRINT	    : 'print' ; // print value of $a0
+HALT	    : 'halt' ;	// stop execution
 
 COL	 : ':' ;
 NUMBER	 : '0' | ('-')?(('1'..'9')('0'..'9')*) ;
