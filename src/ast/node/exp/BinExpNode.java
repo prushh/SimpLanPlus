@@ -138,11 +138,11 @@ public class BinExpNode implements Node {
                 break;
             case ">":
                 // $t0 < $a0
-                builder.append("leq $a0 $t0 $a0\n");
+                builder.append("less $a0 $t0 $a0\n");
                 break;
             case ">=":
                 // $t0 <= $a0
-                builder.append("less $a0 $t0 $a0\n");
+                builder.append("leq $a0 $t0 $a0\n");
                 break;
             case "==":
                 // $a0 == $t0

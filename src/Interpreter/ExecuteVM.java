@@ -93,6 +93,8 @@ public class ExecuteVM {
                         }
                         setRegister(code[ip++], code[ip++]);
                         break;
+                    case SVMParser.LABEL:
+                        break;
                     case SVMParser.BRANCH:
                         address = code[ip];
                         ip = address;

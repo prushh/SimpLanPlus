@@ -60,6 +60,11 @@ public class IteNode implements Node {
                 return e;
             typeErr.add(new SemanticError("Incompatible types in then else branches"));
         }
+        /*
+        else {
+            return new NullTypeNode(Status.DECLARED);
+        }
+        */
         return t;
     }
 
@@ -104,16 +109,24 @@ public class IteNode implements Node {
     public String codeGeneration(CGenEnv env) {
         Label elseLabel = new Label();
         Label endLabel = new Label();
-        return this.cond.codeGeneration(env) +
+        String ite = this.cond.codeGeneration(env) +
                 "li $t0 0\n" +
                 // l is the false branch label got through newLabel() func
                 "beq " + elseLabel.getLabel() + " $a0 $t0\n" +
                 this.th.codeGeneration(env) +
                 "b " + endLabel.getLabel() + "\n" +
-                // here appends false branch label
-                elseLabel.getLabel() + ":\n" +
-                this.el.codeGeneration(env) +
-                endLabel.getLabel() + ":\n";
+                elseLabel.getLabel() + ":\n";
+        if (this.el != null)
+            // here appends false branch label
+            ite += this.el.codeGeneration(env);
+        /*
+        else {
+            RetNode elseRet = new RetNode(new IntNode(0));
+            ite += elseRet.codeGeneration(env);
+        }
+         */
+        ite += endLabel.getLabel() + ":\n";
+        return ite;
 
     }
 
