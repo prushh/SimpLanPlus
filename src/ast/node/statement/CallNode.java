@@ -247,7 +247,7 @@ public class CallNode implements Node {
         }
         builder.append("jal __");
         builder.append(this.ID);
-        builder.append("\n");
+        builder.append("_\n");
         return builder.toString();
     }
 

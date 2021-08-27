@@ -236,7 +236,8 @@ public class DecFunNode implements Node {
                 .append("pop\n")
                 .append(popArgs)
                 .append("push $rv\n")
-                .append("jr $ra\n")
+                .append("lw $a0 $sp\n")
+                .append("jr\n")
                 .append(label.getLabel())
                 .append(":\n");
 

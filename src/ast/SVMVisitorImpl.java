@@ -94,7 +94,7 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 code[i++] = Integer.parseInt(ctx.source.getText());
                 break;
             case SVMLexer.LABEL:
-                labelAdd.put(ctx.l.getText(), i++);
+                labelAdd.put(ctx.l.getText(), i);
                 break;
             case SVMLexer.BRANCH:
                 code[i++] = SVMParser.BRANCH;
