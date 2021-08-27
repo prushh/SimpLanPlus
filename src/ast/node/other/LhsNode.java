@@ -137,7 +137,6 @@ public class LhsNode implements Node {
 
     @Override
     public String codeGeneration(CGenEnv env) {
-        int difference = entry.getType().getPointLevel() - this.pointLevel;
         String lookup = "";
         for (int i = env.getNestingLevel(); i > this.entry.getNestinglevel(); i--)
             lookup += "lw $al $al\n";

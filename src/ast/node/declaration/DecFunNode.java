@@ -258,7 +258,7 @@ public class DecFunNode implements Node {
         ArrayList<SemanticError> res = new ArrayList<>();
 
         HashMap<String, STentry> hm = env.symTable.get(env.nestingLevel);
-        STentry entry = new STentry(env.nestingLevel, env.offset--);
+        STentry entry = new STentry(env.nestingLevel, 0);
 
         if (hm.put(ID, entry) != null) {
             res.add(new SemanticError("Fun id " + ID + " already declared"));
