@@ -206,6 +206,10 @@ public class DecFunNode implements Node {
     @Override
     public String codeGeneration(CGenEnv env) {
         Label label = new Label();
+        Label labelReturn = new Label();//label to get the return inside the bytecode, is put inside the env
+        env.incrementNestingLevel();
+        env.setLabel(labelReturn.getLabel());
+
         StringBuilder popArgs = new StringBuilder();
         for (int i = 0; i < args.size(); i++)
             popArgs.append("pop\n");
@@ -230,6 +234,8 @@ public class DecFunNode implements Node {
                 .append("cfp\n")
                 .append("push $ra\n")
                 .append(this.body.codeGeneration(env))
+                .append(labelReturn.getLabel())
+                .append(":\n")
                 .append(popLocal)
                 .append("lw $a0 $sp\n")
                 .append("sra\n")
@@ -242,7 +248,8 @@ public class DecFunNode implements Node {
                 .append("jr\n")
                 .append(label.getLabel())
                 .append(":\n");
-
+        env.decrementNestingLevel();
+        env.removeLabel();
         return builder.toString();
     }
 
