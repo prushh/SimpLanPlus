@@ -132,6 +132,10 @@ public class BlockNode implements Node {
 
         if (!isBlockFunction) {
             env.decrementNestingLevel();
+
+            builder.append(blockLabel.getLabel());
+            builder.append(":\n");
+
             StringBuilder popLocal = new StringBuilder();
             for (int i = 0; i < this.decList.size(); i++) {
                 if (!(decList.get(i) instanceof DecFunNode)) {
@@ -140,10 +144,10 @@ public class BlockNode implements Node {
             }
             builder.append(popLocal);
             // pop w.r.t push in at line 120
+            builder.append("lw $fp $fp\n");
             builder.append("pop\n");
-            builder.append(blockLabel.getLabel());
-            builder.append(":\n");
             env.removeLabel();
+
             if (env.getNestingLevel() == -1) {
                 builder.append("halt\n");
             }
