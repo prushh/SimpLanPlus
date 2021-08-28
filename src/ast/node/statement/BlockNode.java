@@ -54,7 +54,9 @@ public class BlockNode implements Node {
         ArrayList<Node> nodeList = new ArrayList<>();
         for (Node stm : stmList) {
             tmp = stm.typeCheck(typeErr);
-            if ((stm instanceof RetNode) || (stm instanceof IteNode && !(tmp instanceof NullTypeNode)))
+            if ((stm instanceof RetNode) || (stm instanceof IteNode &&
+                    !(tmp instanceof NullTypeNode) &&
+                    !((IteNode) stm).getIsElNull()))
                 nodeList.add(tmp);
         }
         Node check;

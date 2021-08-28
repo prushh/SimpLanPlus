@@ -17,6 +17,7 @@ public class IteNode implements Node {
     private Node cond;
     private Node th;
     private Node el;
+    private boolean isElNull = false;
 
     public IteNode(Node cond, Node th, Node el) {
         this.cond = cond;
@@ -60,11 +61,6 @@ public class IteNode implements Node {
                 return e;
             typeErr.add(new SemanticError("Incompatible types in then else branches"));
         }
-        /*
-        else {
-            return new NullTypeNode(Status.DECLARED);
-        }
-        */
         return t;
     }
 
@@ -119,12 +115,6 @@ public class IteNode implements Node {
         if (this.el != null)
             // here appends false branch label
             ite += this.el.codeGeneration(env);
-        /*
-        else {
-            RetNode elseRet = new RetNode(new IntNode(0));
-            ite += elseRet.codeGeneration(env);
-        }
-         */
         ite += endLabel.getLabel() + ":\n";
         return ite;
 
@@ -140,12 +130,18 @@ public class IteNode implements Node {
         res.addAll(th.checkSemantics(env));
         if (el != null)
             res.addAll(el.checkSemantics(env));
-
+        else {
+            this.isElNull = true;
+        }
         return res;
     }
 
     @Override
     public int getPointLevel() {
         return 0;
+    }
+
+    public boolean getIsElNull() {
+        return this.isElNull;
     }
 }
