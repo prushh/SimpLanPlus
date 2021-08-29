@@ -1,10 +1,5 @@
 grammar SimpLanPlus;
 
-@lexer::members {
-   //there is a much better way to do this, check the ANTLR guide
-   public int lexicalErrors=0;
-}
-
 // THIS IS THE PARSER INPUT
 
 block	    : '{' declaration* statement* '}';
@@ -81,4 +76,4 @@ BLOCKCOMMENTS   : '/*'( ~('/'|'*')|'/'~'*'|'*'~'/'|BLOCKCOMMENTS)* '*/' -> skip;
 
 //VERY SIMPLISTIC ERROR CHECK FOR THE LEXING PROCESS, THE OUTPUT GOES DIRECTLY TO THE TERMINAL
 //THIS IS WRONG!!!!
-ERR     : . { System.out.println("Invalid char: "+ getText()); lexicalErrors++; } -> channel(HIDDEN);
+ERR     : . { System.out.println("Invalid char: "+ getText());} -> channel(HIDDEN);
