@@ -1,0 +1,29 @@
+// Type Check
+
+/*
+Function type must match return type:
+    if the function is void at least one "return;" is needed
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 3 type errors:
+	Mismatching return types <function = IntTypeNode, body = BoolTypeNode>
+	Mismatching return types <function = IntTypeNode, body = VoidTypeNode>
+	Mismatching return types <function = VoidTypeNode, body = NullTypeNode>
+--------------------------------------------------------------------------
+*/
+
+{
+    int f() {
+       return true;
+    }
+
+    int g(){
+        return;
+    }
+
+    void h(){
+
+    }
+}

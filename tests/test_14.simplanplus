@@ -1,0 +1,24 @@
+// Type Check
+
+/*
+Void function can only be used as statements, not as exp
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 4 type errors:
+	cannot use void function as an exp
+	incompatible value for variable a
+	cannot use void function as an exp
+	incompatible type for print
+--------------------------------------------------------------------------
+*/
+
+{
+    void f() {
+       return;
+    }
+    int a = f();
+    print f();
+
+}

@@ -1,0 +1,26 @@
+// Type Check
+
+/*
+Function formal parameters must match in both type and number to actual parameters
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 4 type errors:
+	Wrong number of parameters in the invocation of f
+	Wrong number of parameters in the invocation of f
+	Wrong type for 2-th parameter in the invocation of f
+	Wrong type for 2-th parameter in the invocation of f
+--------------------------------------------------------------------------
+*/
+
+{
+    int f(int a, int b) {
+       return a+b;
+    }
+    f(1);
+    f(1,2,3);
+    f(1,false);
+    f(1, new int);
+
+}

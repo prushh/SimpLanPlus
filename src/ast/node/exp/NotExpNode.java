@@ -33,7 +33,7 @@ public class NotExpNode implements Node {
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
         Node t = this.exp.typeCheck(typeErr);
         if (!SimpLanPlusLib.isSubtype(t, new BoolTypeNode(0, Status.DECLARED)) || t.getPointLevel() != 0) {
-            typeErr.add(new SemanticError("incompatible types for operator -"));
+            typeErr.add(new SemanticError("incompatible types for operator !"));
         }
         return t;
     }

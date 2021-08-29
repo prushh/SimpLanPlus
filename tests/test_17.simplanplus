@@ -1,0 +1,40 @@
+// Type Check
+
+/*
+Function type must match return type:
+    if there is more than one return type, type check is passed only if all
+        return statements match in type
+    if-then-else branches which contains a return statement or a sequence of other
+        if-then-else branches with return statements counts too
+    if a if-then-else branch is a block and it has matching return types, then that counts too
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 2 type errors:
+	Mismatching return types
+	Mismatching return types
+--------------------------------------------------------------------------
+*/
+
+{
+    int f() {
+       return 1;
+       return true;
+    }
+
+    int h(){
+        if (true) return 1;
+        else {return 1;}
+        return;
+    }
+
+    // this passes type check
+    int g(){
+        return 1;
+        return 2;
+        return 3;
+        return 4;
+    }
+}
+

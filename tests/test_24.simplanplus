@@ -1,0 +1,47 @@
+// Type Check
+
+/*
+Binary expression can be only done between operands of same type
+    Some operations can be only performed between bool-bool/int-int
+
+    "+, -, *, /"    only admit int-int, returns int
+    "<, <=, >, >="  only admit int-int, returns bool
+    "&&, ||"        only admit bool-bool, returns bool
+    "==, !="        admit int-int, bool-bool and pointer(same type and level), returns bool
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 10 type errors:
+    incompatible types for binary operator &&
+	incompatible types for binary operator ||
+	incompatible types for binary operator <=
+	incompatible types for binary operator <
+	incompatible types for binary operator >=
+	incompatible types for binary operator ==
+	incompatible types for binary operator !=
+	incompatible types for binary operator +
+	incompatible types for binary operator -
+	incompatible types for binary operator /
+--------------------------------------------------------------------------
+*/
+
+{
+   print true && 1;                // wrong
+   print 10 || 1;                  // wrong
+   print true <= 1;                // wrong
+   print true < 1;                 // wrong
+   print true >= false;            // wrong
+   print 3 > 1;                    // correct
+   print true == 1;                // wrong
+   print true != 1;                // wrong
+   print true + 1;                 // wrong
+   print true - 1;                 // wrong
+   print true / false;             // wrong
+   print 1 * 10;                   // correct
+   print new int == new int;       // correct
+
+
+
+}
+

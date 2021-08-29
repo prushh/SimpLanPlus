@@ -1,0 +1,17 @@
+// Type Check
+
+/*
+Assigning a variable to another one of a different type causes a mismatching types error
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 1 type errors:
+	incompatible value for variable b
+--------------------------------------------------------------------------
+*/
+
+{
+    int a = 10;
+    bool b = a;
+}

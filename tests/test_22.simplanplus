@@ -1,0 +1,17 @@
+// Type Check
+
+/*
+Assinging a value to a pointer cause mismatching type error
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 1 type errors:
+	cannot assign variable or pointers of different type
+--------------------------------------------------------------------------
+*/
+
+{
+    ^int p = 10;
+}
+

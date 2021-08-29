@@ -1,0 +1,20 @@
+// Type Check
+
+/*
+A function cannot have pointer type
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 1 type errors:
+	Function can not have pointer type
+--------------------------------------------------------------------------
+*/
+
+{
+    ^int f() {
+        return 1;
+    }
+
+}
+

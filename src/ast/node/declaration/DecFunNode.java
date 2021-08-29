@@ -60,7 +60,7 @@ public class DecFunNode implements Node {
         Node bodyTmp = body.typeCheck(typeErr);
         if (this.type.getPointLevel() == 0) {
             if (!SimpLanPlusLib.isSubtype(this.type, bodyTmp)) {
-                typeErr.add(new SemanticError("Mismatching return types <function = " + this.type + ", body = " + bodyTmp + ">"));
+                typeErr.add(new SemanticError("Mismatching return types <function = " + this.type.getClass().getSimpleName() + ", body = " + bodyTmp.getClass().getSimpleName() + ">"));
             }
         } else {
             typeErr.add(new SemanticError("Function can not have pointer type"));

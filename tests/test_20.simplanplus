@@ -1,0 +1,32 @@
+// Type Check
+
+/*
+A function cannot return a pointer
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 2 type errors:
+	cannot return pointers
+	Mismatching return types <function = IntTypeNode, body = NullTypeNode> //error status for returning pointer
+--------------------------------------------------------------------------
+*/
+
+{
+    int f() {
+
+        ^int p = new int;
+        return p;
+
+    }
+
+    // this passes type check
+    int g() {
+
+        ^int p = new int;
+        return p^;
+
+    }
+
+}
+

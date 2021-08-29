@@ -1,0 +1,35 @@
+// Type Check
+
+/*
+If-then-else branches must be of matching type
+    if a if-then-else branch is a block and it has matching return
+        types, then that counts too
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 2 type errors:
+	Incompatible types in then else branches
+	Incompatible types in then else branches
+--------------------------------------------------------------------------
+*/
+
+{
+    int f() {
+
+        if (true) return 1;
+        else return;
+
+    }
+
+    int g() {
+
+        if (true) return 1;
+        else if (true) return 1;
+                     else if (true) return 1;
+                                  else return false;
+
+    }
+
+}
+

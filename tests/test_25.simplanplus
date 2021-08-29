@@ -1,0 +1,31 @@
+// Type Check
+
+/*
+Not operator accepts only bool  (not int pointers)
+Neg operator accepts only int   (not int pointers)
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 3 type errors:
+	incompatible types for operator -
+	incompatible types for operator !
+	incompatible types for operator -
+--------------------------------------------------------------------------
+*/
+
+{
+
+   int a = 10;
+   print !true;             // correct
+   print -a;                // correct
+   print -true;             // wrong
+   print !a;                // wrong
+   print - new int;         // wrong
+
+
+
+
+
+}
+

@@ -1,0 +1,24 @@
+// Type Check
+
+/*
+Assigning a function to a variable of a different type causes a mismatching types error
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 2 type errors:
+	incompatible value for variable a
+	incompatible value for variable b
+--------------------------------------------------------------------------
+*/
+
+{
+    int f() {
+       return 0;
+    }
+    bool g(){
+        return true;
+    }
+    int a = g();
+    bool b = f();
+}
