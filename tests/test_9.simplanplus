@@ -1,0 +1,16 @@
+// CheckSemantics -- Scope Analysis
+
+/*
+Trying to declare a variable with the same name as a formal parameter inside a function
+
+FAILS -- "DecVar a already declared"
+*/
+
+{
+
+    int f(int a){
+        int a;
+        return 0;
+    }
+
+}

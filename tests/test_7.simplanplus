@@ -1,0 +1,13 @@
+// CheckSemantics -- Scope Analysis
+
+/*
+Trying to declare a variable twice in the same block
+
+FAILS -- "DecVar a already declared"
+*/
+
+{
+    int a;
+    int a;
+
+}

@@ -1,0 +1,11 @@
+// CheckSemantics -- Scope Analysis
+
+/*
+Trying to use an undeclared function
+
+FAILS -- "Fun a not declared"
+*/
+
+{
+    print a();
+}

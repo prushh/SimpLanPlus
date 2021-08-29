@@ -1,0 +1,26 @@
+// CheckSemantics -- Scope Analysis
+
+/*
+Printing variables with same name declared in different blocks
+    correctly prints the most nested occurrence of that variable
+
+PASS -- Variables/functions can be accessed in nested block
+OUTPUT:
+--------------------------------------------------------------------------
+20
+20
+10
+--------------------------------------------------------------------------
+*/
+
+{
+    int a = 10;
+    {
+        int a = 20;
+            {
+                print a;
+            }
+        print a;
+    }
+    print a;
+}

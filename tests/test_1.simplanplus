@@ -1,0 +1,11 @@
+// CheckSemantics -- Scope Analysis
+
+/*
+Trying to use an undeclared variable
+
+FAILS -- "Id a not declared"
+*/
+
+{
+    print a;
+}

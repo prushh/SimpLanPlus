@@ -1,0 +1,21 @@
+// CheckSemantics -- Scope Analysis
+
+/*
+Trying to perform a recursive call
+
+PASS -- Functions can be recursive
+OUTPUT:
+--------------------------------------------------------------------------
+0
+--------------------------------------------------------------------------
+*/
+
+{
+    int f(int a) {
+        if (a == 0) return a;
+        return f(a-1);
+    }
+
+    print f(3);
+
+}

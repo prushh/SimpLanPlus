@@ -1,0 +1,25 @@
+// CheckSemantics -- Scope Analysis
+
+/*
+Trying to access a global variable/function from a nested block
+
+PASS -- Variables/functions can be accessed in nested block
+OUTPUT:
+--------------------------------------------------------------------------
+10
+1
+--------------------------------------------------------------------------
+*/
+
+{
+    int a = 10;
+    int f() {
+       return 1;
+    }
+
+    {
+        print a;
+        print f();
+    }
+
+}

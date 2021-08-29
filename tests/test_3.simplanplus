@@ -1,0 +1,16 @@
+// CheckSemantics -- Scope Analysis
+
+/*
+Trying to use a global variable inside function scope
+
+FAILS -- "Id a not declared"
+*/
+
+{
+    int a = 10;
+
+    int f(){
+        print a;
+    }
+
+}
