@@ -197,7 +197,7 @@ public class CallNode implements Node {
                         if (idx != jdx) {
                             Status prev = values.get(idx);
                             Status foll = values.get(jdx);
-                            maxLocal = SimpLanPlusLib.parStatus(prev, foll);
+                            maxLocal = SimpLanPlusLib.maxStatus(SimpLanPlusLib.parStatus(prev, foll), maxLocal);
 
                             //values.remove(jdx);
                             //values.add(maxLocal);
@@ -247,6 +247,7 @@ public class CallNode implements Node {
         }
         builder.append("jal __");
         builder.append(this.ID);
+        builder.append(((ArrowTypeNode) this.entry.getType()).getFunUniqueLabel());
         builder.append("_\n");
         return builder.toString();
     }

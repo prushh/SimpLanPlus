@@ -1,0 +1,32 @@
+// Effects Analysis
+
+/*
+Aliasing example, if a function which can have 2 or more pointers as formal parametes
+    results in having them canceled, there is no problem until the corresponding
+    actual parameter of that function's invocation are alias. If so, raise an aliasing error
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 1 effect errors:
+	Aliasing error in function call f on pointer: p
+--------------------------------------------------------------------------
+*/
+
+{
+    ^int p = new int;
+    ^int q = new int;
+
+    void f(^int t1, ^int t2, ^int t3, ^int t4, ^int t5){
+        delete t1;
+        delete t2;
+        delete t3;
+        delete t4;
+        return;
+    }
+
+    f(p, q, p, p, q);       // p gives an aliasing error since it's deleted
+                            //    more than once
+}
+
+

@@ -58,7 +58,7 @@ public class DeletionNode implements Node {
         env.symTable.get(tmpEntry.getNestinglevel()).replace(ID, newEntry);
 
         if (deletionStatus == Status.ERROR) {
-            res.add(new SemanticError("Cannot delete an already deleted variable"));
+            res.add(new SemanticError("Cannot delete an already deleted pointer"));
         }
 
         // TODO considerare state dell'exp su nodo return

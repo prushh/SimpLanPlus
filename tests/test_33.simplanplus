@@ -1,0 +1,27 @@
+// Effects Analysis
+
+/*
+Effects are propagated to the nearest id with the same name when
+    operations are performed in nested blocks
+
+Pass --
+OUTPUT:
+--------------------------------------------------------------------------
+100
+--------------------------------------------------------------------------
+*/
+
+{
+    ^int p = new int;
+    p^ = 100;
+    {
+        ^int p = new int;
+        {
+           delete p;
+        }
+        // print p^;             // this would cause an error
+    }
+    print p^;
+}
+
+

@@ -1,0 +1,19 @@
+// Type Check
+
+/*
+Dereferencing a initialized pointer too many times is forbidden
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 2 type errors:
+	too many dereferencing operations
+	cannot assign variable or pointers of different type
+--------------------------------------------------------------------------
+*/
+
+{
+    ^^int p = new ^int;
+    p^^^ = 10;
+}
+

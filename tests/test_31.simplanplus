@@ -1,0 +1,24 @@
+// Effects Analysis
+
+/*
+Deleted pointers can be reinitialized, then they can be deleted again.
+
+Pass --
+OUTPUT:
+--------------------------------------------------------------------------
+0
+1
+--------------------------------------------------------------------------
+*/
+
+{
+    ^int p;
+    delete p;
+    p = new int;
+    print (p);          // prints the pointed cell number from heap
+    delete p;           // that cell is no longer available
+    p = new int;        // allocate space for p in the next cell
+    print (p);          // prints the pointed cell number from heap
+}
+
+

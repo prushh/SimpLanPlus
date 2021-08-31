@@ -16,6 +16,6 @@ You had: 2 type errors:
     ^^int p = new int;                    //wrong
     ^^int q = new ^int; /                 /correct
     ^^^^^^^^bool r = new ^^^^^^^bool;     //correct
-    ^^int s = r;                         //wrong
+    ^^int s = r;                          //wrong
 }
 

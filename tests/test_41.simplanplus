@@ -1,0 +1,45 @@
+// Interpreter Behavior
+
+/*
+Multiple function with same name in different nested blocks,
+    using an incremental unique label for each function, even if they
+    have same ID.
+    Invoking a function --> jump to the right scope
+
+Pass --
+OUTPUT:
+--------------------------------------------------------------------------
+10
+20
+10
+30
+10
+--------------------------------------------------------------------------
+*/
+
+{
+    int f(int n){
+        return n;
+    }
+
+    print f(10);
+
+    {
+        int f(int n){
+            return n * 2;
+        }
+        print f(10);
+    }
+
+    print f(10);
+
+    {
+        int f(int n){
+            return n * 3;
+        }
+        print f(10);
+    }
+
+    print f(10);
+}
+

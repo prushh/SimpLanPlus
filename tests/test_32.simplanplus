@@ -1,0 +1,26 @@
+// Effects Analysis
+
+/*
+Function effects are propagated to global pointers
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 1 effect errors:
+	Pointer --p-- has been deleted
+--------------------------------------------------------------------------
+*/
+
+{
+    ^int p = new int;
+    void f(^int p){
+        delete p;
+        return;
+    }
+
+    print p;
+    f(p);
+    print p;
+}
+
+

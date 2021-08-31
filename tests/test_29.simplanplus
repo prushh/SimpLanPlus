@@ -1,0 +1,27 @@
+// Effects Analysis
+
+/*
+Dereferencing a non-initialized pointer is forbidden.
+Dereferencing a deleted pointer is forbidden.
+
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 2 effect errors:
+	Id --p-- has not been initialized
+	Id --q-- has been deleted
+--------------------------------------------------------------------------
+*/
+
+{
+    ^int p;
+    int a = p^;
+
+    bool b;
+    ^bool q = new bool;
+    delete q;
+    b = q^;
+}
+
+

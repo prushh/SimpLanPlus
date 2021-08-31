@@ -1,0 +1,28 @@
+// Effects Analysis
+
+/*
+Trying to use a declared but not assigned variable as an exp.
+    (Also in nested blocks)
+
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 3 effect errors:
+	Id --a-- has not been initialized
+	Id --a-- has returned an error status
+	Id --a-- has returned an error status
+--------------------------------------------------------------------------
+*/
+
+{
+    int a;                  // OK
+    int b = a;              // 	Id --a-- has not been initialized
+                            //      a.status is set to error
+    {
+        int b = a;          //	Id --a-- has returned an error status
+        int a = a;          //	Id --a-- has returned an error status
+    }
+}
+
+

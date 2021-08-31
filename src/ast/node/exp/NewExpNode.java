@@ -50,7 +50,7 @@ public class NewExpNode implements Node {
 
         StringBuilder builder = new StringBuilder();
         builder.append("addi $hp 1\n");
-        builder.append("si -1 $hp\n");
+        builder.append("si 0 $hp\n");
         for (int idx = 0; idx < pointLevel; idx++) {
             builder.append("lhp\n");
             builder.append("addi $hp 1\n");

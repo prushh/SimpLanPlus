@@ -1,0 +1,30 @@
+// Interpreter Behavior
+
+/*
+Recursive function behavior,
+ called from global scope and inner function scope
+
+Pass --
+OUTPUT:
+--------------------------------------------------------------------------
+120
+--------------------------------------------------------------------------
+*/
+
+{
+    int fib(int n){
+
+        if (n <= 1)
+            return n;
+
+        return fib(n-1) + fib (n-2);
+
+    }
+    int g (int a, int b){
+        int c = 10;
+        return a + fib(b) + c;
+    }
+
+    print g(fib(10), 10);
+}
+

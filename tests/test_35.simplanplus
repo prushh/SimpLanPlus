@@ -1,0 +1,37 @@
+// Effects Analysis
+
+/*
+Actual parameters of a call function can be calls, hence they can modify global variables'
+    status. They are evaluated sequentially, and after that, if not all variables among
+    actual parameters are not "Status.Assigned", it raises an error.
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 3 effect errors:
+	Pointer --p-- has been deleted
+	Error in accessing id --p--
+	Cannot pass a deleted pointer as an actual parameter
+--------------------------------------------------------------------------
+*/
+
+{
+    ^int p = new int;
+    ^int q = new int;
+
+    int f(^int t){
+        delete t;
+        return 0;
+    }
+    int g(int a, ^int t, int b){
+        return a + t^ + b;
+    }
+
+    print g(f(p), p, 1);        // 	Pointer --p-- has been deleted
+                                // 	Error in accessing id --p--
+    print g(1, q, f(q));        // 	Cannot pass a deleted pointer as an actual parameter
+
+
+}
+
+

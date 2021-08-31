@@ -19,6 +19,7 @@ public class DecFunNode implements Node {
     private Node type;
     private ArrayList<ArgNode> args;
     private Node body;
+    private int funUniqueLabel;
 
     public DecFunNode(String ID, Node type, Node body) {
         this.ID = ID;
@@ -228,6 +229,7 @@ public class DecFunNode implements Node {
                 .append("\n")
                 .append("__")
                 .append(this.ID)
+                .append(funUniqueLabel)
                 .append("_:\n")
                 .append("cal\n")
                 .append("push $al\n")
@@ -305,6 +307,8 @@ public class DecFunNode implements Node {
             }
 
             entry.addType(new ArrowTypeNode(args, type));
+
+            this.funUniqueLabel = ((ArrowTypeNode) entry.getType()).getFunUniqueLabel();
 
             funEnv.offset = -2;
 

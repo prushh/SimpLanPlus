@@ -2,10 +2,7 @@ package ast.node.type;
 
 import ast.Node;
 import ast.node.other.ArgNode;
-import util.CGenEnv;
-import util.Environment;
-import util.SemanticError;
-import util.Status;
+import util.*;
 
 import java.util.ArrayList;
 
@@ -13,10 +10,12 @@ public class ArrowTypeNode implements Node {
 
     private ArrayList<ArgNode> args;
     private Node ret;
+    private int funUniqueLabel;
 
     public ArrowTypeNode(ArrayList<ArgNode> args, Node ret) {
         this.args = args;
         this.ret = ret;
+        this.funUniqueLabel = SimpLanPlusLib.getUniqueLabel();
     }
 
     public Node getRet() { //
@@ -70,5 +69,9 @@ public class ArrowTypeNode implements Node {
     @Override
     public int getPointLevel() {
         return 0;
+    }
+
+    public int getFunUniqueLabel() {
+        return funUniqueLabel;
     }
 }

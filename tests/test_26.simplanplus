@@ -1,0 +1,26 @@
+// Type Check
+
+/*
+Function calls can be used as operands, and are considered as
+    int/bool types, can cause mismatching type errors
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 2 type errors:
+	incompatible types for binary operator &&
+	incompatible type for print         // && among int returns NullType, not printable
+--------------------------------------------------------------------------
+*/
+
+{
+    int f() {
+        return 1;
+    }
+    int g(){
+        return 10;
+    }
+
+    print (f() && g());
+}
+

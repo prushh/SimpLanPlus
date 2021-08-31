@@ -1,0 +1,27 @@
+// Effects Analysis
+
+/*
+A deeper aliasing example, here we check if changes affecting a pointer
+    and its dereference raise any errors
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 1 effect errors:
+	Aliasing error in function call f on pointer: p
+--------------------------------------------------------------------------
+*/
+
+{
+    ^^int p = new ^int;
+
+    void f(^^int t1, ^int t2){
+        delete t1;
+        delete t2;
+        return;
+    }
+
+    f(p, p^);
+}
+
+

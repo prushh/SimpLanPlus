@@ -57,6 +57,9 @@ public class IteNode implements Node {
         Node t = th.typeCheck(typeErr);
         if (el != null) {
             Node e = el.typeCheck(typeErr);
+            if (el instanceof IteNode) {
+                this.isElNull = ((IteNode) el).getIsElNull() || this.isElNull;
+            }
             if (SimpLanPlusLib.isSubtype(t, e))
                 return e;
             typeErr.add(new SemanticError("Incompatible types in then else branches"));

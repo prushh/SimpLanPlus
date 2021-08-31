@@ -1,0 +1,28 @@
+// Effects Analysis
+
+/*
+If then else branches' operations on variable change a variable status to
+    the max between the two branches
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 1 effect errors:
+	Pointer --p-- has been deleted
+--------------------------------------------------------------------------
+*/
+
+{
+    ^int p = new int;
+    if (true)
+        p^ = 10;
+    else
+        if (false)
+            p^ = 100;
+        else
+            delete p;
+
+    print p;
+}
+
+

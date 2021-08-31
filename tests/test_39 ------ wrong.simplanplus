@@ -1,0 +1,32 @@
+// Interpreter Behavior
+
+/*
+Recursive function behavior
+
+Pass --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 1 effect errors:
+	Aliasing error in function call f on pointer: p
+--------------------------------------------------------------------------
+*/
+
+{
+    int fib(int n){
+
+        if (n <= 1){
+            return n;
+        }
+
+        //else {
+        //    return n;
+        //}
+
+        return fib(n-1) + fib (n-2);
+
+    }
+    int a = 10;
+
+    print fib(10);
+}
+

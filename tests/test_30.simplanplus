@@ -1,0 +1,21 @@
+// Effects Analysis
+
+/*
+Cannot delete the same pointer twice or more
+
+
+Fail --
+OUTPUT:
+--------------------------------------------------------------------------
+You had: 1 effect errors:
+	Cannot delete an already deleted pointer
+--------------------------------------------------------------------------
+*/
+
+{
+    ^int p;
+    delete p;
+    delete p;
+}
+
+

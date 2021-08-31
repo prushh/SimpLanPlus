@@ -1,17 +1,27 @@
 // Type Check
 
 /*
-Assinging a value to a pointer cause mismatching type error
+Assigning a value to a pointer cause mismatching type error.
+Deleting a non-pointer variable is forbidden.
+Initializing a non-pointer variable with "new" is forbidden;
 
 Fail --
 OUTPUT:
 --------------------------------------------------------------------------
-You had: 1 type errors:
+You had: 3 type errors:
 	cannot assign variable or pointers of different type
+	cannot assign variable or pointers of different type
+	cannot delete a non pointer id
 --------------------------------------------------------------------------
 */
 
 {
     ^int p = 10;
+
+    int b = new int;
+
+    int a = 100;
+    delete a;
+
 }
 
