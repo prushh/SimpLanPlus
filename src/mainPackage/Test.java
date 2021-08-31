@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class Test {
     public static void main(String[] args) throws Exception {
 
-        String fileName = "tests/test_41.simplanplus";
+        String fileName = "tests/test_42 ---- wrong.simplanplus";
 
         // String fileName = "./examples/example33.simplan";
 

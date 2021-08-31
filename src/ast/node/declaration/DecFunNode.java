@@ -87,7 +87,9 @@ public class DecFunNode implements Node {
         while (getFunEnv >= 0) {
             for (Map.Entry<String, STentry> funEntry : env.symTable.get(getFunEnv).entrySet()) {
                 if (funEntry.getValue().getType() instanceof ArrowTypeNode) {
-                    hmFun.put(funEntry.getKey(), funEntry.getValue());
+                    if (!hmFun.containsKey(funEntry.getKey())) {
+                        hmFun.put(funEntry.getKey(), funEntry.getValue());
+                    }
                 }
             }
             getFunEnv--;
