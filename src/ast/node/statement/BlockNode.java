@@ -116,7 +116,7 @@ public class BlockNode implements Node {
         StringBuilder builder = new StringBuilder();
 
         Label blockLabel = new Label();
-        if (!isBlockFunction &&!isBlockIte) {
+        if (!isBlockFunction && !isBlockIte) {
             env.incrementNestingLevel();
             env.setLabel(blockLabel.getLabel());
             builder.append("cal\n");
@@ -131,6 +131,7 @@ public class BlockNode implements Node {
         for (Node stm : stmList) {
             builder.append(stm.codeGeneration(env));
         }
+
 
         if (!isBlockFunction&&!isBlockIte) {
             env.decrementNestingLevel();

@@ -136,13 +136,14 @@ public class CallNode implements Node {
             }
         }
 
+        /*
         for (DerExpNode arg : pointerList) {
             int tmpNest = env.nestingLevel;
             while (env.symTable.get(tmpNest).get(arg.getLhsNode().getID()) == null) {
                 tmpNest--;
             }
         }
-
+        */
 
         int tmpArrow = env.nestingLevel;
         while (env.symTable.get(tmpArrow).get(this.ID) == null) {
@@ -180,6 +181,7 @@ public class CallNode implements Node {
                     tmp.add(seqFinal);
                     aliasHsm.put(idLhs, tmp);
                 }
+
 
                 // Update[/sigma', /sigma'']
                 env.symTable.get(tmpNest).get(idLhs).getType().setStatus(SimpLanPlusLib.maxStatus(seqFinal, argStatus));

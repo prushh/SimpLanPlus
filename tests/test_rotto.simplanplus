@@ -1,0 +1,12 @@
+{
+    int f(int a){
+        if (true){
+            bool a = false;
+            return f(a);
+        }
+        return 1;
+    }
+
+    print f(10);
+
+}

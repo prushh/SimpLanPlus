@@ -23,9 +23,8 @@ import java.util.ArrayList;
 public class Test {
     public static void main(String[] args) throws Exception {
 
-        String fileName = "tests/test_41.simplanplus";
-
-        // String fileName = "./examples/example33.simplan";
+        //String fileName = "tests/test_rotto.simplanplus";
+        String fileName = "prova.simplanplus";
 
         CharStream input = CharStreams.fromFileName(fileName);
         SimpLanPlusLexer lexer = new SimpLanPlusLexer(input);
@@ -50,9 +49,8 @@ public class Test {
             for (SemanticError e : err)
                 System.out.println("\t" + e);
         } else {
-            System.out.println("Visualizing AST...");
-            System.out.println(ast.toPrint(""));
-
+            System.out.println("Scope checking ok!");
+            System.out.println("------------------");
             ArrayList<SemanticError> typeErr = new ArrayList<SemanticError>();
             Node type = ast.typeCheck(typeErr); // type-checking bottom-up
             if (typeErr.size() > 0) {
@@ -61,7 +59,8 @@ public class Test {
                     System.out.println("\t" + e);
 
             } else {
-                System.out.println(type.toPrint("Type checking ok! Type of the program is: "));
+                System.out.println("Type checking ok!");
+                System.out.println("------------------");
 
                 Environment sigma = new Environment();
 
@@ -73,7 +72,13 @@ public class Test {
                         System.out.println("\t" + e);
                 } else {
 
-                    System.out.println(type.toPrint("Effect checking ok! Type of the program is: "));
+                    System.out.println("Effect checking ok!");
+                    System.out.println("------------------");
+
+                    // AST visualization
+                    System.out.println("Visualizing AST...\n");
+                    System.out.println(ast.toPrint(""));
+                    System.out.println("------------------");
 
                     // CODE GENERATION prova.SimpLan.asm
                     String code = ast.codeGeneration(new CGenEnv());
