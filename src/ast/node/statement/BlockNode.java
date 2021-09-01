@@ -116,9 +116,12 @@ public class BlockNode implements Node {
         StringBuilder builder = new StringBuilder();
 
         Label blockLabel = new Label();
-        if (!isBlockFunction && !isBlockIte) {
+        if (!isBlockFunction) {
             env.incrementNestingLevel();
-            env.setLabel(blockLabel.getLabel());
+            if(!isBlockIte){
+                env.setLabel(blockLabel.getLabel());
+            }
+
             builder.append("cal\n");
             builder.append("push $al\n");
             builder.append("cfp\n");
@@ -133,11 +136,13 @@ public class BlockNode implements Node {
         }
 
 
-        if (!isBlockFunction&&!isBlockIte) {
+        if (!isBlockFunction) {
             env.decrementNestingLevel();
+            if(!isBlockIte){
+                builder.append(blockLabel.getLabel());
+                builder.append(":\n");
+            }
 
-            builder.append(blockLabel.getLabel());
-            builder.append(":\n");
 
             StringBuilder popLocal = new StringBuilder();
             for (int i = 0; i < this.decList.size(); i++) {
@@ -149,7 +154,10 @@ public class BlockNode implements Node {
             // pop w.r.t push in at line 120
             builder.append("lw $fp $fp\n");
             builder.append("pop\n");
-            env.removeLabel();
+            if(!isBlockIte){
+                env.removeLabel();
+            }
+
 
             if (env.getNestingLevel() == -1) {
                 builder.append("halt\n");
