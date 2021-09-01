@@ -1,0 +1,34 @@
+// Interpreter Behavior
+
+/*
+Having multiple occurrence of nested function with same Id doens't affect
+    more nested function/blocks when invoking previously defined functions.
+Function Shadowing
+
+Pass --
+OUTPUT:
+--------------------------------------------------------------------------
+20
+20
+--------------------------------------------------------------------------
+*/
+
+{
+    int f(int n){           // label = __f0_
+        return n;
+    }
+    {
+        int f(int n){           // label = __f1_
+            return n * 2;
+        }
+        {
+            int g(){                // label = __g2
+                return f(10);       // jump to __f1_
+            }
+            print f(10);            // refers to __f1_
+            print g();              // refers to __g2_ --> __f1_
+
+        }
+    }
+}
+

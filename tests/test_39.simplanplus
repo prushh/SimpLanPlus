@@ -1,13 +1,13 @@
 // Interpreter Behavior
 
 /*
-Recursive function behavior
+Recursive function behavior : Fibonacci
+    This time we test the base case inside a nested "then" block
 
 Pass --
 OUTPUT:
 --------------------------------------------------------------------------
-You had: 1 effect errors:
-	Aliasing error in function call f on pointer: p
+55
 --------------------------------------------------------------------------
 */
 
@@ -17,10 +17,6 @@ You had: 1 effect errors:
         if (n <= 1){
             return n;
         }
-
-        //else {
-        //    return n;
-        //}
 
         return fib(n-1) + fib (n-2);
 

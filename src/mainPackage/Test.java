@@ -4,7 +4,8 @@ import Interpreter.ExecuteVM;
 import ast.Node;
 import ast.SVMVisitorImpl;
 import ast.SimpLanPlusVisitorImpl;
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import parser.SVMLexer;
 import parser.SVMParser;
@@ -16,19 +17,17 @@ import util.SemanticError;
 import util.ThrowingErrorListener;
 
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class Test {
     public static void main(String[] args) throws Exception {
 
-        String fileName = "tests/test_42 ---- wrong.simplanplus";
+        String fileName = "tests/test_41.simplanplus";
 
         // String fileName = "./examples/example33.simplan";
 
-        FileInputStream is = new FileInputStream(fileName);
-        ANTLRInputStream input = new ANTLRInputStream(is);
+        CharStream input = CharStreams.fromFileName(fileName);
         SimpLanPlusLexer lexer = new SimpLanPlusLexer(input);
         //ThrowingErrorListener errorListener = new ThrowingErrorListener();
         lexer.removeErrorListeners();
@@ -83,13 +82,10 @@ public class Test {
                     out.close();
                     System.out.println("Code generated! Assembling and running generated code.");
 
-                    FileInputStream isASM = new FileInputStream(fileName + ".asm");
-                    ANTLRInputStream inputASM = new ANTLRInputStream(isASM);
+                    CharStream inputASM = CharStreams.fromFileName(fileName + ".asm");
                     SVMLexer lexerASM = new SVMLexer(inputASM);
                     CommonTokenStream tokensASM = new CommonTokenStream(lexerASM);
                     SVMParser parserASM = new SVMParser(tokensASM);
-
-                    // parserASM.assembly();
 
                     SVMVisitorImpl visitorSVM = new SVMVisitorImpl();
                     visitorSVM.visit(parserASM.assembly());
