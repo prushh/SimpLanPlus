@@ -110,7 +110,10 @@ public class CallNode implements Node {
                 while (((BaseExpNode) tmp).getExp() instanceof BaseExpNode) {
                     tmp = ((BaseExpNode) tmp).getExp();
                 }
+                tmp = ((BaseExpNode) tmp).getExp();
             }
+            args.set(args.indexOf(arg), tmp);
+
             if (tmp instanceof DerExpNode) {
                 DerExpNode tmpDerNode = (DerExpNode) tmp;
                 int tmpNest = env.nestingLevel;

@@ -2,6 +2,7 @@ package ast.node.statement;
 
 import ast.Node;
 import ast.STentry;
+import ast.node.exp.BaseExpNode;
 import ast.node.exp.NewExpNode;
 import ast.node.other.LhsNode;
 import ast.node.type.NullTypeNode;
@@ -55,29 +56,33 @@ public class AsgNode implements Node {
     public ArrayList<SemanticError> checkEffects(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<>();
 
-        res.addAll(lhs.checkEffects(env));
-
         int idLevel = env.nestingLevel;
         STentry tmpEntry = null;
 
         while (idLevel >= 0 && tmpEntry == null) {
             tmpEntry = (env.symTable.get(idLevel--)).get(lhs.getID());
         }
-
-        if (exp != null) {
-            if (SimpLanPlusLib.isSubtype(exp, new NewExpNode(new NullTypeNode(Status.DECLARED)))) {
-                //  Case lhs.status == declared, bisognerebbe fare una seq tra declared e readwrite, quindi otteniamo readwrite
-                //  Case lhs.status == readwrite, non succede niente
-                //  Case lhs.status == deleted, riassegno una cella di memoria a lhs, torno a readwrite
-                tmpEntry.getType().setStatus(Status.READWRITE);
-            } else {
-                res.addAll(exp.checkEffects(env));
-                Status newlhsAsg = Status.READWRITE;
-                newlhsAsg = SimpLanPlusLib.seqStatus(tmpEntry.getType().getStatus(), newlhsAsg);
-                tmpEntry.getType().setStatus(newlhsAsg);
+        Node tmp = this.exp;
+        if (exp instanceof BaseExpNode) {
+            while (((BaseExpNode) tmp).getExp() instanceof BaseExpNode) {
+                tmp = ((BaseExpNode) tmp).getExp();
             }
-            env.symTable.get(tmpEntry.getNestinglevel()).replace(lhs.getID(), tmpEntry);
+            tmp = ((BaseExpNode) tmp).getExp();
         }
+        if (tmp instanceof NewExpNode) {
+            //  Case lhs.status == declared, bisognerebbe fare una seq tra declared e readwrite, quindi otteniamo readwrite
+            //  Case lhs.status == readwrite, non succede niente
+            //  Case lhs.status == deleted, riassegno una cella di memoria a lhs, torno a readwrite
+            tmpEntry.getType().setStatus(Status.READWRITE);
+        } else {
+            res.addAll(exp.checkEffects(env));
+            res.addAll(lhs.checkEffects(env));
+            Status newlhsAsg = Status.READWRITE;
+            newlhsAsg = SimpLanPlusLib.seqStatus(tmpEntry.getType().getStatus(), newlhsAsg);
+            tmpEntry.getType().setStatus(newlhsAsg);
+        }
+        env.symTable.get(tmpEntry.getNestinglevel()).replace(lhs.getID(), tmpEntry);
+
 
         return res;
     }
@@ -97,10 +102,8 @@ public class AsgNode implements Node {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<>();
 
+        res.addAll(exp.checkSemantics(env));
         res.addAll(lhs.checkSemantics(env));
-        if (exp != null) {
-            res.addAll(exp.checkSemantics(env));
-        }
 
         return res;
     }

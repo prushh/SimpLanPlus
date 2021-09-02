@@ -116,7 +116,10 @@ public class LhsNode implements Node {
                     (this.pointLevel > 0) &&
                     tmpEntry.getType().getPointLevel() > 0
             ) {
-                res.add(new SemanticError("Pointer --" + ID + "-- cannot be dereferenced since it has still not been assigned"));
+                if (tmpEntry.getType().getStatus() == Status.DECLARED)
+                    res.add(new SemanticError("Pointer --" + ID + "-- cannot be dereferenced since it has still not been assigned"));
+                else
+                    res.add(new SemanticError("Pointer --" + ID + "-- cannot be dereferenced since it has been deleted"));
                 tmpEntry.getType().setStatus(Status.ERROR);
                 env.symTable.get(tmpEntry.getNestinglevel()).replace(this.ID, tmpEntry);
             }

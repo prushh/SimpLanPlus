@@ -139,8 +139,8 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public AsgNode visitAssignment(AssignmentContext ctx) {
-        LhsNode lhs = visitLhs(ctx.lhs());
         Node exp = visit(ctx.exp());
+        LhsNode lhs = visitLhs(ctx.lhs());
 
         return new AsgNode(lhs, exp);
     }
