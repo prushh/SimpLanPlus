@@ -1,5 +1,10 @@
 package ast;
 
+/**
+ * This is an entry of the symbol table. It will be inserted in Hash Maps during generation
+ * of environments.
+ */
+
 public class STentry {
 
     private int nl;
