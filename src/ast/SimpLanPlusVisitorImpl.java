@@ -15,6 +15,11 @@ import util.Status;
 
 import java.util.ArrayList;
 
+/**
+ * In this class standard visit of the AST is modified so that is possible to create nodes
+ * of the ast package.
+ */
+
 public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
@@ -53,6 +58,12 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitType(TypeContext ctx) {
+    	/*
+    	 * Since we have also pointer type, when we visit a type node we must check the number
+    	 * of ^. We can have both integer and boolean pointers if the node contains the text 'int'
+    	 * we must delete 3 chars so that the length of the resulting string will be the point 
+    	 * level.
+    	 */
         int pointLevel;
 
         if (ctx.getText().contains("int")) {
@@ -68,26 +79,34 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public DecFunNode visitDecFun(DecFunContext ctx) {
-
+    	
+    	// Get function identifier
         String id = ctx.ID().getText();
+        
+        // Get function return type
         TypeContext tmp = ctx.type();
+        
         Node type;
         if (tmp != null)
             type = visit(ctx.type());
         else
             type = new VoidTypeNode(Status.DECLARED);
+        
         DecFunNode res;
 
         BlockNode block = visitBlock(ctx.block());
+        // Set flag to distinguish between inline block and function block
         block.setBlockFunction();
-        for (Node st : block.getStmList()) {
+        for (Node st : block.getStmList()) {        	
+        	// Set flag to mark return node of a function
             if (st instanceof RetNode) {
                 ((RetNode) st).setFunctionReturn(block.getBlockFunction());
             }
         }
 
         res = new DecFunNode(id, type, block);
-
+        
+        // Load formal parameters in the new DecFunNode
         for (ArgContext vc : ctx.arg()) {
             id = vc.ID().getText();
             type = visit(vc.type());
@@ -128,6 +147,11 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public LhsNode visitLhs(LhsContext ctx) {
+    	
+    	/* Since we can have pointers, we count ^ as in visitType, but here ^ are on the right
+    	* of the variable. We will save this information in the LhsNode so that deuring semantic
+    	* analysis we can verify the usage of pointers.
+    	*/
         int nestLev;
         if (ctx.getText().contains("^")) {
             nestLev = ctx.getText().length() - ctx.getText().indexOf("^");
@@ -148,6 +172,8 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     public RetNode visitRet(RetContext ctx) {
         Node exp = null;
         ExpContext tmp = ctx.exp();
+        
+        // Void functions need return ; at the end so exp could be null.
         if (tmp != null) {
             exp = visit(tmp);
         }
@@ -159,9 +185,16 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     public IteNode visitIte(IteContext ctx) {
         Node condExp = visit(ctx.exp());
         Node thenExp = visit(ctx.statement(0));
+        
+        /*
+         * Set flag so that during code generation is possible to make return from if-then-else
+         * statements nested in functions and inline blocks correctly.
+         */
+        
         if (thenExp instanceof BlockNode) {
             ((BlockNode) thenExp).setBlockIte();
         }
+        
         Node elseExp = null;
 
         if (ctx.statement().size() > 1) {
@@ -177,7 +210,8 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override
     public CallNode visitCall(CallContext ctx) {
         ArrayList<Node> args = new ArrayList<>();
-
+        
+        // Load actual parameters in the new CallNode
         for (ExpContext exp : ctx.exp())
             args.add(visit(exp));
 
@@ -220,7 +254,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     public CallExpNode visitCallExp(CallExpContext ctx) {
         CallNode call = visitCall(ctx.call());
         call.setCallExp();
-
         return new CallExpNode(call);
     }
 
