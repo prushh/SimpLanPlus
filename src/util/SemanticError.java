@@ -1,5 +1,9 @@
 package util;
 
+/**
+ * String error appended to returned lists of checkSemantics, typeCheck or checkEffects.
+ */
+
 public class SemanticError {
 	
 	public final String msg;

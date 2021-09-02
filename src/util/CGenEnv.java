@@ -2,6 +2,11 @@ package util;
 
 import java.util.ArrayList;
 
+/**
+ * Minimal version of symbol table. It stores just current nesting level in order to perform
+ * look up with access link and a list of labels for jump instructions.
+ */
+
 public class CGenEnv {
 
     private int nestingLevel = -1;

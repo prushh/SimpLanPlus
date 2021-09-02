@@ -5,6 +5,9 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
+/**
+ * Minimal error listener for lexical and syntactical analysis.
+ */
 public class ThrowingErrorListener extends BaseErrorListener {
 
 	public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();

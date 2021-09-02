@@ -5,6 +5,10 @@ import java.util.HashMap;
 
 import ast.STentry;
 
+/**
+ * Symbol table implementation as a list of hash maps.
+ */
+
 public class Environment {
 	
 	//THESE VARIABLES SHOULDN'T BE PUBLIC
