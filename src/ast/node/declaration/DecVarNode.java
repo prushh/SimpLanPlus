@@ -56,6 +56,7 @@ public class DecVarNode implements Node {
 			if (!(SimpLanPlusLib.isSubtype(l, r))) {
 				typeErr.add(new SemanticError("incompatible value for variable " + this.ID));
 			} else {
+				// Need one last check because we also have pointer types
 				if (l.getPointLevel() != r.getPointLevel()) {
 					typeErr.add(new SemanticError("cannot assign variable or pointers of different type"));
 				}
