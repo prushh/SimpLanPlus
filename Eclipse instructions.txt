@@ -1,0 +1,46 @@
+Istruzioni per l'esecuzione del progetto su Eclipse:
+
+1. Creare un nuovo progetto Java (File/New/Java Project) 
+	a. dargli il nome (SENZA SUFFISSI) "SimpLanPlus"
+	b. togliere il checkbox "Use default location"
+	c. fare "Browse..." e selezionare la cartella "Java sources"
+	d. Nella finestra che compare, premere su "New Folder" 
+           (chiamare il Folder col nome del progetto)
+	e. premere "Open"
+	f. premere "Finish"
+
+2. Andare sul progetto creato/src tasto destro/New/Package 
+	a. creare package "parser"
+	
+3. Andare in "parser"/tasto destro/New/Other/General/File 
+	a. creare file, SimpLanPlus.g4 (SUFFISSO!)
+
+4. Andare sul progetto "Nome" e click destro/Properties/ANTLR4/Tool
+	a. Cliccare su "Enable project specific settings"
+	b. Caricare la versione di ANTLR >= 4.6 e selezionarla
+	c. in "Options" scrivere "./src" (SENZA DOPPI APICI)
+	d. rimuovere lo spunto da "Generate a parse tree listener"
+	e. mettere lo spunto su "Generate parse tree visitors"
+	f. fare "Apply" e "OK"
+
+5. Andare in un altro progetto, copiare la cartella "lib" nel progetto
+Nome
+	a. aprire lib
+	b. cliccare col tasto destro su antlr-4.9.2-complete.jar
+	c. cliccare su Build Path/add to Build Path
+
+6. Copiare le directories all'interno di "src" nel progetto condiviso al link
+"----" al posto della cartella "parser" appena creata.
+
+7. Dal package explorer di Eclipse, click destro sul progetto "SimpLanPlus"
+	a. Cliccare su "Refresh" (ora tutti i package in "src" dovrebbero essere
+	visibili)
+
+8. Click destro sul progetto "SimpLanPlus" e click su New/Other/File
+	a. Assegnare al file il nome "prova.simplanplus"
+
+9. Copiare e incollare uno dei test forniti col progetto nel file "prova.simplanplus"
+
+10. Run del file "Test.java" nel "mainPackage"
+	a. Potrebbe essere necessario fare il refresh della directory del progetto
+	per vedere il file "prova.simplanplus.asm" generato della compilazione

@@ -1,8 +1,8 @@
 {
     int f(int a){
         if (true){
-            bool a = false;
-            return f(a);
+            bool b = false;
+            return 1;
         }
         return 1;
     }
