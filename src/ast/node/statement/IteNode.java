@@ -12,6 +12,12 @@ import java.util.Map;
 import static util.SimpLanPlusLib.cloneEnvironment;
 import static util.SimpLanPlusLib.maxStatus;
 
+/**
+ * If-then-else statement node.
+ *
+ * ite : 'if' '(' exp ')' statement ('else' statement)?;
+ */
+
 public class IteNode implements Node {
 
     private Node cond;
@@ -25,33 +31,31 @@ public class IteNode implements Node {
         this.el = el;
     }
 
-    @Override
-    public Status getStatus() {
-        return Status.DECLARED;
+    public boolean getIsElNull() {
+        return this.isElNull;
     }
 
     @Override
-    public void setStatus(Status status) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
 
-    }
+        ArrayList<SemanticError> res = new ArrayList<>();
 
-    @Override
-    public String toPrint(String indent) {
-        StringBuilder builder = new StringBuilder();
-        String str = indent + "Ite\n" +
-                cond.toPrint(indent + "\t") +
-                th.toPrint(indent + "\t");
-        builder.append(str);
-        if (el != null) {
-            builder.append(el.toPrint(indent + "\t"));
+        res.addAll(cond.checkSemantics(env));
+
+        res.addAll(th.checkSemantics(env));
+        if (el != null)
+            res.addAll(el.checkSemantics(env));
+        else {
+            this.isElNull = true;
         }
-        return builder.toString();
+        return res;
     }
 
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
         Node cond_type = cond.typeCheck(typeErr);
-        if (cond_type.getPointLevel() != 0 || !(SimpLanPlusLib.isSubtype(cond_type, new BoolTypeNode(0, Status.DECLARED)))) {
+        if (cond_type.getPointLevel() != 0
+                || !(SimpLanPlusLib.isSubtype(cond_type, new BoolTypeNode(0, Status.DECLARED)))) {
             typeErr.add(new SemanticError("non boolean condition in if"));
         }
         Node t = th.typeCheck(typeErr);
@@ -72,7 +76,6 @@ public class IteNode implements Node {
         ArrayList<SemanticError> res = new ArrayList<>();
 
         res.addAll(cond.checkEffects(env));
-
 
         if (el != null) {
 
@@ -105,16 +108,24 @@ public class IteNode implements Node {
     }
 
     @Override
+    public String toPrint(String indent) {
+        StringBuilder builder = new StringBuilder();
+        String str = indent + "Ite\n" + cond.toPrint(indent + "\t") + th.toPrint(indent + "\t");
+        builder.append(str);
+        if (el != null) {
+            builder.append(el.toPrint(indent + "\t"));
+        }
+        return builder.toString();
+    }
+
+    @Override
     public String codeGeneration(CGenEnv env) {
         Label elseLabel = new Label();
         Label endLabel = new Label();
-        String ite = this.cond.codeGeneration(env) +
-                "li $t0 0\n" +
+        String ite = this.cond.codeGeneration(env) + "li $t0 0\n" +
                 // l is the false branch label got through newLabel() func
-                "beq " + elseLabel.getLabel() + " $a0 $t0\n" +
-                this.th.codeGeneration(env) +
-                "b " + endLabel.getLabel() + "\n" +
-                elseLabel.getLabel() + ":\n";
+                "beq " + elseLabel.getLabel() + " $a0 $t0\n" + this.th.codeGeneration(env) + "b " + endLabel.getLabel()
+                + "\n" + elseLabel.getLabel() + ":\n";
         if (this.el != null)
             // here appends false branch label
             ite += this.el.codeGeneration(env);
@@ -124,27 +135,18 @@ public class IteNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-
-        ArrayList<SemanticError> res = new ArrayList<>();
-
-        res.addAll(cond.checkSemantics(env));
-
-        res.addAll(th.checkSemantics(env));
-        if (el != null)
-            res.addAll(el.checkSemantics(env));
-        else {
-            this.isElNull = true;
-        }
-        return res;
-    }
-
-    @Override
     public int getPointLevel() {
         return 0;
     }
 
-    public boolean getIsElNull() {
-        return this.isElNull;
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
     }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
 }

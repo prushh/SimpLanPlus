@@ -23,12 +23,11 @@ import java.util.ArrayList;
 public class Test {
     public static void main(String[] args) throws Exception {
 
-        //String fileName = "tests/test_rotto3.simplanplus";
-        String fileName = "prova.simplanplus";
+        String fileName = "tests/test_1.simplanplus";
+        //String fileName = "prova.simplanplus";
 
         CharStream input = CharStreams.fromFileName(fileName);
         SimpLanPlusLexer lexer = new SimpLanPlusLexer(input);
-        //ThrowingErrorListener errorListener = new ThrowingErrorListener();
         lexer.removeErrorListeners();
         lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
 

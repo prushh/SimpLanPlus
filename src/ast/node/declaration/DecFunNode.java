@@ -33,27 +33,67 @@ public class DecFunNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return Status.DECLARED;
-    }
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        ArrayList<SemanticError> res = new ArrayList<>();
 
-    @Override
-    public void setStatus(Status status) {
+        HashMap<String, STentry> hm = env.symTable.get(env.nestingLevel);
+        STentry entry = new STentry(env.nestingLevel, 0);
 
-    }
+        if (hm.put(ID, entry) != null) {
+            res.add(new SemanticError("Fun id " + ID + " already declared"));
+        } else {
+            Environment funEnv = new Environment();
+            funEnv.nestingLevel = env.nestingLevel;
+            funEnv.offset++; // because at $fp there's the access link
+            HashMap<String, STentry> hmFun = new HashMap<>();
 
-    @Override
-    public String toPrint(String indent) {
-        StringBuilder builder = new StringBuilder();
-        String str = indent + "DecFun: " +
-                ID + "\n" +
-                type.toPrint(indent + "\t");
-        builder.append(str);
-        for (ArgNode arg : args) {
-            builder.append(arg.toPrint(indent + "\t"));
+            for (int i = env.nestingLevel; i > 0; i--) {
+                funEnv.symTable.add(new HashMap<>());
+            }
+
+            if (hmFun.put(ID, entry) != null) {
+                res.add(new SemanticError("Fun id " + ID + " already declared"));
+            }
+
+            int getFunEnv = env.nestingLevel;
+            while (getFunEnv >= 0) {
+                for (Map.Entry<String, STentry> funEntry : env.symTable.get(getFunEnv).entrySet()) {
+                    if (funEntry.getValue().getType() instanceof ArrowTypeNode) {
+                        if (!hmFun.containsKey(funEntry.getKey())) {
+                            hmFun.put(funEntry.getKey(), funEntry.getValue());
+                        }
+                    }
+                }
+                getFunEnv--;
+            }
+
+            entry.addType(new ArrowTypeNode(args, this.type));
+
+            hmFun.put(ID, entry);
+
+            funEnv.symTable.add(hmFun);
+
+            funEnv.nestingLevel++;
+            HashMap<String, STentry> hmArg = new HashMap<>();
+
+            funEnv.symTable.add(hmArg);
+
+            for (ArgNode arg : args) {
+                if (hmArg.put(arg.getId(), new STentry(funEnv.nestingLevel, arg.getType(), funEnv.offset++)) != null) {
+                    res.add(new SemanticError("Parameter id " + arg.getId() + " already declared"));
+                }
+            }
+
+            this.funUniqueLabel = ((ArrowTypeNode) entry.getType()).getFunUniqueLabel();
+
+            funEnv.offset = -2;
+
+            res.addAll(body.checkSemantics(funEnv));
+            funEnv.symTable.remove(funEnv.nestingLevel);
+            funEnv.nestingLevel--;
         }
-        builder.append(body.toPrint(indent + "\t"));
-        return builder.toString();
+
+        return res;
     }
 
     @Override
@@ -117,22 +157,11 @@ public class DecFunNode implements Node {
 
         }
 
-
-        /* -- todo gestire offset per variabili nella funzione
-        if (args.size() > 0) {
-            env.offset = -2;
-
-            for (Node n : args) {
-                res.addAll(n.checkSemantics(env));
-            }
-        }
-        */
-
-
+        // fixPoint Begin
         ArrayList<ArgNode> sigma0;
         ArrayList<ArgNode> sigma1 = args;
         ArrayList<SemanticError> fixPointErrors;
-        boolean checkFixPoint = false;
+        boolean checkFixPoint;
 
         for (ArgNode arg : args) {
             effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().setStatus(Status.READWRITE);
@@ -154,14 +183,11 @@ public class DecFunNode implements Node {
                     sigma0.add(new ArgNode(sigma1.get(i).getId(), new BoolTypeNode(sigma1.get(i).getPointLevel(), sigma1.get(i).getType().getStatus())));
             }
 
-            //Environment effectEnv = SimpLanPlusLib.cloneEnvironment(env);
-
             fixPointErrors.addAll(body.checkEffects(effectEnv));
 
             // Swap local variables status with args if local vars are formal parameters
             for (ArgNode arg : args) {
                 Status localVar = effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().getStatus();
-                //Status arrowArgStatus = arg.getType().getStatus();
                 effectEnv.symTable.get(effectEnv.nestingLevel).get(arg.getId()).getType().setStatus(Status.READWRITE);
                 ArrayList<ArgNode> tmpArgList = ((ArrowTypeNode) effectEnv.symTable.get(effectEnv.nestingLevel - 1).get(this.ID).getType()).getArgList();
                 for (ArgNode arrowArg : tmpArgList) {
@@ -180,8 +206,6 @@ public class DecFunNode implements Node {
                 sigma1.add(tmpArg);
             }
 
-            // System.out.println("Size sigma0: " + sigma0.size());
-            // System.out.println("Size sigma1: " + sigma1.size());
             for (int idx = 0; idx < sigma0.size(); idx++) {
                 if (sigma0.get(idx).getType().getStatus() != sigma1.get(idx).getType().getStatus()) {
                     checkFixPoint = true;
@@ -192,9 +216,7 @@ public class DecFunNode implements Node {
         }
         while (checkFixPoint);
 
-        //res.addAll(body.checkEffects(effectEnv));
-
-        // -- todo fine punto fisso
+        //  fixPoint End
 
 
         entry.addType(new ArrowTypeNode(sigma1, this.type));
@@ -205,11 +227,25 @@ public class DecFunNode implements Node {
         return res;
     }
 
+    @Override
+    public String toPrint(String indent) {
+        StringBuilder builder = new StringBuilder();
+        String str = indent + "DecFun: " +
+                ID + "\n" +
+                type.toPrint(indent + "\t");
+        builder.append(str);
+        for (ArgNode arg : args) {
+            builder.append(arg.toPrint(indent + "\t"));
+        }
+        builder.append(body.toPrint(indent + "\t"));
+        return builder.toString();
+    }
 
     @Override
     public String codeGeneration(CGenEnv env) {
         Label label = new Label();
-        Label labelReturn = new Label();//label to get the return inside the bytecode, is put inside the env
+        Label labelReturn = new Label();
+        //label to get the return inside the bytecode, is put inside the env
         env.incrementNestingLevel();
         env.setLabel(labelReturn.getLabel());
 
@@ -257,75 +293,18 @@ public class DecFunNode implements Node {
         return builder.toString();
     }
 
-    @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        ArrayList<SemanticError> res = new ArrayList<>();
-
-        HashMap<String, STentry> hm = env.symTable.get(env.nestingLevel);
-        STentry entry = new STentry(env.nestingLevel, 0);
-
-        if (hm.put(ID, entry) != null) {
-            res.add(new SemanticError("Fun id " + ID + " already declared"));
-        } else {
-            Environment funEnv = new Environment();
-            funEnv.nestingLevel = env.nestingLevel;
-            funEnv.offset++; // because at $fp there's the access link
-            HashMap<String, STentry> hmFun = new HashMap<>();
-
-            for (int i = env.nestingLevel; i > 0; i--) {
-                funEnv.symTable.add(new HashMap<>());
-            }
-
-            if (hmFun.put(ID, entry) != null) {
-                res.add(new SemanticError("Fun id " + ID + " already declared"));
-            }
-
-            int getFunEnv = env.nestingLevel;
-            while (getFunEnv >= 0) {
-                for (Map.Entry<String, STentry> funEntry : env.symTable.get(getFunEnv).entrySet()) {
-                    if (funEntry.getValue().getType() instanceof ArrowTypeNode) {
-                        if (!hmFun.containsKey(funEntry.getKey())) {
-                            hmFun.put(funEntry.getKey(), funEntry.getValue());
-                        }
-                    }
-                }
-                getFunEnv--;
-            }
-
-            entry.addType(new ArrowTypeNode(args, this.type));
-
-            hmFun.put(ID, entry);
-
-            funEnv.symTable.add(hmFun);
-            //env.symTable.add(hmn);
-
-            funEnv.nestingLevel++;
-            HashMap<String, STentry> hmArg = new HashMap<>();
-
-            funEnv.symTable.add(hmArg);
-
-            for (ArgNode arg : args) {
-                if (hmArg.put(arg.getId(), new STentry(funEnv.nestingLevel, arg.getType(), funEnv.offset++)) != null) {
-                    res.add(new SemanticError("Parameter id " + arg.getId() + " already declared"));
-                }
-            }
-
-            //entry.addType(new ArrowTypeNode(args, type));
-
-            this.funUniqueLabel = ((ArrowTypeNode) entry.getType()).getFunUniqueLabel();
-
-            funEnv.offset = -2;
-
-            res.addAll(body.checkSemantics(funEnv));
-            funEnv.symTable.remove(funEnv.nestingLevel);
-            funEnv.nestingLevel--;
-        }
-
-        return res;
-    }
 
     @Override
     public int getPointLevel() {
         return 0;
     }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {}
+
 }

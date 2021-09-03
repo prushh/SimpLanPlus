@@ -9,12 +9,48 @@ import util.Status;
 
 import java.util.ArrayList;
 
+/**
+ * Boolean expression node.
+ *
+ * exp    :    BOOL    #boolExp
+ */
+
 public class BoolNode implements Node {
 
     private boolean val;
 
     public BoolNode(boolean val) {
         this.val = val;
+    }
+
+    @Override
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public Node typeCheck(ArrayList<SemanticError> typeErr) {
+        return new BoolTypeNode(0, Status.DECLARED);
+    }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public String toPrint(String indent) {
+        return indent + "BoolExp: " + val + "\n";
+    }
+
+    @Override
+    public String codeGeneration(CGenEnv env) {
+        return "li $a0 " + (val ? 1 : 0) + "\n";
+    }
+
+    @Override
+    public int getPointLevel() {
+        return 0;
     }
 
     @Override
@@ -27,34 +63,4 @@ public class BoolNode implements Node {
 
     }
 
-    @Override
-    public String toPrint(String indent) {
-        return indent + "BoolExp: " + val + "\n";
-    }
-
-    @Override
-    public Node typeCheck(ArrayList<SemanticError> typeErr) {
-        return new BoolTypeNode(0, Status.DECLARED);
-    }
-
-    @Override
-    public String codeGeneration(CGenEnv env) {
-        return "li $a0 " + (val ? 1 : 0) + "\n";
-    }
-
-    @Override
-    public ArrayList<SemanticError> checkEffects(Environment env) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<>();
-    }
-
-
-    @Override
-    public int getPointLevel() {
-        return 0;
-    }
 }

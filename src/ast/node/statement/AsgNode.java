@@ -8,8 +8,16 @@ import ast.node.other.LhsNode;
 import ast.node.type.NullTypeNode;
 import util.*;
 
+
 import java.util.ArrayList;
 import java.util.Objects;
+
+
+/**
+ * Assignment statement node.
+ * <p>
+ * assignment : lhs '=' exp ;
+ */
 
 public class AsgNode implements Node {
 
@@ -22,26 +30,22 @@ public class AsgNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return Status.DECLARED;
-    }
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        ArrayList<SemanticError> res = new ArrayList<>();
+        /*
+         * Before checking lhs, we check expression because it can be a function that
+         * modifies global variables through pointers
+         */
+        res.addAll(exp.checkSemantics(env));
+        res.addAll(lhs.checkSemantics(env));
 
-    @Override
-    public void setStatus(Status status) {
-
-    }
-
-    @Override
-    public String toPrint(String indent) {
-        return indent + "Assignment\n" +
-                lhs.toPrint(indent + "\t") +
-                exp.toPrint(indent + "\t");
+        return res;
     }
 
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
-        Node lhs = this.lhs.typeCheck(typeErr);
         Node exp = this.exp.typeCheck(typeErr);
+        Node lhs = this.lhs.typeCheck(typeErr);
         if (!(SimpLanPlusLib.isSubtype(lhs, exp))) {
             typeErr.add(new SemanticError("incompatible value for variable " + this.lhs.getID()));
         } else {
@@ -63,6 +67,10 @@ public class AsgNode implements Node {
             tmpEntry = (env.symTable.get(idLevel--)).get(lhs.getID());
         }
         Node tmp = this.exp;
+        /*
+         *  Similar case of CallNode, from base expressions we are interested in
+         *  getting expression nested inside parentheses
+         */
         if (exp instanceof BaseExpNode) {
             while (((BaseExpNode) tmp).getExp() instanceof BaseExpNode) {
                 tmp = ((BaseExpNode) tmp).getExp();
@@ -70,9 +78,6 @@ public class AsgNode implements Node {
             tmp = ((BaseExpNode) tmp).getExp();
         }
         if (tmp instanceof NewExpNode) {
-            //  Case lhs.status == declared, bisognerebbe fare una seq tra declared e readwrite, quindi otteniamo readwrite
-            //  Case lhs.status == readwrite, non succede niente
-            //  Case lhs.status == deleted, riassegno una cella di memoria a lhs, torno a readwrite
             tmpEntry.getType().setStatus(Status.READWRITE);
         } else {
             res.addAll(exp.checkEffects(env));
@@ -81,10 +86,18 @@ public class AsgNode implements Node {
             newlhsAsg = SimpLanPlusLib.seqStatus(tmpEntry.getType().getStatus(), newlhsAsg);
             tmpEntry.getType().setStatus(newlhsAsg);
         }
+        // Update symbol table
         env.symTable.get(tmpEntry.getNestinglevel()).replace(lhs.getID(), tmpEntry);
 
 
         return res;
+    }
+
+    @Override
+    public String toPrint(String indent) {
+        return indent + "Assignment\n" +
+                lhs.toPrint(indent + "\t") +
+                exp.toPrint(indent + "\t");
     }
 
     @Override
@@ -99,19 +112,18 @@ public class AsgNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        ArrayList<SemanticError> res = new ArrayList<>();
-
-        res.addAll(exp.checkSemantics(env));
-        res.addAll(lhs.checkSemantics(env));
-
-        return res;
-    }
-
-
-    @Override
     public int getPointLevel() {
         return 0;
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
 }

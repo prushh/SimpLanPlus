@@ -10,6 +10,12 @@ import util.Status;
 
 import java.util.ArrayList;
 
+/**
+ * Return statement node.
+ *
+ * ret    :    'return' (exp)?;
+ */
+
 public class RetNode implements Node {
 
     private Node val;
@@ -41,8 +47,7 @@ public class RetNode implements Node {
     @Override
     public String toPrint(String indent) {
         if (val != null) {
-            return indent + "Return\n" +
-                    val.toPrint(indent + "\t");
+            return indent + "Return\n" + val.toPrint(indent + "\t");
         }
         return indent + "Return\n";
     }
@@ -72,16 +77,14 @@ public class RetNode implements Node {
 
     @Override
     public String codeGeneration(CGenEnv env) {
-        StringBuilder builder= new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         String exp = "";
         if (this.val != null) {
-            exp = this.val.codeGeneration(env) +
-                    "srv\n";
+            exp = this.val.codeGeneration(env) + "srv\n"; // Store $a0 into $rv
         }
-        String label=env.getLabel();
+        String label = env.getLabel();
         builder.append(exp);
-        builder.append("b "+label+"\n");
-
+        builder.append("b " + label + "\n"); // Jump to the end of the function/block body
 
         return builder.toString();
     }
@@ -93,7 +96,6 @@ public class RetNode implements Node {
         }
         return new ArrayList<>();
     }
-
 
     @Override
     public int getPointLevel() {

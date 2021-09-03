@@ -9,6 +9,12 @@ import util.Status;
 
 import java.util.ArrayList;
 
+/**
+ * Function call from an expression node.
+ *
+ * exp    :    call    #callExp
+ */
+
 public class CallExpNode implements Node {
 
     private CallNode callNode;
@@ -18,19 +24,8 @@ public class CallExpNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return Status.DECLARED;
-    }
-
-    @Override
-    public void setStatus(Status status) {
-
-    }
-
-    @Override
-    public String toPrint(String indent) {
-        return indent + "CallExp\n" +
-                callNode.toPrint(indent + "\t");
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return callNode.checkSemantics(env);
     }
 
     @Override
@@ -44,19 +39,28 @@ public class CallExpNode implements Node {
     }
 
     @Override
+    public String toPrint(String indent) {
+        return indent + "CallExp\n" + callNode.toPrint(indent + "\t");
+    }
+
+    @Override
     public String codeGeneration(CGenEnv env) {
         return this.callNode.codeGeneration(env);
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return callNode.checkSemantics(env);
-    }
-
-
-    @Override
     public int getPointLevel() {
         return 0;
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
 }

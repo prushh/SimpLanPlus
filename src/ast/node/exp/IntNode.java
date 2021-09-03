@@ -9,6 +9,12 @@ import util.Status;
 
 import java.util.ArrayList;
 
+/**
+ * Integer expression node.
+ *
+ * exp    :    INT    #valExp
+ */
+
 public class IntNode implements Node {
 
     private int val;
@@ -18,18 +24,8 @@ public class IntNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return Status.DECLARED;
-    }
-
-    @Override
-    public void setStatus(Status status) {
-
-    }
-
-    @Override
-    public String toPrint(String indent) {
-        return indent + "ValExp: " + val + "\n";
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return new ArrayList<>();
     }
 
     @Override
@@ -43,18 +39,28 @@ public class IntNode implements Node {
     }
 
     @Override
+    public String toPrint(String indent) {
+        return indent + "ValExp: " + val + "\n";
+    }
+
+    @Override
     public String codeGeneration(CGenEnv env) {
         return "li $a0 " + val + "\n";
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<>();
-    }
-
-
-    @Override
     public int getPointLevel() {
         return 0;
     }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
 }

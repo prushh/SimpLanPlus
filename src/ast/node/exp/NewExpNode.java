@@ -7,6 +7,12 @@ import util.*;
 
 import java.util.ArrayList;
 
+/**
+ * Pointers allocation expression node.
+ *
+ * exp    :    'new' type    #newExp
+ */
+
 public class NewExpNode implements Node {
 
     private Node type;
@@ -16,19 +22,8 @@ public class NewExpNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return Status.DECLARED;
-    }
-
-    @Override
-    public void setStatus(Status status) {
-
-    }
-
-    @Override
-    public String toPrint(String indent) {
-        return indent + "NewExp\n" +
-                type.toPrint(indent + "\t");
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return new ArrayList<>();
     }
 
     @Override
@@ -45,30 +40,42 @@ public class NewExpNode implements Node {
     }
 
     @Override
+    public String toPrint(String indent) {
+        return indent + "NewExp\n" + type.toPrint(indent + "\t");
+    }
+
+    @Override
     public String codeGeneration(CGenEnv env) {
         int pointLevel = this.type.getPointLevel();
 
         StringBuilder builder = new StringBuilder();
-        builder.append("addi $hp 1\n");
-        builder.append("si 0 $hp\n");
+        // Increment heap pointer and store a default value
+        builder.append("addi $hp 1\n")
+                .append("si 0 $hp\n");
         for (int idx = 0; idx < pointLevel; idx++) {
-            builder.append("lhp\n");
-            builder.append("addi $hp 1\n");
-            builder.append("sw $a0 $hp\n");
+            // Allocate a number of heap memory cell equal to the point level of new expression
+            builder.append("lhp\n")
+                    .append("addi $hp 1\n")
+                    // Store in the new memory cell the adress of the old value of the heap pointer
+                    .append("sw $a0 $hp\n");
         }
         builder.append("lhp\n");
         return builder.toString();
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<>();
-    }
-
-
-    @Override
     public int getPointLevel() {
         return 0;
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
 }

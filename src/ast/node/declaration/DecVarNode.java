@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Variables declaration semantic analysis and code generation.
+ * Variables declaration node. It consists of an identifier and a type
+ * (sometimes also an expression as initialization).
+ *
+ * decVar : type ID ('=' exp)? ';' ;
  */
 
 public class DecVarNode implements Node {
@@ -37,6 +40,7 @@ public class DecVarNode implements Node {
 		 * First check exp, because we want to evaluate it in the environment before
 		 * adding the declaration to it
 		 */
+
 		if (exp != null) {
 			res.addAll(exp.checkSemantics(env));
 		}
@@ -73,7 +77,7 @@ public class DecVarNode implements Node {
 		STentry entry;
 
 		if (exp != null) {
-			/*
+			/**
 			 * If variable is also initialized during declaration, then its status must be
 			 * READWRITE (default id DECLARED, so no need to set it in the else branch)
 			 */

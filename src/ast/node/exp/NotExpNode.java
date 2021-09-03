@@ -6,6 +6,12 @@ import util.*;
 
 import java.util.ArrayList;
 
+/**
+ * Negation (operation for booleans) expression node.
+ *
+ * exp    :    '!' exp    #notExp
+ */
+
 public class NotExpNode implements Node {
 
     private Node exp;
@@ -15,18 +21,8 @@ public class NotExpNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return Status.DECLARED;
-    }
-
-    @Override
-    public void setStatus(Status status) {
-
-    }
-
-    @Override
-    public String toPrint(String indent) {
-        return indent + "NotExp\n" + exp.toPrint(indent + "\t");
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return exp.checkSemantics(env);
     }
 
     @Override
@@ -44,20 +40,28 @@ public class NotExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration(CGenEnv env) {
-        return this.exp.codeGeneration(env) +
-                "li $t0 1\n" +
-                "sub $t0 $a0 $a0\n";
+    public String toPrint(String indent) {
+        return indent + "NotExp\n" + exp.toPrint(indent + "\t");
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return exp.checkSemantics(env);
+    public String codeGeneration(CGenEnv env) {
+        return this.exp.codeGeneration(env) + "li $t0 1\n" + "sub $t0 $a0 $a0\n";
     }
-
 
     @Override
     public int getPointLevel() {
         return 0;
     }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
 }

@@ -9,6 +9,12 @@ import util.*;
 
 import java.util.ArrayList;
 
+/**
+ * Binary expressions node.
+ *
+ * exp    :    left=exp    op    right=exp    #binExp
+ */
+
 public class BinExpNode implements Node {
 
     private Node left;
@@ -22,41 +28,34 @@ public class BinExpNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return Status.DECLARED;
-    }
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        ArrayList<SemanticError> res = new ArrayList<>();
 
-    @Override
-    public void setStatus(Status status) {
+        res.addAll(left.checkSemantics(env));
+        res.addAll(right.checkSemantics(env));
 
-    }
-
-    @Override
-    public String toPrint(String indent) {
-        return indent + "BinExp[" + op.getText() + "]\n" +
-                left.toPrint(indent + "\t") +
-                right.toPrint(indent + "\t");
+        return res;
     }
 
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
         Node l = left.typeCheck(typeErr);
         Node r = right.typeCheck(typeErr);
+
+        // First we distinguish between normal variables and pointer variables
         if (l.getPointLevel() == 0 && r.getPointLevel() == 0) {
-            if (op.getText().equals("*") ||
-                    op.getText().equals("/") ||
-                    op.getText().equals("+") ||
-                    op.getText().equals("-")) {
+            // For normal variables we distinguish between operations on integer and booleans
+            if (op.getText().equals("*") || op.getText().equals("/") || op.getText().equals("+")
+                    || op.getText().equals("-")) {
+                // Integer operations type checking (e.g 1 + 1 must be typed as an integer exp)
                 if (!(SimpLanPlusLib.isSubtype(l, new IntTypeNode(0, Status.DECLARED))
                         && (SimpLanPlusLib.isSubtype(r, new IntTypeNode(0, Status.DECLARED))))) {
                     typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
                 } else {
                     return new IntTypeNode(0, Status.DECLARED);
                 }
-            } else if (op.getText().equals("<") ||
-                    op.getText().equals("<=") ||
-                    op.getText().equals(">") ||
-                    op.getText().equals(">=")) {
-
+            } else if (op.getText().equals("<") || op.getText().equals("<=") || op.getText().equals(">")
+                    || op.getText().equals(">=")) {
+                // Example: 2 < 3 is typed as a boolean expression
                 if (!(SimpLanPlusLib.isSubtype(l, new IntTypeNode(0, Status.DECLARED))
                         && (SimpLanPlusLib.isSubtype(r, new IntTypeNode(0, Status.DECLARED))))) {
                     typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
@@ -64,8 +63,8 @@ public class BinExpNode implements Node {
                 } else {
                     return new BoolTypeNode(0, Status.DECLARED);
                 }
-            } else if (op.getText().equals("&&") ||
-                    op.getText().equals("||")) {
+            } else if (op.getText().equals("&&") || op.getText().equals("||")) {
+                // Booleans operations type checking (e.g. true || false)
                 if (!(SimpLanPlusLib.isSubtype(l, new BoolTypeNode(0, Status.DECLARED))
                         && (SimpLanPlusLib.isSubtype(r, new BoolTypeNode(0, Status.DECLARED))))) {
                     typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
@@ -80,8 +79,8 @@ public class BinExpNode implements Node {
                 }
             }
         } else if (l.getPointLevel() != 0 && r.getPointLevel() != 0 && l.getPointLevel() == r.getPointLevel()) {
-            if (op.getText().equals("==") ||
-                    op.getText().equals("!=")) {
+            // For pointers we consider only operators == and !=
+            if (op.getText().equals("==") || op.getText().equals("!=")) {
                 if (!(SimpLanPlusLib.isSubtype(l, r))) {
                     typeErr.add(new SemanticError("incompatible types for binary operator " + op.getText()));
                 } else {
@@ -89,11 +88,13 @@ public class BinExpNode implements Node {
                 }
             }
         } else if (l.getPointLevel() != 0 && r.getPointLevel() != 0 && l.getPointLevel() != r.getPointLevel()) {
-            typeErr.add(new SemanticError("can't apply operator '" + op.getText() + "' between pointers and variables"));
+            // Left-hand-side and right-hand-side of the binary operator are two pointers with different point level
+            typeErr.add(
+                    new SemanticError("can't apply operator '" + op.getText() + "' between pointers and variables"));
         } else {
-            typeErr.add(new SemanticError("can't apply operator '" + op.getText() + "' between pointers and variables"));
+            typeErr.add(
+                    new SemanticError("can't apply operator '" + op.getText() + "' between pointers and variables"));
         }
-
 
         return new NullTypeNode(Status.DECLARED);
     }
@@ -109,12 +110,17 @@ public class BinExpNode implements Node {
     }
 
     @Override
+    public String toPrint(String indent) {
+        return indent + "BinExp[" + op.getText() + "]\n" + left.toPrint(indent + "\t") + right.toPrint(indent + "\t");
+    }
+
+    @Override
     public String codeGeneration(CGenEnv env) {
         StringBuilder builder = new StringBuilder();
-        builder.append(left.codeGeneration(env));
-        builder.append("push $a0\n");
-        builder.append(right.codeGeneration(env));
-        builder.append("lw $t0 $sp\n");
+        builder.append(left.codeGeneration(env))
+                .append("push $a0\n")
+                .append(right.codeGeneration(env))
+                .append("lw $t0 $sp\n");
         switch (op.getText()) {
             case "+":
                 builder.append("add $t0 $a0 $a0\n");
@@ -169,19 +175,18 @@ public class BinExpNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        ArrayList<SemanticError> res = new ArrayList<>();
-
-        res.addAll(left.checkSemantics(env));
-        res.addAll(right.checkSemantics(env));
-
-        return res;
-    }
-
-
-    @Override
     public int getPointLevel() {
         return 0;
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
 }

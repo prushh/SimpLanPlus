@@ -9,6 +9,12 @@ import util.Status;
 
 import java.util.ArrayList;
 
+/**
+ * Right-hand-side expression node.
+ *
+ * exp    :    lhs    #derExp
+ */
+
 public class DerExpNode implements Node {
 
     private LhsNode lhs;
@@ -17,18 +23,13 @@ public class DerExpNode implements Node {
         this.lhs = exp;
     }
 
-    @Override
-    public Status getStatus() {
-        return Status.DECLARED;
+    public LhsNode getLhsNode() {
+        return this.lhs;
     }
 
     @Override
-    public void setStatus(Status status) {
-    }
-
-    @Override
-    public String toPrint(String indent) {
-        return indent + "DerExp\n" + lhs.toPrint(indent + "\t");
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return lhs.checkSemantics(env);
     }
 
     @Override
@@ -42,23 +43,27 @@ public class DerExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration(CGenEnv env) {
-        return this.lhs.codeGeneration(env);
+    public String toPrint(String indent) {
+        return indent + "DerExp\n" + lhs.toPrint(indent + "\t");
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return lhs.checkSemantics(env);
+    public String codeGeneration(CGenEnv env) {
+        return this.lhs.codeGeneration(env);
     }
-
 
     @Override
     public int getPointLevel() {
         return 0;
     }
 
-    public LhsNode getLhsNode() {
-        return this.lhs;
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
     }
 
 }

@@ -12,6 +12,12 @@ import util.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Function/Inline block node.
+ *
+ * block : '{' declaration* statement* '}';
+ */
+
 public class BlockNode implements Node {
 
     private ArrayList<Node> decList;
@@ -24,24 +30,67 @@ public class BlockNode implements Node {
         this.stmList = stmList;
     }
 
-    @Override
-    public Status getStatus() {
-        return Status.DECLARED;
+    /*
+     * This is used in SimpLanPlusVisitorImpl.java when a block is generated inside
+     * a DecFunNode
+     */
+    public void setBlockFunction() {
+        isBlockFunction = true;
+    }
+
+    public boolean getBlockFunction() {
+        return this.isBlockFunction;
+    }
+
+    /*
+     * This is used in SimpLanPlusVisitorImpl.java when a block is generated inside
+     * a IteNode
+     */
+    public void setBlockIte() {
+        isBlockIte = true;
+    }
+
+    public boolean isBlockIte() {
+        return isBlockIte;
+    }
+
+    public ArrayList<Node> getStmList() {
+        return stmList;
+    }
+
+    public ArrayList<Node> getDecList() {
+        return decList;
     }
 
     @Override
-    public void setStatus(Status status) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        ArrayList<SemanticError> res = new ArrayList<>();
 
-    }
+        /*
+         * If we are handling a function block there's no need to modify nesting level,
+         * offset and symbol table because the DecFunNode will have already done it
+         */
+        if (!isBlockFunction) {
+            HashMap<String, STentry> hm = new HashMap<>();
+            env.symTable.add(hm);
+            env.nestingLevel++;
+            env.offset = -1;
+        }
 
-    @Override
-    public String toPrint(String indent) {
-        StringBuilder builder = new StringBuilder();
-        for (Node dec : decList)
-            builder.append(dec.toPrint(indent + "  "));
-        for (Node stm : stmList)
-            builder.append(stm.toPrint(indent + "  "));
-        return indent + "Block\n" + builder;
+        for (Node dec : decList) {
+            res.addAll(dec.checkSemantics(env));
+        }
+
+        for (Node stm : stmList) {
+            res.addAll(stm.checkSemantics(env));
+        }
+
+        if (!isBlockFunction) {
+            env.symTable.remove(env.nestingLevel);
+            env.nestingLevel--;
+        }
+
+        return res;
     }
 
     @Override
@@ -51,25 +100,47 @@ public class BlockNode implements Node {
             dec.typeCheck(typeErr);
 
         Node tmp;
+        // In nodeList we will gather all return statements occurred in block
         ArrayList<Node> nodeList = new ArrayList<>();
+
         for (Node stm : stmList) {
             tmp = stm.typeCheck(typeErr);
-            if ((stm instanceof RetNode) || (stm instanceof IteNode &&
-                    !(tmp instanceof NullTypeNode) &&
-                    !((IteNode) stm).getIsElNull()))
+
+            /*
+             * We insert a return node in nodeList if:
+             * -there's a return statement in block statements
+             * -statement is an if-then-else node and both then/else branches have
+             * return statements inside
+             *
+             * Note that an IteNode will return IntTypeNode or BoolTypeNode only if
+             * inside its branches there are return nodes with an IntNode/BoolNode,
+             * otherwise its type will be NullTypeNode. Moreover nested if-them statement
+             * are tricky because they don't assure to return a paricular type that can
+             * be checked as in an if-then-else statement
+             */
+            if ((stm instanceof RetNode)
+                    || (stm instanceof IteNode && !(tmp instanceof NullTypeNode) && !((IteNode) stm).getIsElNull()))
                 nodeList.add(tmp);
         }
         Node check;
         boolean err = false;
+
+        // Now check return node list
         if (nodeList.isEmpty()) {
+            // No return nodes inside statements
             return new NullTypeNode(Status.DECLARED);
         } else {
-            check = nodeList.get(0);
+            /*
+             *  Some return nodes are present, type of block will one among
+             *  IntTypeNode, BoolTypeNode or VoidTypeNode
+             */
+            check = nodeList.get(0); // make sure all return nodes have the same type
             for (Node ret : nodeList) {
                 if (!SimpLanPlusLib.isSubtype(ret, check))
                     err = true;
             }
         }
+
         if (err) {
             typeErr.add(new SemanticError("Mismatching return types"));
         }
@@ -112,13 +183,25 @@ public class BlockNode implements Node {
     }
 
     @Override
+    public String toPrint(String indent) {
+        StringBuilder builder = new StringBuilder();
+        for (Node dec : decList)
+            builder.append(dec.toPrint(indent + "  "));
+        for (Node stm : stmList)
+            builder.append(stm.toPrint(indent + "  "));
+        return indent + "Block\n" + builder;
+    }
+
+    @Override
     public String codeGeneration(CGenEnv env) {
         StringBuilder builder = new StringBuilder();
 
+        // This label is used later to correctly handle return nodes
         Label blockLabel = new Label();
         if (!isBlockFunction) {
             env.incrementNestingLevel();
-            if(!isBlockIte){
+            if (!isBlockIte) {
+                // If the inline block has
                 env.setLabel(blockLabel.getLabel());
             }
 
@@ -135,14 +218,12 @@ public class BlockNode implements Node {
             builder.append(stm.codeGeneration(env));
         }
 
-
         if (!isBlockFunction) {
             env.decrementNestingLevel();
-            if(!isBlockIte){
+            if (!isBlockIte) {
                 builder.append(blockLabel.getLabel());
                 builder.append(":\n");
             }
-
 
             StringBuilder popLocal = new StringBuilder();
             for (int i = 0; i < this.decList.size(); i++) {
@@ -154,10 +235,9 @@ public class BlockNode implements Node {
             // pop w.r.t push in at line 120
             builder.append("lw $fp $fp\n");
             builder.append("pop\n");
-            if(!isBlockIte){
+            if (!isBlockIte) {
                 env.removeLabel();
             }
-
 
             if (env.getNestingLevel() == -1) {
                 builder.append("halt\n");
@@ -168,59 +248,18 @@ public class BlockNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        ArrayList<SemanticError> res = new ArrayList<>();
-
-        if (!isBlockFunction) {
-            HashMap<String, STentry> hm = new HashMap<>();
-            env.symTable.add(hm);
-            env.nestingLevel++;
-            env.offset = -1;
-        }
-
-        for (Node dec : decList) {
-            res.addAll(dec.checkSemantics(env));
-        }
-
-        for (Node stm : stmList) {
-            res.addAll(stm.checkSemantics(env));
-        }
-
-        if (!isBlockFunction) {
-            env.symTable.remove(env.nestingLevel);
-            env.nestingLevel--;
-        }
-
-        return res;
-    }
-
-    public void setBlockFunction() {
-        isBlockFunction = true;
-    }
-
-    public boolean getBlockFunction() {
-        return this.isBlockFunction;
-    }
-
-    public boolean isBlockIte() {
-        return isBlockIte;
-    }
-
-    public void setBlockIte() {
-        isBlockIte = true;
-    }
-
-    public ArrayList<Node> getStmList() {
-        return stmList;
-    }
-
-    public ArrayList<Node> getDecList() {
-        return decList;
+    public int getPointLevel() {
+        return 0;
     }
 
     @Override
-    public int getPointLevel() {
-        return 0;
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
 }

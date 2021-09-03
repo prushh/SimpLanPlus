@@ -1,26 +1,55 @@
 {
-
-    int f(int a, int b){
-        int c = b;
+    int f(^int a){
+        delete a;
         return 1;
     }
 
-    int d = f(3, 4);
-
-    {
-        int d=4;
+    int g(^int a, int b){
+        return 0;
     }
+
+    ^int p = new int;
+    g(p, f(p));
 }
 
 /*
+{
 
-return adress
+int gg(int a, ^int b){
+    a = b^;
+    return a;
+}
 
--2 c <- fp
--1 b
-0  a
+   int f(int a){
+        ^int b = new int;
+        b^ = 1000;
+        print a;
+        a = gg(a,b);
+        print a;
+        return 1;
+
+   }
+   f(5);
+
+}
 */
 
+/*
+{
+   ^int a = new int;
+   ^int c = new int;
+   ^int b = new int;
+    a^ = 1000
+    b^ = 100;
+    c^ = 10;
+    print (a);
+    print (a^);
+    print (b);
+    print (b^);
+    print (c);
+    print (c^);
+}
+*/
 /*
 
     ^^int a = new int;

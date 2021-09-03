@@ -8,6 +8,12 @@ import util.*;
 
 import java.util.ArrayList;
 
+/**
+ * Print statement node.
+ *
+ * print    :    'print' exp;
+ */
+
 public class PrintNode implements Node {
 
     private Node val;
@@ -17,26 +23,17 @@ public class PrintNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return Status.DECLARED;
-    }
-
-    @Override
-    public void setStatus(Status status) {
-
-    }
-
-    @Override
-    public String toPrint(String indent) {
-        return indent + "Print\n" + val.toPrint(indent + "\t");
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return val.checkSemantics(env);
     }
 
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
         Node t = this.val.typeCheck(typeErr);
-        if ((!SimpLanPlusLib.isSubtype(t, new IntTypeNode(0, Status.DECLARED)) && !SimpLanPlusLib.isSubtype(t, new BoolTypeNode(0, Status.DECLARED)))
-        //  Decomment this line if you want not to be able to print pointer values
-            //        || (t.getPointLevel() != 0)
+        if ((!SimpLanPlusLib.isSubtype(t, new IntTypeNode(0, Status.DECLARED))
+                && !SimpLanPlusLib.isSubtype(t, new BoolTypeNode(0, Status.DECLARED)))
+            // Decomment this line if you want not to be able to print pointer values
+            // || (t.getPointLevel() != 0)
         ) {
             typeErr.add(new SemanticError("incompatible type for print"));
         }
@@ -49,18 +46,28 @@ public class PrintNode implements Node {
     }
 
     @Override
+    public String toPrint(String indent) {
+        return indent + "Print\n" + val.toPrint(indent + "\t");
+    }
+
+    @Override
     public String codeGeneration(CGenEnv env) {
         return this.val.codeGeneration(env) + "print $a0\n";
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return val.checkSemantics(env);
-    }
-
-
-    @Override
     public int getPointLevel() {
         return 0;
     }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
 }

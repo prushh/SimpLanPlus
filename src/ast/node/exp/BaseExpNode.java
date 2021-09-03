@@ -8,6 +8,12 @@ import util.Status;
 
 import java.util.ArrayList;
 
+/**
+ * Base expressions node.
+ *
+ * exp	    : '(' exp ')'		 #baseExp
+ */
+
 public class BaseExpNode implements Node {
 
     private Node exp;
@@ -16,20 +22,14 @@ public class BaseExpNode implements Node {
         this.exp = exp;
     }
 
-    @Override
-    public Status getStatus() {
-        return Status.DECLARED;
+    // Getter needed when we have nested parentheses to get the expression inside
+    public Node getExp() {
+        return this.exp;
     }
 
     @Override
-    public void setStatus(Status status) {
-
-    }
-
-    @Override
-    public String toPrint(String indent) {
-        return indent + "BaseExp\n" +
-                exp.toPrint(indent + "\t");
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return exp.checkSemantics(env);
     }
 
     @Override
@@ -43,14 +43,13 @@ public class BaseExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration(CGenEnv env) {
-        return this.exp.codeGeneration(env);
+    public String toPrint(String indent) {
+        return indent + "BaseExp\n" + exp.toPrint(indent + "\t");
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        // TODO Add res to _ExpNode? (neg, not, etc.)
-        return exp.checkSemantics(env);
+    public String codeGeneration(CGenEnv env) {
+        return this.exp.codeGeneration(env);
     }
 
     @Override
@@ -58,8 +57,14 @@ public class BaseExpNode implements Node {
         return 0;
     }
 
-    public Node getExp() {
-        return this.exp;
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+
     }
 
 }

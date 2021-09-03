@@ -7,6 +7,12 @@ import util.*;
 
 import java.util.ArrayList;
 
+/**
+ * Deletion statement node.
+ *
+ * deletion : 'delete' ID;
+ */
+
 public class DeletionNode implements Node {
 
     private String ID;
@@ -17,18 +23,22 @@ public class DeletionNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return Status.DECLARED;
-    }
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        ArrayList<SemanticError> res = new ArrayList<>();
 
-    @Override
-    public void setStatus(Status status) {
-    }
+        int idLevel = env.nestingLevel;
+        STentry tmpEntry = null;
 
-    @Override
-    public String toPrint(String indent) {
-        return indent + "Deletion: " +
-                ID + "\n";
+        while (idLevel >= 0 && tmpEntry == null) {
+            tmpEntry = (env.symTable.get(idLevel--)).get(ID);
+        }
+
+        if (tmpEntry == null) {
+            res.add(new SemanticError("Id " + ID + " not declared"));
+        } else {
+            this.entry = tmpEntry;
+        }
+        return res;
     }
 
     @Override
@@ -61,9 +71,12 @@ public class DeletionNode implements Node {
             res.add(new SemanticError("Cannot delete an already deleted pointer"));
         }
 
-        // TODO considerare state dell'exp su nodo return
-
         return res;
+    }
+
+    @Override
+    public String toPrint(String indent) {
+        return indent + "Deletion: " + ID + "\n";
     }
 
     @Override
@@ -74,37 +87,23 @@ public class DeletionNode implements Node {
             lookup += "lw $al $al\n";
 
         String res = "";
-        res += "cal\n" +
-                lookup +
-                "addi $al " + this.entry.getOffset() + "\n" +
-                "si -10000 $al\n";
+        res += "cal\n" + lookup + "addi $al " + this.entry.getOffset() + "\n" + "si -10000 $al\n";
 
         return res;
     }
-
-    @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        ArrayList<SemanticError> res = new ArrayList<>();
-
-        int idLevel = env.nestingLevel;
-        STentry tmpEntry = null;
-
-        while (idLevel >= 0 && tmpEntry == null) {
-            tmpEntry = (env.symTable.get(idLevel--)).get(ID);
-        }
-
-        if (tmpEntry == null) {
-            res.add(new SemanticError("Id " + ID + " not declared"));
-        } else {
-            this.entry = tmpEntry;
-        }
-        return res;
-    }
-
 
     @Override
     public int getPointLevel() {
         return 0;
+    }
+
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
+    }
+
+    @Override
+    public void setStatus(Status status) {
     }
 
 }
