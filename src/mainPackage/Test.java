@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class Test {
     public static void main(String[] args) throws Exception {
 
-        String fileName = "tests/test_1.simplanplus";
+        String fileName = "tests/test_42.simplanplus";
         //String fileName = "prova.simplanplus";
 
         CharStream input = CharStreams.fromFileName(fileName);

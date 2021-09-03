@@ -3,7 +3,12 @@
 /*
 Trying to declare a variable twice in the same block
 
-FAILS -- "DecVar a already declared"
+FAILS --
+OUTPUT:
+--------------------------------------------------------------------------
+"DecVar a already declared"
+--------------------------------------------------------------------------
+
 */
 
 {

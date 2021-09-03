@@ -3,7 +3,12 @@
 /*
 Trying to declare a variable and a function with the same name in the same block
 
-FAILS -- "Fun id a already declared"
+FAILS --
+OUTPUT:
+--------------------------------------------------------------------------
+"Fun id a already declared"
+--------------------------------------------------------------------------
+
 */
 
 {

@@ -3,7 +3,12 @@
 /*
 Trying to declare a variable with the same name as a formal parameter inside a function
 
-FAILS -- "DecVar a already declared"
+FAILS --
+OUTPUT:
+--------------------------------------------------------------------------
+"DecVar a already declared"
+--------------------------------------------------------------------------
+
 */
 
 {

@@ -8,13 +8,13 @@ OUTPUT:
 --------------------------------------------------------------------------
 You had: 2 type errors:
 	cannot assign variable or pointers of different type
-	cannot assign variable or pointers of different type
+	incompatible value for variable s
 --------------------------------------------------------------------------
 */
 
 {
     ^^int p = new int;                    //wrong
-    ^^int q = new ^int; /                 /correct
+    ^^int q = new ^int;                   //correct
     ^^^^^^^^bool r = new ^^^^^^^bool;     //correct
     ^^int s = r;                          //wrong
 }
