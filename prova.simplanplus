@@ -1,15 +1,6 @@
 {
-    int f(^int a){
-        delete a;
-        return 1;
-    }
-
-    int g(^int a, int b){
-        return 0;
-    }
-
-    ^int p = new int;
-    g(p, f(p));
+  int a = 10;
+  print 191919191;
 }
 
 /*

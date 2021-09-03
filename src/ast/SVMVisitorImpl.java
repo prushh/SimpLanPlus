@@ -33,16 +33,8 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
     public Void visitInstruction(SVMParser.InstructionContext ctx) {
         switch (ctx.getStart().getType()) {
             case SVMLexer.PUSH:
-                if (ctx.n != null) {
-                    code[i++] = SVMParser.PUSH;
-                    code[i++] = Integer.parseInt(ctx.n.getText());
-                } else if (ctx.l != null) {
-                    code[i++] = SVMParser.PUSH;
-                    labelRef.put(i++, ctx.l.getText());
-                } else {
-                    code[i++] = SVMParser.PUSH;
-                    code[i++] = getRegister(ctx.r);
-                }
+                code[i++] = SVMParser.PUSH;
+                code[i++] = getRegister(ctx.r);
                 break;
             case SVMLexer.POP:
                 code[i++] = SVMParser.POP;

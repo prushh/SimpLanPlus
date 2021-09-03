@@ -1,9 +1,5 @@
 grammar SVM;
 
-@header {
-import java.util.HashMap;
-}
-
 @lexer::members {
 public int lexicalErrors=0;
 }
@@ -15,9 +11,7 @@ public int lexicalErrors=0;
 assembly: (instruction)* ;
 
 instruction:
-    ( PUSH n=NUMBER 
-	  | PUSH l=LABEL
-	  | PUSH r=REGISTER
+    (  PUSH r=REGISTER
 	  | POP
 	  | ADD	r1=REGISTER r2=REGISTER res=REGISTER
 	  | ADDI r1=REGISTER val=NUMBER
@@ -60,39 +54,39 @@ instruction:
  * LEXER RULES
  *------------------------------------------------------------------*/
 
-PUSH  	    : 'push' ; 	// pushes constant in the stack
+PUSH  	    : 'push' ; 	// pushes label/number/register on the stack
 POP	        : 'pop' ; 	// pops from stack
-ADD	        : 'add' ;  	// add two values from the stack
-ADDI        : 'addi';      // --todo--
-SUB	        : 'sub' ;	// add two values from the stack
-MULT	    : 'mult' ;  	// add two values from the stack
-DIV	        : 'div' ;	// add two values from the stack
-STOREW	    : 'sw' ; 	// store in the memory cell pointed by top the value next
-STOREI      : 'si' ;   // --todo--
-LOADW	    : 'lw' ;	// load a value from the memory cell pointed by top
-LOADI       : 'li' ;   // --todo--
-BRANCH	    : 'b' ;	// jump to label
-BRANCHEQ    : 'beq' ;	// jump to label if top == next
-BRANCHLESSEQ:'bleq' ;	// jump to label if top <= next
-LESS        :'less' ;	// --todo--
-LESSEQ      :'leq' ;	// --todo--
-EQ          :'eq' ;	//  --todo--
-NEQ         :'neq' ;	//  --todo--
-AND         :'and' ;	// --todo--
-OR          :'or' ;	// --todo--
-JR          : 'jr' ;   // --todo--
-JAL         : 'jal' ;     // --todo--
-LOADRA	    : 'lra' ;	// load $ra into $a0
+ADD	        : 'add' ;  	// puts the result of _r1_+_r2_ in _r3_
+ADDI        : 'addi';   // add integer to register
+SUB	        : 'sub' ;	// puts the result of _r1_-_r2_ in _r3_
+MULT	    : 'mult' ;  // puts the result of _r1_*_r2_ in _r3_
+DIV	        : 'div' ;	// puts the result of _r1_/_r2_ in _r3_
+STOREW	    : 'sw' ; 	// store in the memory cell pointed by _dest_ the value in _val_ (_val_ is a register)
+STOREI      : 'si' ;    // store in the memory cell pointed by _dest_ the value in _val_ (_val_ is a number)
+LOADW	    : 'lw' ;	// load a value from the memory cell pointed _source_ inside register _val_
+LOADI       : 'li' ;    // load the integer _source_ inside register _val_
+BRANCH	    : 'b' ;	    // jump to _label_
+BRANCHEQ    : 'beq' ;	// jump to _label_ if _e1_ == _e2_
+BRANCHLESSEQ:'bleq' ;	// jump to _label_ if _e1_ <= _e2_
+LESS        :'less' ;	// if (_e1_ < _e2_) puts 1 in _res_, else puts 0 in _res_
+LESSEQ      :'leq' ;	// if (_e1_ <= _e2_) puts 1 in _res_, else puts 0 in _res_
+EQ          :'eq' ;	    // if (_e1_ == _e2_) puts 1 in _res_, else puts 0 in _res_
+NEQ         :'neq' ;	// if (_e1_ != _e2_) puts 1 in _res_, else puts 0 in _res_
+AND         :'and' ;	// if (_e1_ + _e2_ == 2) puts 1 in _res_, else puts 0 in _res_
+OR          :'or' ;	    // if (_e1_ + _e2_ != 0) puts 1 in _res_, else puts 0 in _res_
+JR          : 'jr' ;    // store $ra inside $ip
+JAL         : 'jal' ;   // store next istruction address in $ra, jump to _label_
+LOADRA	    : 'lra' ;	// store $ra into $a0
 STORERA     : 'sra' ;	// store $a0 into $ra
-LOADRV	    : 'lrv' ;	// load $rv into $a0
+LOADRV	    : 'lrv' ;	// store $rv into $a0
 STORERV     : 'srv' ;	// store $a0 into rv
-LOADFP	    : 'lfp' ;	// load $fp into $a0
+LOADFP	    : 'lfp' ;	// store $fp into $a0
 STOREFP	    : 'sfp' ;	// store $a0 into $fp
-COPYFP      : 'cfp' ;  // copy $sp into $fp
-LOADAL      : 'lal' ;  // load $al into $a0
-STOREAL     : 'sal' ;  // store $a0 into $al
-COPYAL      : 'cal' ;  // copy $fp intp $al
-LOADHP	    : 'lhp' ;	// load $hp into $a0
+COPYFP      : 'cfp' ;   // copy $sp into $fp
+LOADAL      : 'lal' ;   // store $al into $a0
+STOREAL     : 'sal' ;   // store $a0 into $al
+COPYAL      : 'cal' ;   // copy $fp into $al
+LOADHP	    : 'lhp' ;	// store $hp into $a0
 STOREHP	    : 'shp' ;	// store $a0 into $hp
 PRINT	    : 'print' ; // print value of $a0
 HALT	    : 'halt' ;	// stop execution
@@ -101,14 +95,14 @@ COL	 : ':' ;
 NUMBER	 : '0' | ('-')?(('1'..'9')('0'..'9')*) ;
 LABEL	 : ('_')?('_')('a'..'z' | 'A'..'Z' | '0'..'9')+('_') ;
 REGISTER : A0 | T0 | SP | RA | FP | AL | HP | RV;
-A0 : '$a0';
-T0 : '$t0';
-SP : '$sp';
-RA : '$ra';
-FP : '$fp';
-AL : '$al';
-HP : '$hp';
-RV : '$rv';
+A0 : '$a0';   // register used to perform each operation
+T0 : '$t0';   // temporary register
+SP : '$sp';   // stack pointer
+RA : '$ra';   // return address
+FP : '$fp';   // frame pointer
+AL : '$al';   // access link
+HP : '$hp';   // heap pointer
+RV : '$rv';   // return value
 
 WHITESP  : ( '\t' | ' ' | '\r' | '\n' )+   -> channel(HIDDEN);
 

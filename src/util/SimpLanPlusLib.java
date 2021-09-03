@@ -155,7 +155,7 @@ public class SimpLanPlusLib {
 	}
 	
 	/**
-	 * Auxiliary function for interpreter code.
+	 * Converts base REGISTER token in one of the specific Tokens based on the text.
 	 * 
 	 * @param register
 	 * @return
