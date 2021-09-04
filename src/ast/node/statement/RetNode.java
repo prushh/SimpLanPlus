@@ -67,6 +67,7 @@ public class RetNode implements Node {
 
     @Override
     public String codeGeneration(CGenEnv env) {
+        env.setReturn(true);
         StringBuilder builder = new StringBuilder();
         String exp = "";
         if (this.val != null) {

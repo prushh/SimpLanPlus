@@ -14,6 +14,16 @@ public class CGenEnv {
     private ArrayList<String> labels = new ArrayList<>();
     private ArrayList<Boolean> isBlockFuncPred = new ArrayList<>();
 
+    public Boolean getReturn() {
+        return isReturn;
+    }
+
+    public void setReturn(Boolean aReturn) {
+        isReturn = aReturn;
+    }
+
+    private Boolean isReturn=false;
+
     public CGenEnv() {
 
     }

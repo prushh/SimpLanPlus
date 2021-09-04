@@ -237,10 +237,11 @@ public class BlockNode implements Node {
             builder.append("lw $fp $fp\n");
             builder.append("pop\n");
             env.removeLabel();
-            if(isBlockIte && env.getIsPredBlockFunc()){
+            if(isBlockIte && env.getIsPredBlockFunc()&&env.getReturn()){
+
                 builder.append("b"+env.getLabel()+"\n");
             }
-
+            env.setReturn(false);
 
             if (env.getNestingLevel() == -1) {
                 builder.append("halt\n");
