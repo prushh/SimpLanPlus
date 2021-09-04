@@ -95,7 +95,7 @@ public class CallNode implements Node {
             // If CallNode typeCheck is called from a CallExpNode, then return type can't be
             // void
             if (isCallExp) {
-                if (SimpLanPlusLib.isSubtype(functionType.getRet(), new VoidTypeNode(Status.DECLARED))) {
+                if (functionType.getRet() instanceof VoidTypeNode) {
                     typeErr.add(new SemanticError("cannot use void function as an exp"));
                 }
             } else {
@@ -122,11 +122,8 @@ public class CallNode implements Node {
             res.addAll(arg.checkEffects(env));
         }
 
-        // Puntatori possibili ---> lhs (pointLevel > 0) e baseExp che contiene un
-        // puntatore
-        // Tutto il resto viene passato per valore
-
-        // Since only pointers can affect global variables, we collect them in a list
+        // We only care about pointers effects variation during a function call,
+        //  simple variables cannot be deleted.
         ArrayList<DerExpNode> pointerList = new ArrayList<>();
         for (Node arg : args) {
             Node tmp = arg;

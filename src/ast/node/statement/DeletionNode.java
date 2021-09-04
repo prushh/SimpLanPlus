@@ -29,6 +29,7 @@ public class DeletionNode implements Node {
         int idLevel = env.nestingLevel;
         STentry tmpEntry = null;
 
+        // Verify that identifier is in symbol table
         while (idLevel >= 0 && tmpEntry == null) {
             tmpEntry = (env.symTable.get(idLevel--)).get(ID);
         }
@@ -56,15 +57,23 @@ public class DeletionNode implements Node {
         int idLevel = env.nestingLevel;
         STentry tmpEntry = null;
 
+        // Get identifier in symbol table
         while (idLevel >= 0 && tmpEntry == null) {
             tmpEntry = (env.symTable.get(idLevel--)).get(ID);
         }
 
         Status deletionStatus = Status.DELETED;
         deletionStatus = SimpLanPlusLib.seqStatus(tmpEntry.getType().getStatus(), deletionStatus);
+
+        /*
+         * Since delete is called with an identifier, we need to construct a Node in
+         * order to make the replacement in symbol table
+         */
         Node lhs = tmpEntry.getType();
         lhs.setStatus(deletionStatus);
         STentry newEntry = new STentry(tmpEntry.getNestinglevel(), lhs, tmpEntry.getOffset());
+
+        // Update symbol table
         env.symTable.get(tmpEntry.getNestinglevel()).replace(ID, newEntry);
 
         if (deletionStatus == Status.ERROR) {
@@ -87,7 +96,18 @@ public class DeletionNode implements Node {
             lookup += "lw $al $al\n";
 
         String res = "";
-        res += "cal\n" + lookup + "addi $al " + this.entry.getOffset() + "\n" + "si -10000 $al\n";
+
+        /*
+         * Delete consists only in setting -10000 in the right memory cell.
+         * So first we copy frame pointer into access link and then we go up
+         * thorough the static chain (bytecode for this is 'lookup' string).
+         * Eventually we store the integer -10000 into the right cell thanks to
+         * the offset left by previous visits of AST
+         */
+        res += "cal\n" +
+                lookup +
+                "addi $al " + this.entry.getOffset() + "\n" +
+                "si -10000 $al\n";
 
         return res;
     }

@@ -8,6 +8,10 @@ import util.Status;
 
 import java.util.ArrayList;
 
+/**
+ * Boolean type, it has a point level and a status.
+ */
+
 public class BoolTypeNode implements Node {
 
     private int pointLevel;
@@ -19,24 +23,9 @@ public class BoolTypeNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return this.status;
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return new ArrayList<>();
     }
-
-    @Override
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toPrint(String indent) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < pointLevel; i++) {
-            builder.append("^");
-        }
-        return indent + builder + "BoolType\n";
-    }
-
 
     @Override
     public Node typeCheck(ArrayList<SemanticError> typeErr) {
@@ -49,17 +38,32 @@ public class BoolTypeNode implements Node {
     }
 
     @Override
-    public String codeGeneration(CGenEnv env) {
-        return null;
+    public String toPrint(String indent) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < pointLevel; i++) {
+            builder.append("^");
+        }
+        return indent + builder + "BoolType\n";
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<>();
+    public String codeGeneration(CGenEnv env) {
+        return null;
     }
 
     @Override
     public int getPointLevel() {
         return this.pointLevel;
     }
+
+    @Override
+    public Status getStatus() {
+        return this.status;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
 }

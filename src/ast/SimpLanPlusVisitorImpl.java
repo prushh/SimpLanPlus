@@ -97,12 +97,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         BlockNode block = visitBlock(ctx.block());
         // Set flag to distinguish between inline block and function block
         block.setBlockFunction();
-        for (Node st : block.getStmList()) {        	
-        	// Set flag to mark return node of a function
-            if (st instanceof RetNode) {
-                ((RetNode) st).setFunctionReturn(block.getBlockFunction());
-            }
-        }
 
         res = new DecFunNode(id, type, block);
         

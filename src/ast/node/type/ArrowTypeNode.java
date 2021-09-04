@@ -6,6 +6,12 @@ import util.*;
 
 import java.util.ArrayList;
 
+/**
+ * Function arrow type class.
+ *
+ * (T1 a1 x T2 a2 x ... x Tn an) -> T
+ */
+
 public class ArrowTypeNode implements Node {
 
     private ArrayList<ArgNode> args;
@@ -18,32 +24,21 @@ public class ArrowTypeNode implements Node {
         this.funUniqueLabel = SimpLanPlusLib.getUniqueLabel();
     }
 
-    public Node getRet() { //
-        return ret;
-    }
-
-    public ArrayList<ArgNode> getArgList() { //
+    public ArrayList<ArgNode> getArgList() {
         return args;
     }
 
-    @Override
-    public Status getStatus() {
-        return Status.DECLARED;
+    public Node getRet() {
+        return ret;
+    }
+
+    public int getFunUniqueLabel() {
+        return funUniqueLabel;
     }
 
     @Override
-    public void setStatus(Status status) {
-
-    }
-
-    @Override
-    public String toPrint(String indent) {
-        StringBuilder builder = new StringBuilder();
-        for (ArgNode arg : args)
-            builder.append(arg.toPrint(indent + "\t"));
-        return indent + "ArrowType\n" +
-                builder +
-                ret.toPrint(indent + " -> ");
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return new ArrayList<>();
     }
 
     @Override
@@ -57,13 +52,16 @@ public class ArrowTypeNode implements Node {
     }
 
     @Override
-    public String codeGeneration(CGenEnv env) {
-        return null;
+    public String toPrint(String indent) {
+        StringBuilder builder = new StringBuilder();
+        for (ArgNode arg : args)
+            builder.append(arg.toPrint(indent + "\t"));
+        return indent + "ArrowType\n" + builder + ret.toPrint(indent + " -> ");
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<>();
+    public String codeGeneration(CGenEnv env) {
+        return null;
     }
 
     @Override
@@ -71,7 +69,14 @@ public class ArrowTypeNode implements Node {
         return 0;
     }
 
-    public int getFunUniqueLabel() {
-        return funUniqueLabel;
+    @Override
+    public Status getStatus() {
+        return Status.DECLARED;
     }
+
+    @Override
+    public void setStatus(Status status) {
+
+    }
+
 }

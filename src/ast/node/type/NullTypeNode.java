@@ -8,6 +8,10 @@ import util.Status;
 
 import java.util.ArrayList;
 
+/**
+ * NullType for node in the AST that are not concerned with typeCheck.
+ */
+
 public class NullTypeNode implements Node {
 
     private Status status;
@@ -17,17 +21,8 @@ public class NullTypeNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return this.status;
-    }
-
-    @Override
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String toPrint(String indent) {
-        return indent + "NullType\n";
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return new ArrayList<>();
     }
 
     @Override
@@ -41,8 +36,8 @@ public class NullTypeNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<>();
+    public String toPrint(String indent) {
+        return indent + "NullType\n";
     }
 
     @Override
@@ -54,4 +49,15 @@ public class NullTypeNode implements Node {
     public int getPointLevel() {
         return 0;
     }
-}  
+
+    @Override
+    public Status getStatus() {
+        return this.status;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+}

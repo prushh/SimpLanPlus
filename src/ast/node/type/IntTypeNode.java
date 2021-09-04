@@ -8,6 +8,10 @@ import util.Status;
 
 import java.util.ArrayList;
 
+/**
+ * Integer type, it has a point level and a status.
+ */
+
 public class IntTypeNode implements Node {
 
     private int pointLevel;

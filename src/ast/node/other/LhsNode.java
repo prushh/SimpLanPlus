@@ -154,17 +154,6 @@ public class LhsNode implements Node {
                 tmpEntry.getType().setStatus(Status.ERROR);
                 env.symTable.get(tmpEntry.getNestinglevel()).replace(this.ID, tmpEntry);
             }
-
-        }
-
-        // ???
-        if (this.pointLevel > 0 && tmpEntry.getType().getStatus() == Status.DELETED) {
-            res.add(new SemanticError("Cannot dereference an already deleted pointer"));
-            Node tmpLhs = tmpEntry.getType();
-            tmpLhs.setStatus(Status.ERROR);
-            STentry newEntry = new STentry(tmpEntry.getNestinglevel(), tmpLhs, tmpEntry.getOffset());
-            env.symTable.get(tmpEntry.getNestinglevel()).replace(this.getID(), newEntry);
-
         }
 
         return res;

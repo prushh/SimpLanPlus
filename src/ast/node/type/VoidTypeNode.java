@@ -8,6 +8,10 @@ import util.Status;
 
 import java.util.ArrayList;
 
+/**
+ * VoidType for function that doesn't have return value.
+ */
+
 public class VoidTypeNode implements Node {
 
     private Status status;
@@ -17,18 +21,8 @@ public class VoidTypeNode implements Node {
     }
 
     @Override
-    public Status getStatus() {
-        return this.status;
-    }
-
-    @Override
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toPrint(String indent) {
-        return indent + "VoidType\n";
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return new ArrayList<>();
     }
 
     @Override
@@ -42,8 +36,8 @@ public class VoidTypeNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return new ArrayList<>();
+    public String toPrint(String indent) {
+        return indent + "VoidType\n";
     }
 
     @Override
@@ -55,4 +49,15 @@ public class VoidTypeNode implements Node {
     public int getPointLevel() {
         return 0;
     }
-}  
+
+    @Override
+    public Status getStatus() {
+        return this.status;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+}

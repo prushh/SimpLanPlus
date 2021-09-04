@@ -20,16 +20,6 @@ public class RetNode implements Node {
 
     private Node val;
 
-    private boolean isFunctionReturn;
-
-    public boolean isFunctionReturn() {
-        return isFunctionReturn;
-    }
-
-    public void setFunctionReturn(boolean functionReturn) {
-        isFunctionReturn = functionReturn;
-    }
-
     public RetNode(Node val) {
         this.val = val;
     }
@@ -84,8 +74,8 @@ public class RetNode implements Node {
         }
         String label = env.getLabel();
         builder.append(exp);
-        builder.append("b " + label + "\n"); // Jump to the end of the function/block body
-
+        // Jump to the end of the function/block body
+        builder.append("b " + label + "\n");
         return builder.toString();
     }
 

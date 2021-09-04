@@ -42,7 +42,7 @@ public class SimpLanPlusLib {
 		return a.getClass().equals(b.getClass());
 	}
 
-	// Operations for effects analysis: max, seq and par.
+	// Operations for effects analysis: max, ite, seq and par.
 	/**
 	 * Return max between two instances of Status enumeration.
 	 * 
@@ -56,7 +56,22 @@ public class SimpLanPlusLib {
 		else
 			return s1;
 	}
-	
+
+	/**
+	 * Return max between two instances of Status enumeration, except for Readwrite/Declared or Declared/Readwrite.
+	 *
+	 * @param s1 -> Status
+	 * @param s2 -> Status
+	 */
+	public static Status iteStatus(Status s1, Status s2) {
+		if (s1 == Status.DECLARED && s2 == Status.READWRITE)
+			return Status.DECLARED;
+		else if (s1 == Status.READWRITE && s2 == Status.DECLARED)
+			return Status.DECLARED;
+		else return maxStatus(s1,s2);
+	}
+
+
 	/**
 	 * Perform sequence between two status. Please note condition of the else-if clause:
 	 *  

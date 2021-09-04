@@ -67,6 +67,7 @@ public class AsgNode implements Node {
             tmpEntry = (env.symTable.get(idLevel--)).get(lhs.getID());
         }
         Node tmp = this.exp;
+
         /*
          *  Similar case of CallNode, from base expressions we are interested in
          *  getting expression nested inside parentheses
@@ -78,6 +79,8 @@ public class AsgNode implements Node {
             tmp = ((BaseExpNode) tmp).getExp();
         }
         if (tmp instanceof NewExpNode) {
+            // This allows to reinitialize an already deleted pointer
+            res.addAll(lhs.checkEffects(env));
             tmpEntry.getType().setStatus(Status.READWRITE);
         } else {
             res.addAll(exp.checkEffects(env));
