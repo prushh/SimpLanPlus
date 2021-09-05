@@ -1,0 +1,14 @@
+/*
+This is an example of code you can run in SimpLanPlus
+You can use this file to write any kind of program in
+    SimpLanPlus language.
+*/
+
+{
+
+    int a = 10;
+
+    print (a*10);
+
+}
+
