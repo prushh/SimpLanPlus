@@ -24,7 +24,8 @@ import java.util.ArrayList;
 public class Test {
     public static void main(String[] args) throws Exception {
 
-        String fileName = "prova.simplanplus";
+        String fileName = "test.simplanplus";
+        //String fileName = "tests/test_1.simplanplus";
 
         CharStream input = CharStreams.fromFileName(fileName);
         SimpLanPlusLexer lexer = new SimpLanPlusLexer(input);
