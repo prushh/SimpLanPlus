@@ -11,7 +11,7 @@ import ast.STentry;
 
 public class Environment {
 
-	public ArrayList<HashMap<String,STentry>>  symTable = new ArrayList<HashMap<String,STentry>>();
+	public ArrayList<HashMap<String,STentry>>  symTable = new ArrayList<>();
 	public int nestingLevel = -1;
 	public int offset = 0;
 

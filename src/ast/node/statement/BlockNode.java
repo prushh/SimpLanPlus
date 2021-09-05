@@ -50,12 +50,8 @@ public class BlockNode implements Node {
         isBlockIte = true;
     }
 
-    public boolean isBlockIte() {
+    public boolean getBlockIte() {
         return isBlockIte;
-    }
-
-    public ArrayList<Node> getStmList() {
-        return stmList;
     }
 
     public ArrayList<Node> getDecList() {
