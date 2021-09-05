@@ -2,6 +2,8 @@ package Interpreter;
 
 import parser.SVMParser;
 
+import java.util.Arrays;
+
 public class ExecuteVM {
 
     public static final int CODESIZE = 10000;
@@ -82,15 +84,7 @@ public class ExecuteVM {
                         }
                         setRegister(code[ip++], memory[getRegister(code[ip++])]);
                         break;
-                    case SVMParser.LOADI: //
-                        // check if object address where we take the method label
-                        // is null value (-10000)
-                        if (sp < 10000) {
-                            if (memory[sp] == -10000) {
-                                System.out.println("\nError: Null pointer exception");
-                                return;
-                            }
-                        }
+                    case SVMParser.LOADI:
                         setRegister(code[ip++], code[ip++]);
                         break;
                     case SVMParser.LABEL:

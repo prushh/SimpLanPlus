@@ -169,10 +169,6 @@ public class DecFunNode implements Node {
         HashMap<String, STentry> hmFun = new HashMap<>();
         effectEnv.symTable.add(effectEnv.nestingLevel, hmFun);
 
-       /* for (int i = env.nestingLevel; i > 0; i--) {
-            effectEnv.symTable.add(new HashMap<>());
-        }*/
-
         int getFunEnv = env.nestingLevel;
         while (getFunEnv >= 0) {
             for (Map.Entry<String, STentry> funEntry : env.symTable.get(getFunEnv).entrySet()) {
