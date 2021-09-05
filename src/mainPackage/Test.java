@@ -7,6 +7,7 @@ import ast.SimpLanPlusVisitorImpl;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import parser.SVMLexer;
 import parser.SVMParser;
 import parser.SimpLanPlusLexer;
@@ -23,7 +24,6 @@ import java.util.ArrayList;
 public class Test {
     public static void main(String[] args) throws Exception {
 
-        //String fileName = "tests/test_42.simplanplus";
         String fileName = "prova.simplanplus";
 
         CharStream input = CharStreams.fromFileName(fileName);
@@ -38,7 +38,14 @@ public class Test {
         parser.addErrorListener(ThrowingErrorListener.INSTANCE);
 
         SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
-        Node ast = visitor.visit(parser.block()); // generazione AST
+        Node ast = null;
+        try {
+             ast = visitor.visit(parser.block()); // generazione AST
+        }catch(ParseCancellationException exp){
+            System.out.println("You had  a lexical error:");
+            System.out.println(exp.getMessage());
+            System.exit(0);
+        }
 
         Environment env = new Environment();
 
@@ -50,10 +57,10 @@ public class Test {
         } else {
             System.out.println("Scope checking ok!");
             System.out.println("------------------");
-            ArrayList<SemanticError> typeErr = new ArrayList<SemanticError>();
+            ArrayList<SemanticError> typeErr = new ArrayList<>();
             Node type = ast.typeCheck(typeErr); // type-checking bottom-up
             if (typeErr.size() > 0) {
-                System.out.println("You had: " + typeErr.size() + " type errors:");
+                System.out.println("You had " + typeErr.size() + " type errors:");
                 for (SemanticError e : typeErr)
                     System.out.println("\t" + e);
 
@@ -63,10 +70,10 @@ public class Test {
 
                 Environment sigma = new Environment();
 
-                ArrayList<SemanticError> effectErr = new ArrayList<SemanticError>();
+                ArrayList<SemanticError> effectErr;
                 effectErr = ast.checkEffects(sigma);
                 if (effectErr.size() > 0) {
-                    System.out.println("You had: " + effectErr.size() + " effect errors:");
+                    System.out.println("You had " + effectErr.size() + " effect errors:");
                     for (SemanticError e : effectErr)
                         System.out.println("\t" + e);
                 } else {
@@ -79,7 +86,7 @@ public class Test {
                     System.out.println(ast.toPrint(""));
                     System.out.println("------------------");
 
-                    // CODE GENERATION prova.SimpLan.asm
+                    // CODE GENERATION
                     String code = ast.codeGeneration(new CGenEnv());
                     BufferedWriter out = new BufferedWriter(new FileWriter(fileName + ".asm"));
                     out.write(code);
@@ -94,7 +101,7 @@ public class Test {
                     SVMVisitorImpl visitorSVM = new SVMVisitorImpl();
                     visitorSVM.visit(parserASM.assembly());
 
-                    System.out.println("You had: " + lexerASM.lexicalErrors + " lexical errors and "
+                    System.out.println("You had " + lexerASM.lexicalErrors + " lexical errors and "
                             + parserASM.getNumberOfSyntaxErrors() + " syntax errors.");
                     if (lexerASM.lexicalErrors > 0 || parserASM.getNumberOfSyntaxErrors() > 0)
                         System.exit(1);
